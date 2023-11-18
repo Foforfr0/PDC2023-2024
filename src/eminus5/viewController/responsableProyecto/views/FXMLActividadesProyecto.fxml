@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="570.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.responsableProyecto.controllers.FXMLActividadesProyectoController">
+   <children>
+      <TableView fx:id="tvActividades" layoutX="258.0" layoutY="90.0" prefHeight="390.0" prefWidth="834.0">
+        <columns>
+          <TableColumn fx:id="tcNombre" prefWidth="188.0" text="Nombre" />
+          <TableColumn fx:id="tvAsignado" prefWidth="92.0" text="Asignado" />
+            <TableColumn fx:id="tcEstado" prefWidth="149.0" text="Estado" />
+            <TableColumn fx:id="tcTipo" prefWidth="136.0" text="Tipo" />
+            <TableColumn fx:id="tcFechaInicio" prefWidth="128.0" text="Fecha inicio" />
+            <TableColumn fx:id="tcFechaFin" prefWidth="140.0" text="Fecha fin" />
+        </columns>
+      </TableView>
+      <Button layoutX="258.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicAddActividad" text="Crear" />
+      <Button layoutX="313.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicModifyActividad" text="Modificar" />
+      <Button layoutX="389.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicDeleteActividad" text="Eliminar" />
+   </children>
+</AnchorPane>
