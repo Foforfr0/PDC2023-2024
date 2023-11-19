@@ -18,10 +18,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import eminus5.utils.ShowMessage;
 import java.sql.SQLException;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
@@ -45,13 +49,15 @@ public class FXMLCrearActividadController implements Initializable {
     public static int idResponsable = 0;
     @FXML
     private AnchorPane stageCrearActividad;
+    @FXML
+    private Pane pnPrincipal;
     
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addOptionsCbTipo();
         initializaDatePickers();
-        //addActionToStage((Stage) this.tfNombre.getScene().getWindow());
+        addActionToStage();
     }    
     
     private void closeWindow(Stage currentStage) {
@@ -68,12 +74,13 @@ public class FXMLCrearActividadController implements Initializable {
         });
     }
     
-    private void addActionToStage(Stage currentStage) {
-        //Stage currentStage = (Stage) this.tfNombre.getScene().getWindow();
-        currentStage.setOnCloseRequest(event -> {
-            event.consume(); 
-            closeWindow(currentStage);
-        });
+    private void addActionToStage() {
+        stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ESCAPE){
+                event.consume();
+                closeWindow((Stage) this.tfNombre.getScene().getWindow());
+            }
+        });    
     }
             
     private void addOptionsCbTipo() {

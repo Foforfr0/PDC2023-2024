@@ -22,4 +22,12 @@ public class ActividadDAO {
     public static ResultOperation createActividad(int idProyecto) throws SQLException{
         return new ResultOperation();
     }
+    
+    public static ResultOperation modifyActividad(int idActividad) throws SQLException{
+        return new ResultOperation();
+    }
+    
+    public static ResultOperation deleteActividad(int idActividad) throws SQLException{
+        return new ResultOperation();
+    }
 }

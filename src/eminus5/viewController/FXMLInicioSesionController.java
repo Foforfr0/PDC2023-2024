@@ -69,7 +69,7 @@ public class FXMLInicioSesionController implements Initializable {
         } else if (systemRole.equals("Desarrollador")) {
             pathResource = "viewController/desarrollador/views/FXMLPantallaInicioD.fxml";
         }
-        
+        System.out.println("PathResource: "+pathResource);
         Stage currentStage = (Stage) this.tfUserLogin.getScene().getWindow();
         
         if (systemRole.equals("Responsable")) {

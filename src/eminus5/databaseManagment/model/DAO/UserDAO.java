@@ -22,9 +22,9 @@ public class UserDAO {
         
         if (connectionDB != null) {    
             try {            
-                String sqlQuery = "SELECT u.IDUsuario, u.RolSistema, p.IDProyecto " +
-                                  "FROM Usuario u LEFT JOIN Proyecto p ON u.IDProyecto = p.IDProyecto " +
-                                  "WHERE Matricula = ? AND Password = ?;";
+                String sqlQuery = "SELECT u.IDUsuario, rs.Nombre AS RolSistema " +
+                                  "FROM RolSistema rs RIGHT JOIN Usuario u ON u.RolSistema = rs.IDRolSistema " +
+                                  "WHERE u.Matricula = ? AND u.Password = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setString(1, user);
                     prepareQuery.setString(2, password);
