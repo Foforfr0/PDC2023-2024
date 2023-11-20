@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 
 /**
  * FXML Controller class
@@ -25,6 +27,8 @@ public class FXMLPantallaInicioDController implements Initializable {
     public static int idUser = 0;
     @FXML
     private Label lbRol;
+    @FXML
+    private StackPane spMostrarTablas;
     
     
     @Override
@@ -50,6 +54,10 @@ public class FXMLPantallaInicioDController implements Initializable {
 
     @FXML
     private void btnDefectos(ActionEvent event) {
+    }
+
+    @FXML
+    private void showSceneLogin(MouseEvent event) {
     }
     
 }
