@@ -7,8 +7,10 @@ package eminus5.viewController.responsableProyecto.controllers;
 import eminus5.databaseManagment.model.DAO.ActividadDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
+import eminus5.utils.ShowMessage;
 import static eminus5.utils.ShowMessage.showMessage;
-import static eminus5.utils.ShowMessage.showMessageFailureConnection;
+import static eminus5.utils.ShowMessage.showMessageFailureConnection; 
+import static eminus5.utils.ShowMessage.showMessageConfirmationToCancel;
 import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
 import java.net.URL;
@@ -132,6 +134,7 @@ public class FXMLActividadesProyectoController implements Initializable {
             );
             stageAddPaciente.initStyle(StageStyle.UTILITY);
             stageAddPaciente.setOnCloseRequest(eventStage -> {
+                eventStage.consume();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("¿Está seguro?");
                 alert.setHeaderText("¿Está seguro de cancelar?");
@@ -139,10 +142,12 @@ public class FXMLActividadesProyectoController implements Initializable {
 
 
                 alert.showAndWait().ifPresent(response -> {
-                    if (response == ButtonType.OK) {
+                    String responseMessage = response.getText();
+                    if (responseMessage.equals("Aceptar")) {
                         stageAddPaciente.close(); 
                     }
                 });
+                //showMessageConfirmationToCancel(stageAddPaciente);
             });
             stageAddPaciente.showAndWait();
         } catch (IOException ioex) {
@@ -169,17 +174,20 @@ public class FXMLActividadesProyectoController implements Initializable {
                     alert.setTitle("¿Está seguro?");
                     alert.setHeaderText("¿Está seguro de cancelar?");
                     alert.setContentText("¿Ésta acción no se podrá revertir?");
-
-
-                    alert.showAndWait().ifPresent(response -> {
-                        if (response == ButtonType.OK) {
+                        
+                    //alert.showAndWait().get().getText()
+                    /*alert.showAndWait().ifPresent((t) -> {
+                        if (t.getText() == "Aceptar") {
                             stageAddPaciente.close(); 
+                        } else if (t.getText() == "Cancelar") {
+                            
                         }
-                    });
+                    });*/
+                    ShowMessage.showMessageConfirmationToCancel(stageAddPaciente);
                 });
                 stageAddPaciente.showAndWait();
             } catch (IOException ioex) {
-                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
+                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                 ioex.printStackTrace();
             }
         } else {
@@ -194,7 +202,8 @@ public class FXMLActividadesProyectoController implements Initializable {
     
     private Actividad verifyActividadSelected(){
         int selectedRow = this.tvActividades.getSelectionModel().getSelectedIndex();
-        return (selectedRow >= 0) ? this.actividades.get(selectedRow) : null ;
+        this.selectedActividad = (selectedRow >= 0) ? this.actividades.get(selectedRow) : null ;
+        return selectedActividad;
     }
     
     @FXML
