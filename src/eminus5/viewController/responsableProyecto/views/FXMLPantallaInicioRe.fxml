@@ -12,12 +12,12 @@
    <children>
       <Pane prefHeight="110.0" prefWidth="1350.0" style="-fx-background-color: #1C6CE3;">
          <children>
-            <Label fx:id="lbTittleWindow" alignment="CENTER" contentDisplay="CENTER" layoutX="551.0" layoutY="33.0" nodeOrientation="LEFT_TO_RIGHT" text="Menú principal" textAlignment="CENTER" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+            <Label fx:id="lbTittleWindow" alignment="CENTER" contentDisplay="CENTER" layoutX="551.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" text="Menú principal" textAlignment="CENTER" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
                <font>
                   <Font name="System Bold" size="35.0" />
                </font>
             </Label>
-            <ImageView fitHeight="57.0" fitWidth="51.0" layoutX="14.0" layoutY="33.0" onMouseClicked="#showSceneLogin" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+            <ImageView fitHeight="57.0" fitWidth="51.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#showSceneLogin" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                <image>
                   <Image url="@../../../sources/icon/logout_icon.png" />
                </image>
@@ -25,16 +25,18 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Button fx:id="btInicio" layoutX="88.0" layoutY="84.0" mnemonicParsing="false" onMouseClicked="#clearInsideScene" style="-fx-background-color: inherit;" text="Inicio" textFill="WHITE">
+            <Button fx:id="btInicio" layoutX="65.0" layoutY="65.0" mnemonicParsing="false" onMouseClicked="#clearInsideScene" style="-fx-background-color: inherit;" text="Inicio" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="btGestionarActividades" layoutX="132.0" layoutY="84.0" mnemonicParsing="false" onMouseClicked="#clicShowGestionarActividadesScene" style="-fx-background-color: inherit;" text="Gestionar actividades" textFill="WHITE">
+            <Button fx:id="btGestionarActividades" layoutX="131.0" layoutY="65.0" mnemonicParsing="false" onMouseClicked="#clicShowGestionarActividadesScene" style="-fx-background-color: inherit;" text="Gestionar actividades" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button layoutX="325.0" layoutY="65.0" mnemonicParsing="false" onAction="#btnDesarrolladores" style="-fx-background-color: inehrit;" text="Desarrolladores" textFill="WHITE" />
+            <Button layoutX="473.0" layoutY="65.0" mnemonicParsing="false" onAction="#btnDefectos" style="-fx-background-color: inehrit;" text="Defectos" textFill="WHITE" />
          </children>
       </Pane>
       <ImageView fitHeight="200.0" fitWidth="446.0" layoutX="452.0" layoutY="291.0" pickOnBounds="true" preserveRatio="true">

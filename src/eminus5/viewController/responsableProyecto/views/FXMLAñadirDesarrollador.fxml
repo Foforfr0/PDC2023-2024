@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="474.0" prefWidth="679.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="eminus5.viewController.responsableProyecto.controllers.FXMLAñadirDesarrolladorController">
+   <children>
+      <Pane prefHeight="74.0" prefWidth="679.0" style="-fx-background-color: blue;">
+         <children>
+            <Label layoutX="511.0" layoutY="17.0" prefHeight="40.0" prefWidth="145.0" text="Eminus 5" textFill="WHITE">
+               <font>
+                  <Font name="Arial Black" size="27.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="40.0" fitWidth="47.0" layoutX="14.0" layoutY="17.0" onMouseClicked="#clicRegresar" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../Construccion/pruebaNetBeans2/src/eminus5/resources/backArrow.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutY="74.0" prefHeight="410.0" prefWidth="679.0">
+         <children>
+            <Label layoutX="33.0" layoutY="22.0" text="Añadir desarrollador">
+               <font>
+                  <Font name="Arial Black" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="33.0" layoutY="57.0" text="Ingrese los datos requeridos (*)" />
+            <Label layoutX="33.0" layoutY="106.0" text="Nombre*" />
+            <Label layoutX="179.0" layoutY="106.0" text="Apellido paterno*" />
+            <Label layoutX="345.0" layoutY="106.0" text="Apellido materno*" />
+            <Label layoutX="507.0" layoutY="106.0" text="Matricula*" />
+            <Label layoutX="29.0" layoutY="198.0" text="Correo electrónico institucional*" />
+            <Label layoutX="313.0" layoutY="198.0" text="Correo electrónico personal*" />
+            <Label layoutX="567.0" layoutY="198.0" text="Semestre*" />
+            <TextField fx:id="tfNombre" layoutX="32.0" layoutY="133.0" prefHeight="39.0" prefWidth="141.0" />
+            <TextField fx:id="tfApellidoPaterno" layoutX="186.0" layoutY="133.0" prefHeight="39.0" prefWidth="141.0" />
+            <TextField fx:id="tfApellidoMaterno" layoutX="347.0" layoutY="133.0" prefHeight="39.0" prefWidth="141.0" />
+            <TextField fx:id="tfMatricula" layoutX="507.0" layoutY="133.0" prefHeight="39.0" prefWidth="141.0" />
+            <TextField fx:id="tfCorreoInstitucional" layoutX="32.0" layoutY="232.0" prefHeight="39.0" prefWidth="248.0" />
+            <TextField fx:id="tfCorreoPersonal" layoutX="306.0" layoutY="232.0" prefHeight="39.0" prefWidth="248.0" />
+            <TextField fx:id="tfSemestre" layoutX="567.0" layoutY="232.0" prefHeight="39.0" prefWidth="73.0" />
+            <Button layoutX="560.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnGuardar" text="Guardar" />
+            <Button layoutX="461.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnCancelar" text="Cancelar" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

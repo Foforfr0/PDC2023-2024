@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="458.0" prefWidth="607.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="eminus5.viewController.responsableProyecto.controllers.FXMLConsultarDefectosController">
+   <children>
+      <Pane prefHeight="74.0" prefWidth="607.0" style="-fx-background-color: blue;">
+         <children>
+            <Label layoutX="447.0" layoutY="17.0" prefHeight="40.0" prefWidth="192.0" text="Eminus 5" textFill="WHITE">
+               <font>
+                  <Font name="Arial Black" size="27.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../Construccion/pruebaNetBeans2/src/eminus5/resources/backArrow.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutY="74.0" prefHeight="385.0" prefWidth="607.0">
+         <children>
+            <TableView layoutX="28.0" layoutY="105.0" prefHeight="200.0" prefWidth="551.0">
+               <columns>
+                  <TableColumn prefWidth="41.0" text="#" />
+                  <TableColumn prefWidth="154.0" text="Nombre defecto" />
+                  <TableColumn prefWidth="147.0" text="Fecha encontrado" />
+                  <TableColumn minWidth="0.0" prefWidth="85.0" text="Estado" />
+                  <TableColumn prefWidth="123.0" text="Seleccionado" />
+               </columns>
+            </TableView>
+            <Button layoutX="426.0" layoutY="315.0" mnemonicParsing="false" text="Mostrar detalles" />
+            <ComboBox layoutX="94.0" layoutY="54.0" prefHeight="40.0" prefWidth="222.0" promptText="Todos" />
+            <Label layoutX="40.0" layoutY="60.0" text="Vista" />
+            <Label layoutX="40.0" layoutY="14.0" text="Defectos">
+               <font>
+                  <Font name="Arial Black" size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -20,7 +20,10 @@ import javafx.stage.Stage;
 import static eminus5.utils.loadView.loadScene;
 import static eminus5.utils.loadView.loadView;
 import static eminus5.utils.loadView.loadParent;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 
 public class FXMLPantallaInicioRController implements Initializable {
@@ -75,6 +78,7 @@ public class FXMLPantallaInicioRController implements Initializable {
         }
     }
     
+    @FXML
     private void showSceneLogin() throws IOException{
         Stage stageActual = (Stage) this.lbTittleWindow.getScene().getWindow();
         stageActual.setScene(loadScene("viewController/FXMLInicioSesion.fxml"));
@@ -85,7 +89,6 @@ public class FXMLPantallaInicioRController implements Initializable {
         stageActual.show();
     }
     
-    @FXML
     private void showSceneLogin(MouseEvent event) {
         try {
             showSceneLogin();
@@ -114,4 +117,38 @@ public class FXMLPantallaInicioRController implements Initializable {
             ioex.printStackTrace();
         }
     }    
+
+    @FXML
+    private void btnDesarrolladores(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                eminus5.Eminus5.class.getResource("viewController/responsableProyecto/views/FXMLDesarrolladores.fxml"));            
+            Parent vista = loader.load();
+            Scene escena = new Scene (vista);
+            Stage escenario = new Stage();
+            escenario.setScene(escena);
+            escenario.setTitle("Desarrolladores");
+            escenario.showAndWait(); 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void btnDefectos(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                eminus5.Eminus5.class.getResource("viewController/responsableProyecto/views/FXMLConsultarDefectos.fxml"));            
+            Parent vista = loader.load();
+            Scene escena = new Scene (vista);
+            Stage escenario = new Stage();
+            escenario.setScene(escena);
+            escenario.setTitle("Defectos");
+            escenario.showAndWait(); 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 }
