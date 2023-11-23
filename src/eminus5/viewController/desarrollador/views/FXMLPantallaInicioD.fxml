@@ -10,6 +10,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLPantallaInicioDController">
    <children>
+      <Pane fx:id="pnInsideSceneD" prefHeight="440.0" prefWidth="650.0" />
       <Pane prefHeight="80.0" prefWidth="650.0" style="-fx-background-color: #18419D;">
          <children>
             <Label layoutX="465.0" layoutY="14.0" text="EMINUS 5">
@@ -30,8 +31,11 @@
             <Button layoutX="10.0" layoutY="149.0" mnemonicParsing="false" onAction="#btnActividades" prefHeight="31.0" prefWidth="151.0" text="Actividades" />
             <Button layoutX="10.0" layoutY="97.0" mnemonicParsing="false" onAction="#btnCambios" prefHeight="31.0" prefWidth="151.0" text="Cambios" />
             <Button layoutX="10.0" layoutY="52.0" mnemonicParsing="false" onAction="#btnDefectos" prefHeight="31.0" prefWidth="151.0" text="Defectos" />
-            <Label fx:id="lbRol" layoutX="10.0" layoutY="325.0" />
          </children></Pane>
-      <StackPane fx:id="spMostrarTablas" layoutX="170.0" layoutY="80.0" prefHeight="360.0" prefWidth="481.0" />
+      <Label fx:id="lbTituloVentana" layoutX="170.0" layoutY="80.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
