@@ -9,18 +9,19 @@ public class Actividad {
     private int idActividad;
     private String nombre;
     private String descripcion;
-    private boolean isAsignado;
+    private String isAsignado;
     private String estado;
     private String tipo;
     private String fechaInicio;
     private String fechaFin;
     private int idProyecto;
     private int idDesarrollador;
+    private String nombreDesarrollador;
 
     public Actividad() {
     }
 
-    public Actividad(int idActividad, String nombre, boolean isAsignado, String estado, String tipo, String fechaInicio, String fechaFin) {
+    public Actividad(int idActividad, String nombre, String isAsignado, String estado, String tipo, String fechaInicio, String fechaFin) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.isAsignado = isAsignado;
@@ -30,7 +31,7 @@ public class Actividad {
         this.fechaFin = fechaFin;
     }
 
-    public Actividad(int idActividad, String nombre, String descripcion, boolean isAsignado, String estado, String tipo, String fechaInicio, String fechaFin, int idProyecto, int idDesarrollador) {
+    public Actividad(int idActividad, String nombre, String descripcion, String isAsignado, String estado, String tipo, String fechaInicio, String fechaFin, int idProyecto, int idDesarrollador, String nombreDesarrollador) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -41,6 +42,7 @@ public class Actividad {
         this.fechaFin = fechaFin;
         this.idProyecto = idProyecto;
         this.idDesarrollador = idDesarrollador;
+        this.nombreDesarrollador = nombreDesarrollador;
     }
 
     public int getIdActividad() {
@@ -67,11 +69,11 @@ public class Actividad {
         this.descripcion = descripcion;
     }
 
-    public boolean isIsAsignado() {
+    public String isIsAsignado() {
         return isAsignado;
     }
 
-    public void setIsAsignado(boolean isAsignado) {
+    public void setIsAsignado(String isAsignado) {
         this.isAsignado = isAsignado;
     }
 
@@ -121,5 +123,13 @@ public class Actividad {
 
     public void setIdDesarrollador(int idDesarrollador) {
         this.idDesarrollador = idDesarrollador;
+    }
+
+    public String getNombreDesarrollador() {
+        return nombreDesarrollador;
+    }
+
+    public void setNombreDesarrollador(String nombreDesarrollador) {
+        this.nombreDesarrollador = nombreDesarrollador;
     }
 }

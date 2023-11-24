@@ -7,10 +7,8 @@ package eminus5.viewController.responsableProyecto.controllers;
 import eminus5.databaseManagment.model.DAO.ActividadDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
-import eminus5.utils.ShowMessage;
 import static eminus5.utils.ShowMessage.showMessage;
 import static eminus5.utils.ShowMessage.showMessageFailureConnection; 
-import static eminus5.utils.ShowMessage.showMessageConfirmationToCancel;
 import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
 import java.net.URL;
@@ -20,9 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -73,29 +69,18 @@ public class FXMLActividadesProyectoController implements Initializable {
             TableRow<Actividad> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
-                    Actividad objetoSeleccionado = row.getItem();
+                    selectedActividad = row.getItem();
                     try {
                         Stage stageAddPaciente = new Stage();
-                        stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
-                        stageAddPaciente.setTitle("Modificar actividad");
+                        
+                        FXMLDetallesActividadController.currentActividad = selectedActividad;
+                        stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividad.fxml"));
+                        stageAddPaciente.setTitle("Detalles de actividad");
                         stageAddPaciente.initModality(Modality.WINDOW_MODAL);
                         stageAddPaciente.initOwner(
                             (Stage) this.tvActividades.getScene().getWindow()
                         );
                         stageAddPaciente.initStyle(StageStyle.UTILITY);
-                        stageAddPaciente.setOnCloseRequest(eventStage -> {
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.setTitle("¿Está seguro?");
-                            alert.setHeaderText("¿Está seguro de cancelar?");
-                            alert.setContentText("¿Ésta acción no se podrá revertir?");
-
-
-                            alert.showAndWait().ifPresent(response -> {
-                                if (response == ButtonType.OK) {
-                                    stageAddPaciente.close(); 
-                                }
-                            });
-                        });
                         stageAddPaciente.showAndWait();
                     } catch (IOException ioex) {
                         System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
@@ -147,7 +132,6 @@ public class FXMLActividadesProyectoController implements Initializable {
                         stageAddPaciente.close(); 
                     }
                 });
-                //showMessageConfirmationToCancel(stageAddPaciente);
             });
             stageAddPaciente.showAndWait();
         } catch (IOException ioex) {
@@ -161,7 +145,8 @@ public class FXMLActividadesProyectoController implements Initializable {
         if (verifyActividadSelected() != null) {
             try {
                 Stage stageAddPaciente = new Stage();
-                FXMLModificarActividadController.idActividad = verifyActividadSelected().getIdActividad();
+                FXMLModificarActividadController.currentActividad = verifyActividadSelected();
+                //FXMLModificarActividadController.idActividad = verifyActividadSelected().getIdActividad();
                 stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
                 stageAddPaciente.setTitle("Modificar actividad");
                 stageAddPaciente.initModality(Modality.WINDOW_MODAL);
@@ -175,15 +160,12 @@ public class FXMLActividadesProyectoController implements Initializable {
                     alert.setHeaderText("¿Está seguro de cancelar?");
                     alert.setContentText("¿Ésta acción no se podrá revertir?");
                         
-                    //alert.showAndWait().get().getText()
-                    /*alert.showAndWait().ifPresent((t) -> {
-                        if (t.getText() == "Aceptar") {
+                    alert.showAndWait().ifPresent(response -> {
+                        String responseMessage = response.getText();
+                        if (responseMessage.equals("Aceptar")) {
                             stageAddPaciente.close(); 
-                        } else if (t.getText() == "Cancelar") {
-                            
                         }
-                    });*/
-                    ShowMessage.showMessageConfirmationToCancel(stageAddPaciente);
+                    });
                 });
                 stageAddPaciente.showAndWait();
             } catch (IOException ioex) {
