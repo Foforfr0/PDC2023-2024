@@ -18,10 +18,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import eminus5.utils.ShowMessage;
 import java.sql.SQLException;
-import javafx.scene.Node;
+import java.time.LocalDate;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DateCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -55,46 +56,51 @@ public class FXMLCrearActividadController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        addOptionsCbTipo();
-        initializaDatePickers();
-        addActionToStage();
+        initializeStage();
     }    
     
-    private void closeWindow(Stage currentStage) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("¿Está seguro?");
-        alert.setHeaderText("¿Está seguro de cancelar?");
-        alert.setContentText("¿Ésta acción no se podrá revertir?");
-
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                currentStage.close(); 
-            }
-        });
-    }
-    
-    private void addActionToStage() {
-        stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ESCAPE){
-                event.consume();
-                closeWindow((Stage) this.tfNombre.getScene().getWindow());
-            }
-        });    
-    }
-            
-    private void addOptionsCbTipo() {
-        this.cbTipo.getItems().setAll(
+    private void initializeStage() {
+        this.cbTipo.getItems().setAll(                      //addOptionsCbTipo();
             "Frontend", 
             "Backend", 
             "Controladoes", 
             "Base de datos", 
             "JavaScript"
         );
-    }
-    
-    private void initializaDatePickers() {
         
+        this.dpFechaFin.setDisable(true);               //initializaDatePickers();
+        this.dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
+                if (dpFechaInicio.getValue() == null) {
+                    dpFechaFin.setDisable(true);
+                } else {
+                    dpFechaFin.setDisable(false);
+                }
+            }
+        });
+        this.dpFechaFin.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
+                dpFechaFin.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        setDisable(date.isBefore(dpFechaInicio.getValue())); // Deshabilitar fechas anteriores a la del primer DatePicker
+                    }
+                });
+            }
+        });
+        stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {     //addActionToStage();
+            if (event.getCode() == KeyCode.ESCAPE){
+                event.consume();
+                closeWindow((Stage) this.tfNombre.getScene().getWindow());
+            }
+        }); 
     }
     
     private boolean validateFullFields() {      //faltanDatos ? return true : return false;
@@ -145,7 +151,21 @@ public class FXMLCrearActividadController implements Initializable {
             }
         }
     }
+    
+    private void closeWindow(Stage currentStage) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("¿Está seguro?");
+        alert.setHeaderText("¿Está seguro de cancelar?");
+        alert.setContentText("¿Ésta acción no se podrá revertir?");
 
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                currentStage.close(); 
+            }
+        });
+    }
+    
     @FXML
     private void clicCancelAdd(ActionEvent event) {
         closeWindow((Stage) this.tfNombre.getScene().getWindow());

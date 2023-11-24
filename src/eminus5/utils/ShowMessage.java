@@ -7,6 +7,8 @@ package eminus5.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 
 public class ShowMessage {
@@ -15,8 +17,7 @@ public class ShowMessage {
         
         switch (alertType) {
             case "CONFIRMATION":
-                alert.setAlertType(AlertType.INFORMATION);
-                break;
+                return ;
             case "INFORMATION":
                 alert.setAlertType(AlertType.CONFIRMATION);
                 break;
@@ -38,6 +39,21 @@ public class ShowMessage {
         alert.setResizable(false);
         
         alert.showAndWait();
+    }
+    
+    public static void showMessageConfirmationToCancel(Stage currentStage) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("¿Está seguro?");
+        alert.setHeaderText("¿Está seguro de cancelar?");
+        alert.setContentText("Ésta acción no se podrá revertir");
+        
+        alert.showAndWait().ifPresent((button) -> {
+            if (button.getText().equals("Aceptar")) {
+                currentStage.close(); 
+            } else {
+                
+            }
+        });
     }
     
     public static void showMessageFailureConnection() {

@@ -97,7 +97,7 @@ public class FXMLPantallaInicioRController implements Initializable {
 
     @FXML
     private void clicShowGestionarActividadesScene(MouseEvent event) {
-        this.lbTittleWindow.setText("Gestión de pacientes");
+        this.lbTittleWindow.setText("Gestión de actividades");
         this.btInicio.setDisable(false);
         this.btGestionarActividades.setDisable(true);
         String FXMLActividadesProyecto = "viewController/responsableProyecto/views/FXMLActividadesProyecto.fxml";

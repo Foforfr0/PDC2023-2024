@@ -8,7 +8,7 @@ import eminus5.databaseManagment.model.DAO.ActividadDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
-import static eminus5.utils.ShowMessage.showMessageFailureConnection;
+import static eminus5.utils.ShowMessage.showMessageFailureConnection; 
 import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
 import java.net.URL;
@@ -18,9 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -71,29 +69,18 @@ public class FXMLActividadesProyectoController implements Initializable {
             TableRow<Actividad> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
-                    Actividad objetoSeleccionado = row.getItem();
+                    selectedActividad = row.getItem();
                     try {
                         Stage stageAddPaciente = new Stage();
-                        stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
-                        stageAddPaciente.setTitle("Modificar actividad");
+                        
+                        FXMLDetallesActividadController.currentActividad = selectedActividad;
+                        stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividad.fxml"));
+                        stageAddPaciente.setTitle("Detalles de actividad");
                         stageAddPaciente.initModality(Modality.WINDOW_MODAL);
                         stageAddPaciente.initOwner(
                             (Stage) this.tvActividades.getScene().getWindow()
                         );
                         stageAddPaciente.initStyle(StageStyle.UTILITY);
-                        stageAddPaciente.setOnCloseRequest(eventStage -> {
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.setTitle("¿Está seguro?");
-                            alert.setHeaderText("¿Está seguro de cancelar?");
-                            alert.setContentText("¿Ésta acción no se podrá revertir?");
-
-
-                            alert.showAndWait().ifPresent(response -> {
-                                if (response == ButtonType.OK) {
-                                    stageAddPaciente.close(); 
-                                }
-                            });
-                        });
                         stageAddPaciente.showAndWait();
                     } catch (IOException ioex) {
                         System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
@@ -132,6 +119,7 @@ public class FXMLActividadesProyectoController implements Initializable {
             );
             stageAddPaciente.initStyle(StageStyle.UTILITY);
             stageAddPaciente.setOnCloseRequest(eventStage -> {
+                eventStage.consume();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("¿Está seguro?");
                 alert.setHeaderText("¿Está seguro de cancelar?");
@@ -139,7 +127,8 @@ public class FXMLActividadesProyectoController implements Initializable {
 
 
                 alert.showAndWait().ifPresent(response -> {
-                    if (response == ButtonType.OK) {
+                    String responseMessage = response.getText();
+                    if (responseMessage.equals("Aceptar")) {
                         stageAddPaciente.close(); 
                     }
                 });
@@ -156,7 +145,8 @@ public class FXMLActividadesProyectoController implements Initializable {
         if (verifyActividadSelected() != null) {
             try {
                 Stage stageAddPaciente = new Stage();
-                FXMLModificarActividadController.idActividad = verifyActividadSelected().getIdActividad();
+                FXMLModificarActividadController.currentActividad = verifyActividadSelected();
+                //FXMLModificarActividadController.idActividad = verifyActividadSelected().getIdActividad();
                 stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
                 stageAddPaciente.setTitle("Modificar actividad");
                 stageAddPaciente.initModality(Modality.WINDOW_MODAL);
@@ -169,17 +159,17 @@ public class FXMLActividadesProyectoController implements Initializable {
                     alert.setTitle("¿Está seguro?");
                     alert.setHeaderText("¿Está seguro de cancelar?");
                     alert.setContentText("¿Ésta acción no se podrá revertir?");
-
-
+                        
                     alert.showAndWait().ifPresent(response -> {
-                        if (response == ButtonType.OK) {
+                        String responseMessage = response.getText();
+                        if (responseMessage.equals("Aceptar")) {
                             stageAddPaciente.close(); 
                         }
                     });
                 });
                 stageAddPaciente.showAndWait();
             } catch (IOException ioex) {
-                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
+                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                 ioex.printStackTrace();
             }
         } else {
@@ -194,7 +184,8 @@ public class FXMLActividadesProyectoController implements Initializable {
     
     private Actividad verifyActividadSelected(){
         int selectedRow = this.tvActividades.getSelectionModel().getSelectedIndex();
-        return (selectedRow >= 0) ? this.actividades.get(selectedRow) : null ;
+        this.selectedActividad = (selectedRow >= 0) ? this.actividades.get(selectedRow) : null ;
+        return selectedActividad;
     }
     
     @FXML
