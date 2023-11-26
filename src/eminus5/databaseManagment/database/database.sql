@@ -292,9 +292,8 @@ INSERT INTO Estado (Nombre) VALUES ('Sin asignar'), ('Asigado'), ('Iniciado'), (
 /*TIPOS----------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO TipoActividad (Nombre) VALUES ('Frontend'), ('Backend'), ('Base de datos'), ('Controlador'), ('JavaScript');
 /*PROYECTO------------------------------------------------------------------------------------------------------------------------*/
-USE Eminus5;
 INSERT INTO Proyecto (Nombre, NumIntegrantes, Descripcion, FechaInicio, FechaFin) 
-	VALUES ('SPGER', 10, 'Descripción de ejemplo del proyecto SPGER', '2023-06-01', '2024-01-01');
+  VALUES ('SPGER', 10, 'Descripción de ejemplo del proyecto SPGER', '2023-06-01', '2024-01-01');
     
 SELECT * FROM Proyecto;
 SELECT P.IDProyecto FROM Proyecto P RIGHT JOIN Usuario U ON U.IDProyecto = P.IDProyecto WHERE U.IDUsuario = 1;
@@ -303,11 +302,11 @@ RIGHT JOIN Usuario U ON U.IDProyecto = P.IDProyecto
 WHERE U.IDUsuario = 1;
 /*USUARIO-------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO Usuario (Matricula, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, RolSistema, IDproyecto) 
+	VALUES('P21013908', '1234', 'Abraham David', 'Fernández', 'Rodríguez', 
+	'abrakadabra007@gmail.com', 'ps21013908@profesor.uv.mx', NULL, 1, 1);
+INSERT INTO Usuario (Matricula, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, RolSistema, IDproyecto) 
 	VALUES('S21013908', '1234', 'Rodolfo', 'Fernández', 'Rodríguez', 
 	'foforfr007@gmail.com', 'zs21013908@estudiantes.uv.mx', 6, 2, 1);
-INSERT INTO Usuario (Matricula, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, RolSistema, IDproyecto) 
-	VALUES('P21013908', '1234', 'Rodolfo', 'Fernández', 'Rodríguez', 
-	'foforfr008@gmail.com', 'zp21013908@estudiantes.uv.mx', null, 1, 1);
 
 SELECT * FROM Usuario WHERE RolSistema = 2;
 SELECT u.IDUsuario, rs.Nombre AS RolSistema 
@@ -317,8 +316,12 @@ SELECT u.IDUsuario, rs.Nombre AS RolSistema
 USE Eminus5;
 INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES 
 ('Creación de base de datos', 'Descripción de ejemplo para la actividad Creación de base de datos', 
-TRUE, 2, 3, '2023-06-01', '2023-06-04', 1, 2);
-
+2, 1, 1, '2023-06-01', '2023-06-04', 1, null);
+INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES 
+('Creación de base de datos 4', 'Descripción de ejemplo para la actividad Creación de base de datos 2', 
+2, 1, 1, '2023-06-01', '2023-06-04', 1, 2);
+use eminus5;
+SELECT * FROM Actividad;
 SELECT A.IDActividad, A.Nombre, A.Descripcion, A.Asignado, E.Nombre AS 'Estado', 
 TA.Nombre AS 'TipoActividad', DATE_FORMAT(A.FechaInicio, '%d-%m-%Y') AS FechaInicio, 
 DATE_FORMAT(A.FechaFin, '%d-%m-%Y') AS FechaFin 
@@ -326,6 +329,12 @@ FROM Estado E RIGHT JOIN Actividad A ON E.IDEstado = A.Estado
 LEFT JOIN TipoActividad TA ON TA.IDTipoActividad = A.Tipo 
 RIGHT JOIN Proyecto ON A.IDProyecto = Proyecto.IDProyecto 
 WHERE Proyecto.IDProyecto = 1;
-
-
-
+UPDATE Actividad 
+SET Nombre = 'Nombre cambiado 4', Descripcion = 'Descripción cambiada', Tipo = 2, 
+FechaInicio = '2023-11-26', FechaFin = '2023-11-27' 
+WHERE IDActividad = 4;
+SELECT U.IDusuario FROM 
+Actividad A LEFT JOIN Usuario U 
+ON A.IDDesarrollador = U.IDUsuario 
+WHERE A.IDActividad = 4;
+DELETE FROM Actividad WHERE `IDActividad` = 1;

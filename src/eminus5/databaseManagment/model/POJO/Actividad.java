@@ -69,7 +69,7 @@ public class Actividad {
         this.descripcion = descripcion;
     }
 
-    public String isIsAsignado() {
+    public String getIsAsignado() {
         return isAsignado;
     }
 

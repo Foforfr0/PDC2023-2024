@@ -8,7 +8,7 @@ import eminus5.databaseManagment.model.DAO.ActividadDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
-import static eminus5.utils.ShowMessage.showMessageFailureConnection; 
+import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
 import java.net.URL;
@@ -27,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 
 
 public class FXMLActividadesProyectoController implements Initializable {
@@ -71,17 +72,16 @@ public class FXMLActividadesProyectoController implements Initializable {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     selectedActividad = row.getItem();
                     try {
-                        Stage stageAddPaciente = new Stage();
-                        
+                        Stage stageAddActividad = new Stage();
                         FXMLDetallesActividadController.currentActividad = selectedActividad;
-                        stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividad.fxml"));
-                        stageAddPaciente.setTitle("Detalles de actividad");
-                        stageAddPaciente.initModality(Modality.WINDOW_MODAL);
-                        stageAddPaciente.initOwner(
+                        stageAddActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividad.fxml"));
+                        stageAddActividad.setTitle("Detalles de actividad");
+                        stageAddActividad.initModality(Modality.WINDOW_MODAL);
+                        stageAddActividad.initOwner(
                             (Stage) this.tvActividades.getScene().getWindow()
                         );
-                        stageAddPaciente.initStyle(StageStyle.UTILITY);
-                        stageAddPaciente.showAndWait();
+                        stageAddActividad.initStyle(StageStyle.UTILITY);
+                        stageAddActividad.showAndWait();
                     } catch (IOException ioex) {
                         System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                         ioex.printStackTrace();
@@ -110,15 +110,16 @@ public class FXMLActividadesProyectoController implements Initializable {
     @FXML
     private void clicAddActividad(MouseEvent event) {
         try {
-            Stage stageAddPaciente = new Stage();
-            stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLCrearActividad.fxml"));
-            stageAddPaciente.setTitle("Crear actividad");
-            stageAddPaciente.initModality(Modality.WINDOW_MODAL);
-            stageAddPaciente.initOwner(
+            Stage clicAddActividad = new Stage();
+            FXMLCrearActividadController.idResponsable = idResponsable;
+            clicAddActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLCrearActividad.fxml"));
+            clicAddActividad.setTitle("Crear actividad");
+            clicAddActividad.initModality(Modality.WINDOW_MODAL);
+            clicAddActividad.initOwner(
                 (Stage) this.tvActividades.getScene().getWindow()
             );
-            stageAddPaciente.initStyle(StageStyle.UTILITY);
-            stageAddPaciente.setOnCloseRequest(eventStage -> {
+            clicAddActividad.initStyle(StageStyle.UTILITY);
+            clicAddActividad.setOnCloseRequest(eventStage -> {
                 eventStage.consume();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("¿Está seguro?");
@@ -129,11 +130,12 @@ public class FXMLActividadesProyectoController implements Initializable {
                 alert.showAndWait().ifPresent(response -> {
                     String responseMessage = response.getText();
                     if (responseMessage.equals("Aceptar")) {
-                        stageAddPaciente.close(); 
+                        clicAddActividad.close(); 
                     }
                 });
             });
-            stageAddPaciente.showAndWait();
+            clicAddActividad.showAndWait();
+            initializeData();
         } catch (IOException ioex) {
             System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
             ioex.printStackTrace();
@@ -144,17 +146,16 @@ public class FXMLActividadesProyectoController implements Initializable {
     private void clicModifyActividad(MouseEvent event) {
         if (verifyActividadSelected() != null) {
             try {
-                Stage stageAddPaciente = new Stage();
+                Stage stageModifyActividad = new Stage();
                 FXMLModificarActividadController.currentActividad = verifyActividadSelected();
-                //FXMLModificarActividadController.idActividad = verifyActividadSelected().getIdActividad();
-                stageAddPaciente.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
-                stageAddPaciente.setTitle("Modificar actividad");
-                stageAddPaciente.initModality(Modality.WINDOW_MODAL);
-                stageAddPaciente.initOwner(
+                stageModifyActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
+                stageModifyActividad.setTitle("Modificar actividad");
+                stageModifyActividad.initModality(Modality.WINDOW_MODAL);
+                stageModifyActividad.initOwner(
                     (Stage) this.tvActividades.getScene().getWindow()
                 );
-                stageAddPaciente.initStyle(StageStyle.UTILITY);
-                stageAddPaciente.setOnCloseRequest(eventStage -> {
+                stageModifyActividad.initStyle(StageStyle.UTILITY);
+                stageModifyActividad.setOnCloseRequest(eventStage -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("¿Está seguro?");
                     alert.setHeaderText("¿Está seguro de cancelar?");
@@ -163,11 +164,12 @@ public class FXMLActividadesProyectoController implements Initializable {
                     alert.showAndWait().ifPresent(response -> {
                         String responseMessage = response.getText();
                         if (responseMessage.equals("Aceptar")) {
-                            stageAddPaciente.close(); 
+                            stageModifyActividad.close(); 
                         }
                     });
                 });
-                stageAddPaciente.showAndWait();
+                stageModifyActividad.showAndWait();
+                initializeData();
             } catch (IOException ioex) {
                 System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                 ioex.printStackTrace();
@@ -188,34 +190,95 @@ public class FXMLActividadesProyectoController implements Initializable {
         return selectedActividad;
     }
     
+    private void deleteActividad() {
+        try {
+            ResultOperation resultDelete = ActividadDAO.deleteActividad(
+                verifyActividadSelected().getIdActividad()
+            );
+
+            if (resultDelete.getIsError() == false && resultDelete.getNumberRowsAffected() > 0) {
+                showMessage(
+                    "INFORMATION", 
+                    "Se ha eliminado correctamente", 
+                    "Se ha eliminado con éxito la actividad", 
+                    ""
+                );
+                initializeData();
+            } else if (resultDelete.getIsError() == true) {
+                showMessage(
+                    "ERROR", 
+                    "Falló de eliminación", 
+                    "Falló la eliminación de la actividad", 
+                    "Intente más tarde"
+                );
+            }
+        } catch (SQLException sqlex) {
+            System.out.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"ActividadDAO.deleteActividad\"");
+            sqlex.printStackTrace();
+        }
+    }
+    
     @FXML
     private void clicDeleteActividad(MouseEvent event) {
         if (verifyActividadSelected() != null) {
-            try {
-                ResultOperation resultDelete = ActividadDAO.deleteActividad(
-                        verifyActividadSelected().getIdActividad()
-                );
-                
-                if (resultDelete.getIsError() == false && resultDelete.getNumberRowsAffected() > 0) {
-                    
-                } else if (resultDelete.getIsError() == true) {
-                    showMessage(
-                        "ERROR", 
-                        "Falló de eliminación", 
-                        "Falló la eliminación de la actividad", 
-                        "Intente más tarde"
-                    );
-                }
-            } catch (SQLException sqlex) {
-                System.out.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"ActividadDAO.deleteActividad\"");
-                sqlex.printStackTrace();
-            }
+            Alert confirmationDelete = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmationDelete.setTitle("¿Está seguro de eliminar?");
+                confirmationDelete.setHeaderText("¿Está seguro de eliminar la actividad?");
+                confirmationDelete.setContentText("No se podrán revertir los cambios");
+                confirmationDelete.showAndWait().ifPresent(response -> {
+                    String responseMessage = response.getText();
+                    if (responseMessage.equals("Aceptar")) {
+                        deleteActividad();
+                    }
+                });
         } else {
             showMessage(
                 "WARNING", 
                 "Selección requerida", 
                 "Primero selecciona una actividad", 
                 "Eliga una actividad para poder eliminarla"
+            );
+        }
+    }
+
+    @FXML
+    private void clicAsignarActividad(MouseEvent event) {
+        if (verifyActividadSelected() != null) {
+            try {
+                Stage stageAsignActividad = new Stage();
+                FXMLAsignarActividadController.idActividad = verifyActividadSelected().getIdActividad();
+                stageAsignActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLAsignarActividad.fxml"));
+                stageAsignActividad.setTitle("Asignar actividad");
+                stageAsignActividad.initModality(Modality.WINDOW_MODAL);
+                stageAsignActividad.initOwner(
+                    (Stage) this.tvActividades.getScene().getWindow()
+                );
+                stageAsignActividad.initStyle(StageStyle.UTILITY);
+                stageAsignActividad.setOnCloseRequest(eventStage -> {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("¿Está seguro?");
+                    alert.setHeaderText("¿Está seguro de cancelar?");
+                    alert.setContentText("¿No se guardarán los cambios realizados?");
+                        
+                    alert.showAndWait().ifPresent(response -> {
+                        String responseMessage = response.getText();
+                        if (responseMessage.equals("Aceptar")) {
+                            stageAsignActividad.close(); 
+                        }
+                    });
+                });
+                stageAsignActividad.showAndWait();
+                initializeData();
+            } catch (IOException ioex) {
+                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
+                ioex.printStackTrace();
+            }
+        } else {
+            showMessage(
+                "WARNING", 
+                "Selección requerida", 
+                "Primero selecciona una actividad", 
+                "Eliga una actividad para poder asignarla"
             );
         }
     }
