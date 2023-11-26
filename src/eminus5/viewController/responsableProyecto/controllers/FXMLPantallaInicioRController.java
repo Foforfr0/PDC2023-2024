@@ -4,11 +4,15 @@
  */
 package eminus5.viewController.responsableProyecto.controllers;
 
+import static eminus5.utils.loadView.loadScene;
+import static eminus5.utils.loadView.loadView;
+import static eminus5.utils.loadView.loadParent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,10 +21,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import static eminus5.utils.loadView.loadScene;
-import static eminus5.utils.loadView.loadView;
-import static eminus5.utils.loadView.loadParent;
-import javafx.fxml.FXMLLoader;
 
 
 public class FXMLPantallaInicioRController implements Initializable {
@@ -90,7 +90,7 @@ public class FXMLPantallaInicioRController implements Initializable {
         try {
             showSceneLogin();
         } catch (IOException ioex) {
-            System.out.println("\"Error de \"IOException\" en archivo \"FXMLPantallaInicioRController\" en método \"showSceneLogin\"\"");
+            System.err.println("\"Error de \"IOException\" en archivo \"FXMLPantallaInicioRController\" en método \"showSceneLogin\"\"");
             ioex.printStackTrace();
         }
     }
@@ -110,7 +110,7 @@ public class FXMLPantallaInicioRController implements Initializable {
             Pane vistaSecundaria = (Pane) loadParent(FXMLActividadesProyecto);
             this.pnInsideScene.getChildren().setAll(vistaSecundaria);
         } catch (IOException ioex) {
-            System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioRController\" en método \"clicShowGestionarActividadesScene\"");
+            System.err.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioRController\" en método \"clicShowGestionarActividadesScene\"");
             ioex.printStackTrace();
         }
     }    

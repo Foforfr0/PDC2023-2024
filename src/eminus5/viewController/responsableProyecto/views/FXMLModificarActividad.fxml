@@ -28,15 +28,15 @@
             <Label layoutX="43.0" layoutY="40.0" text="Nombre: *" />
             <TextField fx:id="tfNombre" layoutX="57.0" layoutY="57.0" prefHeight="25.0" prefWidth="286.0" />
             <Label layoutX="43.0" layoutY="97.0" text="Descripcion: *" />
-            <Label layoutX="370.0" layoutY="36.0" text="Tipo: *" />
-            <Label layoutX="546.0" layoutY="36.0" text="Fecha inicio: " />
-            <Button fx:id="btAddActividad" defaultButton="true" layoutX="689.0" layoutY="334.0" mnemonicParsing="false" onAction="#clicAddActividad" text="Agregar" />
-            <Button fx:id="btCancelAddActividad" cancelButton="true" layoutX="620.0" layoutY="334.0" mnemonicParsing="false" onAction="#clicCancelAdd" text="Cancelar" />
             <TextArea fx:id="tfDescripcion" layoutX="55.0" layoutY="114.0" prefHeight="211.0" prefWidth="469.0" />
+            <Label layoutX="370.0" layoutY="36.0" text="Tipo: *" />
             <ComboBox fx:id="cbTipo" layoutX="388.0" layoutY="57.0" prefHeight="25.0" prefWidth="130.0" />
+            <Label layoutX="546.0" layoutY="36.0" text="Fecha inicio: " />
             <DatePicker fx:id="dpFechaInicio" layoutX="564.0" layoutY="53.0" prefHeight="25.0" prefWidth="137.0" />
             <DatePicker fx:id="dpFechaFin" layoutX="566.0" layoutY="110.0" prefHeight="25.0" prefWidth="137.0" />
             <Label layoutX="555.0" layoutY="93.0" text="Fecha fin:" />
+            <Button fx:id="btAddActividad" defaultButton="true" layoutX="689.0" layoutY="334.0" mnemonicParsing="false" onAction="#clicModifyActividad" text="Modificar" />
+            <Button fx:id="btCancelAddActividad" cancelButton="true" layoutX="620.0" layoutY="334.0" mnemonicParsing="false" onAction="#clicCancelAdd" text="Cancelar" />
          </children>
       </Pane>
    </children>

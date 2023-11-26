@@ -5,15 +5,18 @@
 package eminus5.viewController.responsableProyecto.controllers;
 
 import eminus5.databaseManagment.model.POJO.Actividad;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 public class FXMLDetallesActividadController implements Initializable {
@@ -57,10 +60,18 @@ public class FXMLDetallesActividadController implements Initializable {
     }
     
     private void initializeStage() {
-        
+        stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {     //addActionToStage();
+            if (event.getCode() == KeyCode.ESCAPE){
+                event.consume();
+                Stage current = (Stage) this.pnPrincipal.getScene().getWindow();
+                current.close();
+            }
+        }); 
     }
     
     @FXML
     private void clicAceptar(ActionEvent event) {
+        Stage currentStage = (Stage) this.pnPrincipal.getScene().getWindow();
+        currentStage.close();
     }
 }

@@ -36,7 +36,7 @@ public class Eminus5 extends Application {
         try {
             showSceneLogin(stage);
         } catch(IOException ioex) {
-            System.out.println("\"Error de \"IOException\" en archivo \"Eminus5\" en método \"showSceneLogin\"\"");
+            System.err.println("\"Error de \"IOException\" en archivo \"Eminus5\" en método \"showSceneLogin\"\"");
             ioex.printStackTrace();
         }
     }

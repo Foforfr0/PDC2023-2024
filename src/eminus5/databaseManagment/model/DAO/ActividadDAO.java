@@ -6,9 +6,9 @@
 package eminus5.databaseManagment.model.DAO;
 
 import eminus5.databaseManagment.model.OpenConnectionDB;
-import eminus5.databaseManagment.model.ResultOperation;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.POJO.Proyecto;
+import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -67,7 +67,7 @@ public class ActividadDAO {
                         listActividades.size(),
                         listActividades
                     );
-                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS "+listActividades.size()+" DEL PROYECTO "+currentProyecto.getIdProyecto());
+                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS: "+listActividades.size()+" DEL PROYECTO ID"+currentProyecto.getIdProyecto());
                 }
                 if (listActividades.size() <= 0) {
                     resultOperation = new ResultOperation(            //It doesn't exist but it wasn't an error
@@ -76,7 +76,7 @@ public class ActividadDAO {
                         0, 
                         null
                     );
-                    System.out.println("NO SE ENCONTRARON ACTIVIDADES");
+                    System.out.println("NO SE ENCONTRARON ACTIVIDADES DEL PROYECTO ID"+currentProyecto.getIdProyecto());
                 }
             } catch (SQLException sqlex) {
                 resultOperation = new ResultOperation(               
@@ -85,7 +85,7 @@ public class ActividadDAO {
                     -1, 
                     null
                 );
-                System.out.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"getActividadesProyecto\"");
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"getActividadesProyecto\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();
@@ -103,15 +103,265 @@ public class ActividadDAO {
         return resultOperation;
     }
     
-    public static ResultOperation createActividad(int idProyecto) throws SQLException{
-        return new ResultOperation();
+    public static ResultOperation getDesarrolladoActividad(int idActividad) throws SQLException{
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {    
+            try {            
+                String sqlQuery = "SELECT U.IDUsuario FROM " +
+                                  "Actividad A LEFT JOIN Usuario U " +
+                                  "ON A.IDDesarrollador = U.IDUsuario " +
+                                  "WHERE A.IDActividad = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setInt(1, idActividad);
+                ResultSet resultQuery = prepareQuery.executeQuery();
+                int idDesarrolllador = 0;
+                
+                if (resultQuery.next()) {
+                    idDesarrolllador = resultQuery.getInt("IDUsuario");
+                    resultOperation = new ResultOperation(            //It´s exists
+                        false, 
+                        "Se encontró el desarrollador", 
+                        idDesarrolllador,
+                        idDesarrolllador
+                    );
+                    System.out.println("ActividadDAO//DESARROLLADOR ENCONTRADO "+idDesarrolllador);
+                }
+                if (idDesarrolllador <= 0) {
+                    resultOperation = new ResultOperation(            //It doesn't exist but it wasn't an error
+                        false, 
+                        "La actividad no está asignada a un desarrollador", 
+                        0, 
+                        null
+                    );
+                    System.out.println("NO SE ENCONTRÓ DESARROLLADOR");
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"getDesarrolladoActividad\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
     }
     
-    public static ResultOperation modifyActividad(int idActividad) throws SQLException{
-        return new ResultOperation();
+    private static int getTipoActividadToInt (String idTipoAtividad) {
+        switch (idTipoAtividad) {
+            case "Frontend":
+                return 1;
+            case "Backend":
+                return 2;
+            case "Base de datos":
+                return 3;
+            case "Controlador":
+                return 4;
+            case "JavaScript":
+                return 5;
+            default:
+                return 0;
+        }
+    }
+    
+    public static ResultOperation createActividad(int idResponsable, Actividad newActividad) throws SQLException{
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
+        
+        if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null) {
+            resultOperation = new ResultOperation(
+                resultGetProyecto.getIsError(),
+                resultGetProyecto.getMessage(),
+                0,
+                null
+            );
+        } else if (connectionDB != null) { 
+            try {            
+                String sqlQuery = "INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, " +
+                                  "FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES " +
+                                  "(?,?,?,?,?,(STR_TO_DATE(?, '%d-%m-%Y')),(STR_TO_DATE(?, '%d-%m-%Y')),?,NULL);";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setString(1, newActividad.getNombre());
+                    prepareQuery.setString(2, newActividad.getDescripcion());
+                    prepareQuery.setInt(3, 2);
+                    prepareQuery.setInt(4, 1);
+                    prepareQuery.setInt(5, getTipoActividadToInt(newActividad.getTipo()));
+                    prepareQuery.setString(6, newActividad.getFechaInicio().replace("/}", "-"));
+                    prepareQuery.setString(7, newActividad.getFechaFin().replace("/}", "-"));
+                    prepareQuery.setInt(8, resultGetProyecto.getNumberRowsAffected());
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                        false, 
+                        "Se ha registrado la actividad", 
+                        numberAffectedRows, 
+                        newActividad
+                    );
+                    System.out.println("ActividadDAO//SE HA REGISTRADO LA ACTIVIDAD: "+newActividad.getNombre());
+                } else {
+                    resultOperation = new ResultOperation(
+                        true, 
+                        "No se ha registrado la actividad", 
+                        numberAffectedRows, 
+                        newActividad
+                    );
+                    System.out.println("ActividadDAO//NO SE REGISTRÓ LA ACTIVIDAD: "+newActividad.getNombre());
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"createActividad\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
+    }
+    
+    public static ResultOperation modifyActividad(Actividad newActividad) throws SQLException{
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) { 
+            try {            
+                String sqlQuery = "UPDATE Actividad " +
+                                  "SET Nombre = ?, Descripcion = ?, Tipo = ?, " +
+                                  "FechaInicio = (STR_TO_DATE(?, '%d-%m-%Y')), FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')) " +
+                                  "WHERE IDActividad = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setString(1, newActividad.getNombre());
+                    prepareQuery.setString(2, newActividad.getDescripcion());
+                    prepareQuery.setInt(3, getTipoActividadToInt(newActividad.getTipo()));
+                    prepareQuery.setString(4, newActividad.getFechaInicio().replace("/}", "-"));
+                    System.out.println("        Fecha de inicio: "+newActividad.getFechaInicio().replace("/}", "-"));
+                    prepareQuery.setString(5, newActividad.getFechaFin().replace("/}", "-"));
+                    System.out.println("        Fecha de fin: "+newActividad.getFechaFin().replace("/}", "-"));
+                    prepareQuery.setInt(6, newActividad.getIdActividad());
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                        false, 
+                        "Se ha modificado la actividad", 
+                        numberAffectedRows, 
+                        newActividad
+                    );
+                    System.out.println("ActividadDAO//SE HA MODIFICADO LA ACTIVIDAD: "+newActividad.getNombre());
+                } else {
+                    resultOperation = new ResultOperation(
+                        true, 
+                        "No se ha modificado la actividad", 
+                        numberAffectedRows, 
+                        newActividad
+                    );
+                    System.out.println("ActividadDAO//SE SE MODIFICÓ LA ACTIVIDAD: "+newActividad.getNombre());
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.out.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"modifyActividad\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
     }
     
     public static ResultOperation deleteActividad(int idActividad) throws SQLException{
-        return new ResultOperation();
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) { 
+            try {            
+                String sqlQuery = "DELETE FROM Actividad WHERE IDActividad = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setInt(1, idActividad);
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                        false, 
+                        "Se ha eliminado la actividad", 
+                        1, 
+                        null
+                    );
+                    System.out.println("ActividadDAO//SE HA ELIMINADO LA ACTIVIDAD: "+idActividad);
+                } else {
+                    resultOperation = new ResultOperation(
+                        true, 
+                        "No se ha eliminado la actividad", 
+                        -1, 
+                        null
+                    );
+                    System.out.println("ActividadDAO//NO SE ELIMINÓ LA ACTIVIDAD: "+idActividad);
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.out.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"deleteActividad\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
     }
 }
