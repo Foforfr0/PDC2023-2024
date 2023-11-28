@@ -136,10 +136,10 @@ public class FXMLInicioSesionController implements Initializable {
                     );
                 }
             } catch (SQLException sqlex) {
-                System.out.println("\"Error de \"SQLException\" en archivo \"FXMLInicioSesionController\" en método \"getLogin\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLInicioSesionController\" en método \"getLogin\"");
                 sqlex.printStackTrace();
             } catch (IOException ioex) {
-                System.out.println("\"Error de \"IOException\" en archivo \"FXMLInicioSesionController\" en método \"showScenePaginaInicial\"\"");
+                System.err.println("\"Error de \"IOException\" en archivo \"FXMLInicioSesionController\" en método \"showScenePaginaInicial\"\"");
                 ioex.printStackTrace();
             }
         }

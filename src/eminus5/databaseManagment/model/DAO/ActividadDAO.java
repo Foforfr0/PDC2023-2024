@@ -19,30 +19,21 @@ import javafx.collections.ObservableList;
 
 
 public class ActividadDAO {
-    public static ResultOperation getActividadesProyecto(int idResponsable) throws SQLException{
+    public static ResultOperation getActividadesProyecto(int idProyecto) throws SQLException{
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
-        ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
         
-        if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null) {
-            resultOperation = new ResultOperation(
-                resultGetProyecto.getIsError(),
-                resultGetProyecto.getMessage(),
-                0,
-                null
-            );
-        } else if (connectionDB != null) {    
+        if (connectionDB != null) {    
             try {            
                 String sqlQuery = "SELECT A.IDActividad, A.Nombre, A.Descripcion, A.Asignado, E.Nombre AS 'Estado', " +
                                   "TA.Nombre AS 'TipoActividad', DATE_FORMAT(A.FechaInicio, '%d-%m-%Y') AS FechaInicio, " +
-                                  "DATE_FORMAT(A.FechaFin, '%d-%m-%Y') AS FechaFin " +
+                                  "DATE_FORMAT(A.FechaFin, '%d-%m-%Y') AS FechaFin, A.IDProyecto, A.IDDesarrollador " +
                                   "FROM Estado E RIGHT JOIN Actividad A ON E.IDEstado = A.Estado " +
                                   "LEFT JOIN TipoActividad TA ON TA.IDTipoActividad = A.Tipo " +
                                   "RIGHT JOIN Proyecto ON A.IDProyecto = Proyecto.IDProyecto " +
                                   "WHERE Proyecto.IDProyecto = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
-                Proyecto currentProyecto = (Proyecto) resultGetProyecto.getData();
-                    prepareQuery.setInt(1, currentProyecto.getIdProyecto());
+                    prepareQuery.setInt(1, idProyecto);
                 ResultSet resultQuery = prepareQuery.executeQuery();
                 
                 ObservableList<Actividad> listActividades= FXCollections.observableArrayList();
@@ -60,6 +51,8 @@ public class ActividadDAO {
                         newActividad.setTipo(resultQuery.getString("TipoActividad"));
                         newActividad.setFechaInicio(resultQuery.getString("FechaInicio"));
                         newActividad.setFechaFin(resultQuery.getString("FechaFin"));
+                        newActividad.setIdProyecto(resultQuery.getInt("IDProyecto"));
+                        newActividad.setIdDesarrollador(resultQuery.getInt("IDDesarrollador"));
                     listActividades.add(newActividad);
                     resultOperation = new ResultOperation(            //It´s exists
                         false, 
@@ -67,7 +60,7 @@ public class ActividadDAO {
                         listActividades.size(),
                         listActividades
                     );
-                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS: "+listActividades.size()+" DEL PROYECTO ID"+currentProyecto.getIdProyecto());
+                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS: "+listActividades.size()+" DEL PROYECTO ID"+idProyecto);
                 }
                 if (listActividades.size() <= 0) {
                     resultOperation = new ResultOperation(            //It doesn't exist but it wasn't an error
@@ -76,7 +69,7 @@ public class ActividadDAO {
                         0, 
                         null
                     );
-                    System.out.println("NO SE ENCONTRARON ACTIVIDADES DEL PROYECTO ID"+currentProyecto.getIdProyecto());
+                    System.out.println("ActividadDAO//NO SE ENCONTRARON ACTIVIDADES DEL PROYECTO ID"+idProyecto);
                 }
             } catch (SQLException sqlex) {
                 resultOperation = new ResultOperation(               
@@ -103,7 +96,7 @@ public class ActividadDAO {
         return resultOperation;
     }
     
-    public static ResultOperation getDesarrolladoActividad(int idActividad) throws SQLException{
+    public static ResultOperation getDesarrolladorActividad(int idActividad) throws SQLException{
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
         
@@ -135,7 +128,7 @@ public class ActividadDAO {
                         0, 
                         null
                     );
-                    System.out.println("NO SE ENCONTRÓ DESARROLLADOR");
+                    System.out.println("ActividadDAO//NO SE ENCONTRÓ DESARROLLADOR");
                 }
             } catch (SQLException sqlex) {
                 resultOperation = new ResultOperation(               
@@ -179,19 +172,11 @@ public class ActividadDAO {
         }
     }
     
-    public static ResultOperation createActividad(int idResponsable, Actividad newActividad) throws SQLException{
+    public static ResultOperation createActividad(int idProyecto, Actividad newActividad) throws SQLException{
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
-        ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
         
-        if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null) {
-            resultOperation = new ResultOperation(
-                resultGetProyecto.getIsError(),
-                resultGetProyecto.getMessage(),
-                0,
-                null
-            );
-        } else if (connectionDB != null) { 
+        if (connectionDB != null) { 
             try {            
                 String sqlQuery = "INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, " +
                                   "FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES " +
@@ -204,7 +189,7 @@ public class ActividadDAO {
                     prepareQuery.setInt(5, getTipoActividadToInt(newActividad.getTipo()));
                     prepareQuery.setString(6, newActividad.getFechaInicio().replace("/}", "-"));
                     prepareQuery.setString(7, newActividad.getFechaFin().replace("/}", "-"));
-                    prepareQuery.setInt(8, resultGetProyecto.getNumberRowsAffected());
+                    prepareQuery.setInt(8, idProyecto);
                 int numberAffectedRows = prepareQuery.executeUpdate();
                 
                 if (numberAffectedRows > 0) {
@@ -264,9 +249,7 @@ public class ActividadDAO {
                     prepareQuery.setString(2, newActividad.getDescripcion());
                     prepareQuery.setInt(3, getTipoActividadToInt(newActividad.getTipo()));
                     prepareQuery.setString(4, newActividad.getFechaInicio().replace("/}", "-"));
-                    System.out.println("        Fecha de inicio: "+newActividad.getFechaInicio().replace("/}", "-"));
                     prepareQuery.setString(5, newActividad.getFechaFin().replace("/}", "-"));
-                    System.out.println("        Fecha de fin: "+newActividad.getFechaFin().replace("/}", "-"));
                     prepareQuery.setInt(6, newActividad.getIdActividad());
                 int numberAffectedRows = prepareQuery.executeUpdate();
                 
@@ -294,7 +277,7 @@ public class ActividadDAO {
                     -1, 
                     null
                 );
-                System.out.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"modifyActividad\"");
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"modifyActividad\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();

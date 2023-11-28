@@ -56,7 +56,7 @@ public class ProyectoDAO {
                     -1, 
                     null
                 );
-                System.out.println("Error de \"SQLException\" en archivo \"ProyectoDAO\" en método \"getProyectoUsuario\"");
+                System.err.println("Error de \"SQLException\" en archivo \"ProyectoDAO\" en método \"getProyectoUsuario\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();

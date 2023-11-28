@@ -149,7 +149,7 @@ public class FXMLModificarActividadController implements Initializable {
                     currentStage.close();
                 }
             } catch (SQLException sqlex) {
-                System.out.println("\"Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"createActividad\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"createActividad\"");
                 sqlex.printStackTrace();
             }
         }
