@@ -5,6 +5,7 @@
 package eminus5.viewController.responsableProyecto.controllers;
 
 import eminus5.databaseManagment.model.DAO.ActividadDAO;
+import eminus5.databaseManagment.model.DAO.ProyectoDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
@@ -83,7 +84,7 @@ public class FXMLActividadesProyectoController implements Initializable {
                         stageAddActividad.initStyle(StageStyle.UTILITY);
                         stageAddActividad.showAndWait();
                     } catch (IOException ioex) {
-                        System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
+                        System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                         ioex.printStackTrace();
                     }
                 }
@@ -94,13 +95,24 @@ public class FXMLActividadesProyectoController implements Initializable {
     
     public void initializeData() {
         try{            
-            this.actividades = FXCollections.observableArrayList(
-                (ObservableList) ActividadDAO.getActividadesProyecto(idResponsable).getData()
-            );
-            this.tvActividades.setItems(this.actividades);
+            ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
+        
+            if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null || resultGetProyecto.getNumberRowsAffected() <= 0) {
+                showMessage(
+                    "ERROR", 
+                    "Error inesperado", 
+                    resultGetProyecto.getMessage(), 
+                    "Intente más tarde"
+                );
+            } else {
+                this.actividades = FXCollections.observableArrayList(
+                    (ObservableList) ActividadDAO.getActividadesProyecto(resultGetProyecto.getNumberRowsAffected()).getData()
+                );
+                this.tvActividades.setItems(this.actividades);
+            }
         }catch(SQLException sqlex){
             showMessageFailureConnection();
-            System.out.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"initializeData\"");
+            System.err.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"initializeData\"");
             sqlex.printStackTrace();
         }
         
@@ -137,7 +149,7 @@ public class FXMLActividadesProyectoController implements Initializable {
             clicAddActividad.showAndWait();
             initializeData();
         } catch (IOException ioex) {
-            System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
+            System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
             ioex.printStackTrace();
         }
     }
@@ -171,7 +183,7 @@ public class FXMLActividadesProyectoController implements Initializable {
                 stageModifyActividad.showAndWait();
                 initializeData();
             } catch (IOException ioex) {
-                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
+                System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                 ioex.printStackTrace();
             }
         } else {
@@ -213,7 +225,7 @@ public class FXMLActividadesProyectoController implements Initializable {
                 );
             }
         } catch (SQLException sqlex) {
-            System.out.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"ActividadDAO.deleteActividad\"");
+            System.err.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"ActividadDAO.deleteActividad\"");
             sqlex.printStackTrace();
         }
     }
@@ -246,7 +258,9 @@ public class FXMLActividadesProyectoController implements Initializable {
         if (verifyActividadSelected() != null) {
             try {
                 Stage stageAsignActividad = new Stage();
+                FXMLAsignarActividadController.idProyecto = verifyActividadSelected().getIdProyecto();
                 FXMLAsignarActividadController.idActividad = verifyActividadSelected().getIdActividad();
+                FXMLAsignarActividadController.idDesarrolladorAsignado = verifyActividadSelected().getIdDesarrollador();
                 stageAsignActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLAsignarActividad.fxml"));
                 stageAsignActividad.setTitle("Asignar actividad");
                 stageAsignActividad.initModality(Modality.WINDOW_MODAL);
@@ -270,7 +284,7 @@ public class FXMLActividadesProyectoController implements Initializable {
                 stageAsignActividad.showAndWait();
                 initializeData();
             } catch (IOException ioex) {
-                System.out.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
+                System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                 ioex.printStackTrace();
             }
         } else {

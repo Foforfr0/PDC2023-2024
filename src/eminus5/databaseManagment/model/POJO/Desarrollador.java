@@ -13,10 +13,11 @@ public class Desarrollador {
     private String matricula;
     private String correoInstitucional;
     private String semestre;
+    private boolean isAsignado;
 
     public Desarrollador() {
     }
-
+    
     public Desarrollador(int idDesarrollador, String nombre, String apellidoPaterno, String apellidoMaterno, String matricula, String correoInstitucional, String semestre) {
         this.idDesarrollador = idDesarrollador;
         this.nombre = nombre;
@@ -26,7 +27,17 @@ public class Desarrollador {
         this.correoInstitucional = correoInstitucional;
         this.semestre = semestre;
     }
-
+    
+    public Desarrollador(int idDesarrollador, String nombre, String apellidoPaterno, String apellidoMaterno, String matricula, String correoInstitucional, String semestre, boolean isAsignado) {
+        this.idDesarrollador = idDesarrollador;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.matricula = matricula;
+        this.correoInstitucional = correoInstitucional;
+        this.semestre = semestre;
+    }
+    
     public int getIdDesarrollador() {
         return idDesarrollador;
     }
@@ -81,5 +92,13 @@ public class Desarrollador {
 
     public void setSemestre(String semestre) {
         this.semestre = semestre;
+    }
+
+    public boolean isIsAsignado() {
+        return isAsignado;
+    }
+
+    public void setIsAsignado(boolean isAsignado) {
+        this.isAsignado = isAsignado;
     }
 }

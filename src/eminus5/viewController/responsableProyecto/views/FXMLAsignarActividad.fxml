@@ -7,8 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="430.0" prefWidth="770.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="eminus5.viewController.responsableProyecto.controllers.FXMLAsignarActividadController">
+<AnchorPane id="AnchorPane" prefHeight="430.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.responsableProyecto.controllers.FXMLAsignarActividadController">
    <children>
       <Pane fx:id="pnPrincipal" prefHeight="70.0" prefWidth="770.0" style="-fx-background-color: #2c87cf;">
          <children>
@@ -35,7 +34,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="722.0">
                      <children>
-                        <TableView prefHeight="282.0" prefWidth="724.0">
+                        <TableView fx:id="tvDesarrolladores" prefHeight="282.0" prefWidth="724.0">
                            <columns>
                               <TableColumn fx:id="tcNumDesarrollador" prefWidth="29.0" text="#" />
                               <TableColumn fx:id="tcApellidoPaterno" prefWidth="127.0" text="Apellido paterno" />

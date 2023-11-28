@@ -4,22 +4,33 @@
  */
 package eminus5.viewController.responsableProyecto.controllers;
 
+import eminus5.databaseManagment.model.DAO.DesarrolladorDAO;
 import eminus5.databaseManagment.model.POJO.Desarrollador;
+import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.Callback;
 
 
 public class FXMLAsignarActividadController implements Initializable {
     @FXML
     private Pane pnPrincipal;
+    @FXML
+    private TableView<Desarrollador> tvDesarrolladores;
     @FXML
     private TableColumn<Desarrollador, Integer> tcNumDesarrollador;
     @FXML
@@ -38,7 +49,10 @@ public class FXMLAsignarActividadController implements Initializable {
     private TableColumn<Desarrollador, Boolean> tcAsignado;
 
     
+    public static int idProyecto = 0;
     public static int idActividad = 0;
+    public static int idDesarrolladorAsignado = 0;
+    private ObservableList<Desarrollador> desarrolladores = FXCollections.observableArrayList();
     
     
     @Override
@@ -48,7 +62,35 @@ public class FXMLAsignarActividadController implements Initializable {
     }        
     
     private void initializeData() {
+        try{  
+            this.desarrolladores = FXCollections.observableArrayList(
+                (ObservableList) DesarrolladorDAO.getDesarrolladoresProyecto(idProyecto).getData()
+            );
+            this.tvDesarrolladores.setItems(this.desarrolladores);
+        }catch(SQLException sqlex){
+            showMessageFailureConnection();
+            System.err.println("Error de \"SQLException\" en archivo \"FXMLAsignarActividadController\" en método \"initializeData\"");
+            sqlex.printStackTrace();
+        }
         
+        ToggleGroup tgAsignado = new ToggleGroup();
+        this.tcAsignado.setCellFactory(col -> new TableCell<Desarrollador, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty == false) {
+                    RadioButton radioButton = new RadioButton();
+                    radioButton.setToggleGroup(tgAsignado);
+                    setGraphic(radioButton);
+                }
+            }
+        });
+        
+        for (Desarrollador item : tvDesarrolladores.getItems()) {
+            if (item.getIdDesarrollador() == idDesarrolladorAsignado) {
+                
+            }
+        }
     }
     
     private void initializeStage() {
@@ -59,30 +101,28 @@ public class FXMLAsignarActividadController implements Initializable {
         this.tcCorreoInstitucional.setCellValueFactory(new PropertyValueFactory("correoInstitucional"));
         this.tcSemestre.setCellValueFactory(new PropertyValueFactory("semestre"));
         
-        tcNumDesarrollador.setCellFactory(col -> new TableCell<Desarrollador, Integer>() {
-            @Override
+        this.tcNumDesarrollador.setCellFactory(col -> new TableCell<Desarrollador, Integer>() {
+            @Override       
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(String.valueOf(getIndex() + 1));
+                if (empty == false) {
+                    setText(Integer.toString(getIndex() + 1));
                 }
             }
         });
-        tcAsignado.setCellFactory(col -> new TableCell<Desarrollador, Boolean>() {
+        /*
+        ToggleGroup tgAsignado = new ToggleGroup();
+        this.tcAsignado.setCellFactory(col -> new TableCell<Desarrollador, Boolean>() {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
+                if (empty == false) {
                     RadioButton radioButton = new RadioButton();
-                    // Configurar lógica para seleccionar/deseleccionar RadioButtons
+                    radioButton.setToggleGroup(tgAsignado);
                     setGraphic(radioButton);
                 }
             }
-        });
+        });*/
     }
     
     @FXML

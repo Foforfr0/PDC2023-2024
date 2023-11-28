@@ -5,9 +5,11 @@
 package eminus5.viewController.responsableProyecto.controllers;
 
 import eminus5.databaseManagment.model.DAO.ActividadDAO;
+import eminus5.databaseManagment.model.DAO.ProyectoDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
 import eminus5.utils.ShowMessage;
+import static eminus5.utils.ShowMessage.showMessage;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -146,26 +148,37 @@ public class FXMLCrearActividadController implements Initializable {
                     newActividad.setTipo(this.cbTipo.getValue());
                     newActividad.setFechaInicio(this.dpFechaInicio.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                     newActividad.setFechaFin(this.dpFechaFin.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-                ResultOperation resultCreate = ActividadDAO.createActividad(idResponsable, newActividad);
-                if (resultCreate.getIsError() == true) {
-                    ShowMessage.showMessage(
+                
+                ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
+                if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null || resultGetProyecto.getNumberRowsAffected() <= 0) {
+                    showMessage(
                         "ERROR", 
                         "Error inesperado", 
-                        resultCreate.getMessage(), 
+                        resultGetProyecto.getMessage(), 
                         "Intente más tarde"
                     );
                 } else {
-                    ShowMessage.showMessage(
-                            "INFORMATION", 
-                            "Se ha creado correctamente", 
-                            "Se creó con éxito la actividad", 
-                            ""
-                    );
-                    Stage currentStage = (Stage) this.tfNombre.getScene().getWindow();
-                    currentStage.close();
+                    ResultOperation resultCreate = ActividadDAO.createActividad(resultGetProyecto.getNumberRowsAffected(), newActividad);
+                    if (resultCreate.getIsError() == true) {
+                        ShowMessage.showMessage(
+                            "ERROR", 
+                            "Error inesperado", 
+                            resultCreate.getMessage(), 
+                            "Intente más tarde"
+                        );
+                    } else {
+                        ShowMessage.showMessage(
+                                "INFORMATION", 
+                                "Se ha creado correctamente", 
+                                "Se creó con éxito la actividad", 
+                                ""
+                        );
+                        Stage currentStage = (Stage) this.tfNombre.getScene().getWindow();
+                        currentStage.close();
+                    }
                 }
             } catch (SQLException sqlex) {
-                System.out.println("\"Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"createActividad\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"createActividad\"");
                 sqlex.printStackTrace();
             }
         }
