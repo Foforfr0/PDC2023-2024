@@ -24,22 +24,17 @@ public class BitacoraDAO {
         
         if(connectionDB != null){
             try{
-                String sqlQuery = "SELECT * FROM Bitacora WHERE idUser = ?";
-                PreparedStatement prepareQuery= connectionDB.prepareStatement(sqlQuery);
+                String sqlQuery = "SELECT *  FROM Bitacora " +
+                                  "JOIN Usuario ON Bitacora.IDDesarrollador = Usuario.IDUsuario " +
+                                  "WHERE Usuario.IDUsuario = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, idUser);
                 ResultSet resultQuery = prepareQuery.executeQuery();
+                
                 ObservableList<Bitacora> listBitacoras = FXCollections.observableArrayList();
                 while(resultQuery.next()){
-                    Bitacora newBitacora = new Bitacora(
-                            resultQuery.getInt("idBitacora"),
-                            resultQuery.getInt("numBitacora"),
-                            resultQuery.getString("nombreCambio"),
-                            resultQuery.getString("descripcion"),
-                            resultQuery.getInt("idEstado"),
-                            resultQuery.getInt("idDesarrollador"),
-                            resultQuery.getInt("idActividad"),
-                            resultQuery.getInt("idCambio")
-                    );
+                    Bitacora newBitacora = new Bitacora();
+                    //TODO
                     listBitacoras.add(newBitacora);
                 }
                 
@@ -50,14 +45,24 @@ public class BitacoraDAO {
                         listBitacoras
                 );
             } catch (SQLException sqlex) {
-                resultOperation = new ResultOperation(true, "Falló conexión con la base de datos", -1, null);
-                System.out.println("Error de \"SQLException\" en archivo \"BitacoraDAO\"");
+                resultOperation = new ResultOperation(
+                        true,
+                        "Fallo la conexion con la base de datos",
+                        -1,
+                        null
+                );
+                System.out.println("Error de \"SQLException\" en archivo\"BitacoraDAO\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();
             }
         } else {
-            resultOperation = new ResultOperation(true, "Falló conexión con la base de datos", -1, null);
+            resultOperation = new ResultOperation(
+                    true,
+                    "Fallo la conexion con la base de datos",
+                    -1,
+                    null
+            );
             showMessageFailureConnection();
         }
         return resultOperation;
