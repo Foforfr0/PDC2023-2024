@@ -57,7 +57,7 @@ public class UserDAO {
                     -1, 
                     null
                 );
-                System.out.println("Error de \"SQLException\" en archivo \"UserDAO\" en método \"verifyUser\"");
+                System.err.println("Error de \"SQLException\" en archivo \"UserDAO\" en método \"verifyUser\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();

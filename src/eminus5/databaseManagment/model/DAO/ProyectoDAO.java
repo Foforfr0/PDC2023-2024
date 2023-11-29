@@ -32,7 +32,7 @@ public class ProyectoDAO {
                 if(resultQuery.next()){
                     resultOperation = new ResultOperation(            //It´s exists
                         false, 
-                        "Se encontró el proyecto", 
+                        "El usuario si pertenece a un proyecto", 
                         resultQuery.getInt("IDProyecto"), 
                         new Proyecto(
                             resultQuery.getInt("IDProyecto"), 
@@ -56,7 +56,7 @@ public class ProyectoDAO {
                     -1, 
                     null
                 );
-                System.out.println("Error de \"SQLException\" en archivo \"ProyectoDAO\" en método \"verifyUser\"");
+                System.err.println("Error de \"SQLException\" en archivo \"ProyectoDAO\" en método \"getProyectoUsuario\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();

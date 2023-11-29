@@ -28,10 +28,10 @@ public class OpenConnectionDB {
                 ConstantsConnectionDB.PASSWORD
             );
         } catch (ClassNotFoundException clnfe) {
-            System.out.println("Error de \"ClassNotFoundException\" en archivo \"OpenConnectionDB\" en método \"getConnection\"");
+            System.err.println("Error de \"ClassNotFoundException\" en archivo \"OpenConnectionDB\" en método \"getConnection\"");
             clnfe.printStackTrace();
         } catch (SQLException sqle) {
-            System.out.println("Error de \"SQLException\" en archivo \"OpenConnectionDB\" en método \"getConnection\"");
+            System.err.println("Error de \"SQLException\" en archivo \"OpenConnectionDB\" en método \"getConnection\"");
             sqle.printStackTrace();
         }
         

@@ -6,6 +6,11 @@ package eminus5.viewController;
 
 import eminus5.databaseManagment.model.DAO.UserDAO;
 import eminus5.databaseManagment.model.POJO.Usuario;
+import eminus5.databaseManagment.model.ResultOperation;
+import eminus5.utils.ShowMessage;
+import eminus5.viewController.desarrollador.controllers.FXMLPantallaInicioDController;
+import eminus5.viewController.responsableProyecto.controllers.FXMLPantallaInicioRController;
+import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,12 +26,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import eminus5.databaseManagment.model.ResultOperation;
-import eminus5.utils.ShowMessage;
-import static eminus5.utils.loadView.loadScene;
-import eminus5.viewController.desarrollador.controllers.FXMLPantallaInicioDController;
-import eminus5.viewController.responsableProyecto.controllers.FXMLPantallaInicioRController;
-
 
 
 public class FXMLInicioSesionController implements Initializable {
@@ -137,10 +136,10 @@ public class FXMLInicioSesionController implements Initializable {
                     );
                 }
             } catch (SQLException sqlex) {
-                System.out.println("\"Error de \"SQLException\" en archivo \"FXMLInicioSesionController\" en método \"getLogin\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLInicioSesionController\" en método \"getLogin\"");
                 sqlex.printStackTrace();
             } catch (IOException ioex) {
-                System.out.println("\"Error de \"IOException\" en archivo \"FXMLInicioSesionController\" en método \"showScenePaginaInicial\"\"");
+                System.err.println("\"Error de \"IOException\" en archivo \"FXMLInicioSesionController\" en método \"showScenePaginaInicial\"\"");
                 ioex.printStackTrace();
             }
         }

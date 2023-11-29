@@ -21,5 +21,6 @@
       <Button layoutX="258.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicAddActividad" text="Crear" />
       <Button layoutX="313.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicModifyActividad" text="Modificar" />
       <Button layoutX="389.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicDeleteActividad" text="Eliminar" />
+      <Button layoutX="1036.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#clicAsignarActividad" text="Asignar" />
    </children>
 </AnchorPane>

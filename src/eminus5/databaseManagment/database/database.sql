@@ -286,46 +286,44 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 /*ROLES SISTEMA--------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO RolSistema (Nombre) VALUES ('Responsable'), ('Desarrollador');
+INSERT INTO RolSistema (Nombre) VALUES ('Responsable');
+INSERT INTO RolSistema (Nombre) VALUES ('Desarrollador');
 /*ESTADOS--------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO Estado (Nombre) VALUES ('Sin asignar'), ('Asigado'), ('Iniciado'), ('Terminado'), ('Entregado');
+INSERT INTO Estado (Nombre) VALUES ('Sin asignar');
+INSERT INTO Estado (Nombre) VALUES ('Asignado');
+INSERT INTO Estado (Nombre) VALUES ('Iniciado');
+INSERT INTO Estado (Nombre) VALUES ('Terminado');
+INSERT INTO Estado (Nombre) VALUES ('Entregado');
 /*TIPOS----------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO TipoActividad (Nombre) VALUES ('Frontend'), ('Backend'), ('Base de datos'), ('Controlador'), ('JavaScript');
+INSERT INTO TipoActividad (Nombre) VALUES ('Frontend');
+INSERT INTO TipoActividad (Nombre) VALUES ('Backend');
+INSERT INTO TipoActividad (Nombre) VALUES ('Base de datos');
+INSERT INTO TipoActividad (Nombre) VALUES ('Controlador');
+INSERT INTO TipoActividad (Nombre) VALUES ('JavaScript');
 /*PROYECTO------------------------------------------------------------------------------------------------------------------------*/
-USE Eminus5;
 INSERT INTO Proyecto (Nombre, NumIntegrantes, Descripcion, FechaInicio, FechaFin) 
-	VALUES ('SPGER', 10, 'Descripción de ejemplo del proyecto SPGER', '2023-06-01', '2024-01-01');
-    
-SELECT * FROM Proyecto;
-SELECT P.IDProyecto FROM Proyecto P RIGHT JOIN Usuario U ON U.IDProyecto = P.IDProyecto WHERE U.IDUsuario = 1;
-SELECT P.IDProyecto, P.Nombre FROM Proyecto P 
-RIGHT JOIN Usuario U ON U.IDProyecto = P.IDProyecto 
-WHERE U.IDUsuario = 1;
+  VALUES ('SPGER', 10, 'Descripción de ejemplo del proyecto SPGER', '2023-06-01', '2024-01-01');
+
 /*USUARIO-------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO Usuario (Matricula, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, RolSistema, IDproyecto) 
-	VALUES('S21013908', '1234', 'Rodolfo', 'Fernández', 'Rodríguez', 
-	'foforfr007@gmail.com', 'zs21013908@estudiantes.uv.mx', 6, 2, 1);
+	VALUES('P21013908', '1234', 'Abraham David', 'Fernández', 'Rodríguez', 
+	'abrakadabra007@gmail.com', 'ps21013908@profesor.uv.mx', NULL, 1, 1);
 INSERT INTO Usuario (Matricula, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, RolSistema, IDproyecto) 
-	VALUES('P21013908', '1234', 'Rodolfo', 'Fernández', 'Rodríguez', 
-	'foforfr008@gmail.com', 'zp21013908@estudiantes.uv.mx', null, 1, 1);
+	VALUES('S21013909', '1234', 'Rodolfo', 'Fernández', 'Rodríguez', 
+	'foforfr007@gmail.com', 'zs21013909@estudiantes.uv.mx', 6, 2, 1);
+INSERT INTO Usuario (Matricula, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, RolSistema, IDproyecto) 
+	VALUES('S21013910', '1234', 'Andrés', 'Arellano', 'García', 
+	'andargar@gmail.com', 'zs21013910@estudiantes.uv.mx', 6, 2, 1);
 
-SELECT * FROM Usuario WHERE RolSistema = 2;
-SELECT u.IDUsuario, rs.Nombre AS RolSistema 
-	FROM RolSistema rs RIGHT JOIN Usuario u ON u.RolSistema = rs.IDRolSistema
-    WHERE u.Matricula = 'S21013908' AND u.Password = '1234';
 /*ACTIVIDAD-------------------------------------------------------------------------------------------------------------------------*/
 USE Eminus5;
 INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES 
 ('Creación de base de datos', 'Descripción de ejemplo para la actividad Creación de base de datos', 
-TRUE, 2, 3, '2023-06-01', '2023-06-04', 1, 2);
+1, 2, 3, '2023-06-01', '2023-06-04', 1, 2);
+INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES 
+('Creación de vistas', 'Descripción de ejemplo para la actividad Creación de vistas', 
+1, 2, 1, '2023-06-01', '2023-06-04', 1, 3);
 
-SELECT A.IDActividad, A.Nombre, A.Descripcion, A.Asignado, E.Nombre AS 'Estado', 
-TA.Nombre AS 'TipoActividad', DATE_FORMAT(A.FechaInicio, '%d-%m-%Y') AS FechaInicio, 
-DATE_FORMAT(A.FechaFin, '%d-%m-%Y') AS FechaFin 
-FROM Estado E RIGHT JOIN Actividad A ON E.IDEstado = A.Estado 
-LEFT JOIN TipoActividad TA ON TA.IDTipoActividad = A.Tipo 
-RIGHT JOIN Proyecto ON A.IDProyecto = Proyecto.IDProyecto 
-WHERE Proyecto.IDProyecto = 1;
-
-
-
+SELECT * FROM Actividad RIGHT JOIN Usuario 
+ON Actividad.IDDesarrollador = Usuario.IDUsuario 
+WHERE Usuario.RolSistema = 2;

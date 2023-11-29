@@ -7,7 +7,6 @@ package eminus5.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 
@@ -16,10 +15,8 @@ public class ShowMessage {
         Alert alert = new Alert(AlertType.NONE);
         
         switch (alertType) {
-            case "CONFIRMATION":
-                return ;
             case "INFORMATION":
-                alert.setAlertType(AlertType.CONFIRMATION);
+                alert.setAlertType(AlertType.INFORMATION);
                 break;
             case "ERROR":
                 alert.setAlertType(AlertType.ERROR);

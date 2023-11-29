@@ -5,29 +5,34 @@
 package eminus5.viewController.responsableProyecto.controllers;
 
 import eminus5.databaseManagment.model.DAO.ActividadDAO;
+import eminus5.databaseManagment.model.DAO.ProyectoDAO;
+import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
+import eminus5.utils.ShowMessage;
+import static eminus5.utils.ShowMessage.showMessage;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import eminus5.utils.ShowMessage;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DateCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
 
 
 public class FXMLCrearActividadController implements Initializable {
@@ -45,13 +50,13 @@ public class FXMLCrearActividadController implements Initializable {
     private Button btAddActividad;
     @FXML
     private Button btCancelAddActividad;
-
-    
-    public static int idResponsable = 0;
     @FXML
     private AnchorPane stageCrearActividad;
     @FXML
     private Pane pnPrincipal;
+    
+    
+    public static int idResponsable = 0;
     
     
     @Override
@@ -95,6 +100,7 @@ public class FXMLCrearActividadController implements Initializable {
                 });
             }
         });
+        
         stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {     //addActionToStage();
             if (event.getCode() == KeyCode.ESCAPE){
                 event.consume();
@@ -136,17 +142,43 @@ public class FXMLCrearActividadController implements Initializable {
             );
         } else {
             try {
-                ResultOperation resultCreate = ActividadDAO.createActividad(idResponsable);
-                if (resultCreate.getIsError() == true) {
-                    ShowMessage.showMessage(
+                Actividad newActividad = new Actividad();
+                    newActividad.setNombre(this.tfNombre.getText());
+                    newActividad.setDescripcion(this.tfDescripcion.getText());
+                    newActividad.setTipo(this.cbTipo.getValue());
+                    newActividad.setFechaInicio(this.dpFechaInicio.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                    newActividad.setFechaFin(this.dpFechaFin.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                
+                ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
+                if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null || resultGetProyecto.getNumberRowsAffected() <= 0) {
+                    showMessage(
                         "ERROR", 
                         "Error inesperado", 
-                        resultCreate.getMessage(), 
+                        resultGetProyecto.getMessage(), 
                         "Intente más tarde"
                     );
+                } else {
+                    ResultOperation resultCreate = ActividadDAO.createActividad(resultGetProyecto.getNumberRowsAffected(), newActividad);
+                    if (resultCreate.getIsError() == true) {
+                        ShowMessage.showMessage(
+                            "ERROR", 
+                            "Error inesperado", 
+                            resultCreate.getMessage(), 
+                            "Intente más tarde"
+                        );
+                    } else {
+                        ShowMessage.showMessage(
+                                "INFORMATION", 
+                                "Se ha creado correctamente", 
+                                "Se creó con éxito la actividad", 
+                                ""
+                        );
+                        Stage currentStage = (Stage) this.tfNombre.getScene().getWindow();
+                        currentStage.close();
+                    }
                 }
             } catch (SQLException sqlex) {
-                System.out.println("\"Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"createActividad\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"createActividad\"");
                 sqlex.printStackTrace();
             }
         }
