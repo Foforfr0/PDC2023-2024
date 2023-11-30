@@ -4,6 +4,7 @@ import eminus5.databaseManagment.model.DAO.BitacoraDAO;
 import eminus5.databaseManagment.model.POJO.Bitacora;
 import eminus5.databaseManagment.model.ResultOperation;
 import eminus5.utils.ShowMessage;
+import static eminus5.utils.ShowMessage.showMessage;
 import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class FXMLBitacorasDController implements Initializable {
                     bitacoraSeleccionada = row.getItem();
                     try {
                         Stage stageBitacora = new Stage();
+                        FXMLVerBitacoraController.currentBitacora = bitacoraSeleccionada;
                         stageBitacora.setScene(loadScene("viewController/desarrollador/views/FXMLVerBitacora.fxml"));
                         stageBitacora.setTitle("Visualizar bitacora");
                         stageBitacora.initModality(Modality.WINDOW_MODAL);
@@ -77,10 +79,22 @@ public class FXMLBitacorasDController implements Initializable {
     
     public void cargarBitacoras(){
         try{
+            ResultOperation resultGetBitacoras = BitacoraDAO.getBitacoras(idUser);
+            
+            if(resultGetBitacoras.getIsError() == true && resultGetBitacoras.getData() == null ||
+               resultGetBitacoras.getNumberRowsAffected() <= 0){
+                showMessage(
+                        "ERROR",
+                        "Error inesperado",
+                        resultGetBitacoras.getMessage(),
+                        "Intente mas tarde"
+                );
+            } else {
             this.bitacoras = FXCollections.observableArrayList(
                     (ObservableList) BitacoraDAO.getBitacoras(idUser).getData()
             );
             this.tvBitacoras.setItems(this.bitacoras);
+            }
         } catch (SQLException sqlex) {
             showMessageFailureConnection();
            System.out.println("\"Error de \"SQLException\" en archivo \"FXMLBitacorasDcontroller\"");

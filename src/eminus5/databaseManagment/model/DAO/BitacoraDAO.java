@@ -1,8 +1,3 @@
-/*
- * Descripción del programa
- * Últimos 3 cambios realizados
- */
-
 package eminus5.databaseManagment.model.DAO;
 
 import eminus5.databaseManagment.model.OpenConnectionDB;
@@ -24,7 +19,7 @@ public class BitacoraDAO {
         
         if(connectionDB != null){
             try{
-                String sqlQuery = "SELECT *  FROM Bitacora " +
+                String sqlQuery = "SELECT * FROM Bitacora " +
                                   "JOIN Usuario ON Bitacora.IDDesarrollador = Usuario.IDUsuario " +
                                   "WHERE Usuario.IDUsuario = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
@@ -34,16 +29,28 @@ public class BitacoraDAO {
                 ObservableList<Bitacora> listBitacoras = FXCollections.observableArrayList();
                 while(resultQuery.next()){
                     Bitacora newBitacora = new Bitacora();
-                    //TODO
+                    newBitacora.setIdBitacora(resultQuery.getInt("IDBitacora"));
+                    newBitacora.setNombreCambio(resultQuery.getString("[Nombre del cambio]"));
+                    newBitacora.setDescripcion(resultQuery.getString("Descripcion"));
+                    newBitacora.setIdEstado(resultQuery.getInt("IDEstado"));
                     listBitacoras.add(newBitacora);
-                }
-                
                 resultOperation = new ResultOperation(
                         false,
                         "Se encontraron bitacoras",
                         listBitacoras.size(),
                         listBitacoras
                 );
+                System.out.println("BitacoraDAO//BITACORAS ENCONTRADAS: " + listBitacoras.size() + " DEL DESARROLLADOR ID" + idUser);
+                }
+                if(listBitacoras.size() <= 0) {
+                    resultOperation = new ResultOperation(
+                            false,
+                            "No se encontraron bitacoras",
+                            0,
+                            null
+                    );
+                    System.out.println("BitacoraDAO//NO SE ENCONTRARON BITACORAS DEL DESARROLLADOR ID" + idUser);
+                }
             } catch (SQLException sqlex) {
                 resultOperation = new ResultOperation(
                         true,
@@ -51,7 +58,7 @@ public class BitacoraDAO {
                         -1,
                         null
                 );
-                System.out.println("Error de \"SQLException\" en archivo\"BitacoraDAO\"");
+                System.out.println("Error de \"SQLException\" en archivo\"BitacoraDAO\" en metodo \"getBitacoras\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();
