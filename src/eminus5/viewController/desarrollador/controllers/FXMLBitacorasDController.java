@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -26,21 +27,22 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- * FXML Controller class
- *
- * @author abrah
- */
-public class FXMLBitacorasDController implements Initializable {
 
+public class FXMLBitacorasDController implements Initializable {
+    
     @FXML
     private TableView<Bitacora> tvBitacoras;
     @FXML
-    private TableColumn<Bitacora, Integer> tcBitacoras;
-
+    private TableColumn<Bitacora, String> tcTituloBitacora;
+    @FXML
+    private TableColumn<Bitacora, String> tcDescripcion;
+    @FXML
+    private Button btCancelarSeleccion;
+    
     public static int idUser = 0;
     private ObservableList<Bitacora> bitacoras = FXCollections.observableArrayList();
     private Bitacora bitacoraSeleccionada = null;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         inicializarTabla();
@@ -48,8 +50,8 @@ public class FXMLBitacorasDController implements Initializable {
     }    
     
     public void inicializarTabla() {
-        this.tcBitacoras.setCellValueFactory(new PropertyValueFactory("Bitacoras"));
-        
+        this.tcTituloBitacora.setCellValueFactory(new PropertyValueFactory("Titulo"));
+        this.tcDescripcion.setCellValueFactory(new PropertyValueFactory("Descripcion"));
         tvBitacoras.setRowFactory(tv -> {
             TableRow<Bitacora> row = new TableRow<>();
             row.setOnMouseClicked(event -> {

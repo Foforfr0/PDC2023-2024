@@ -19,23 +19,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author fofor
- */
-public class FXMLPantallaInicioDController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
+public class FXMLPantallaInicioDController implements Initializable {
     
-    public static int idUser = 0;
     @FXML
     private Label lbTituloVentana;
     @FXML
     private Pane pnInsideSceneD;
     
+    public static int idUser = 0;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -76,10 +68,38 @@ public class FXMLPantallaInicioDController implements Initializable {
 
     @FXML
     private void btnCambios(ActionEvent event) {
+        String FXMLCambiosD = "viewController/desarrollador/views/FXMLCambiosD.fxml";
+        
+        try {
+            FXMLLoader loader = loadView(FXMLCambiosD);
+            FXMLCambiosDController controller = loader.getController();
+            FXMLCambiosDController.idUser = idUser;
+        
+            Pane vistaSecundaria = (Pane) loadParent(FXMLCambiosD);
+            this.pnInsideSceneD.getChildren().setAll(vistaSecundaria);
+        } catch (IOException ioex) {
+            System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"btnCambios\"");
+            ioex.printStackTrace();
+        }
+        
     }
 
     @FXML
     private void btnDefectos(ActionEvent event) {
+        String FXMLDefectosD = "viewController/desarrollador/views/FXMLDefectosD.fxml";
+        
+        try {
+            FXMLLoader loader = loadView(FXMLDefectosD);
+            FXMLDefectosDController controller = loader.getController();
+            FXMLDefectosDController.idUser = idUser;
+        
+            Pane vistaSecundaria = (Pane) loadParent(FXMLDefectosD);
+            this.pnInsideSceneD.getChildren().setAll(vistaSecundaria);
+        } catch (IOException ioex) {
+            System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"btnDefectos\"");
+            ioex.printStackTrace();
+        }
+        
     }
 
     @FXML

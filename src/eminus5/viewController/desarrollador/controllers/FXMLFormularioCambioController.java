@@ -35,9 +35,7 @@ public class FXMLFormularioCambioController implements Initializable {
     @FXML
     private TextField tfEsfuerzo;
 
-    /**
-     * Initializes the controller class.
-     */
+    public static int idUser = 0;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

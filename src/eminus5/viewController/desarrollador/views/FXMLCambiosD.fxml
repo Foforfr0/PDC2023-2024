@@ -6,10 +6,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLCambiosDController">
+<AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLCambiosDController">
    <children>
       <Pane layoutY="80.0" prefHeight="360.0" prefWidth="170.0" style="-fx-background-color: lightgrey;" />
-      <Pane prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #18419D;" />
+      <Pane prefHeight="80.0" prefWidth="660.0" style="-fx-background-color: #18419D;" />
+      <TableView fx:id="tvCambios" layoutX="176.0" layoutY="105.0" prefHeight="275.0" prefWidth="470.0">
+        <columns>
+          <TableColumn fx:id="tcNombreCambio" prefWidth="75.0" text="Titulo" />
+          <TableColumn fx:id="tcDescripcionCambio" prefWidth="400.0" text="Descripcion" />
+        </columns>
+      </TableView>
+      <Button layoutX="358.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnRegistrarCambio" text="Registrar cambio" />
+      <Button fx:id="btCambio" layoutX="510.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnModificarCambio" text="Modificar cambio" />
    </children>
 </AnchorPane>
