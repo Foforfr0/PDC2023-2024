@@ -52,6 +52,7 @@ public class FXMLPantallaInicioRController implements Initializable {
     }
     
     private void addActionToButtons() {
+        btInicio.setDisable(true);
         btInicio.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
