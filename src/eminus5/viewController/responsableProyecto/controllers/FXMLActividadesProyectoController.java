@@ -261,6 +261,7 @@ public class FXMLActividadesProyectoController implements Initializable {
                 FXMLAsignarActividadController.idProyecto = verifyActividadSelected().getIdProyecto();
                 FXMLAsignarActividadController.idActividad = verifyActividadSelected().getIdActividad();
                 FXMLAsignarActividadController.idDesarrolladorAsignado = verifyActividadSelected().getIdDesarrollador();
+                
                 stageAsignActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLAsignarActividad.fxml"));
                 stageAsignActividad.setTitle("Asignar actividad");
                 stageAsignActividad.initModality(Modality.WINDOW_MODAL);
@@ -268,7 +269,7 @@ public class FXMLActividadesProyectoController implements Initializable {
                     (Stage) this.tvActividades.getScene().getWindow()
                 );
                 stageAsignActividad.initStyle(StageStyle.UTILITY);
-                stageAsignActividad.setOnCloseRequest(eventStage -> {
+                /*stageAsignActividad.setOnCloseRequest(eventStage -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("¿Está seguro?");
                     alert.setHeaderText("¿Está seguro de cancelar?");
@@ -280,7 +281,8 @@ public class FXMLActividadesProyectoController implements Initializable {
                             stageAsignActividad.close(); 
                         }
                     });
-                });
+                });*/
+                //TODO Arreglar: eliminar pregunta cuando no es necesario
                 stageAsignActividad.showAndWait();
                 initializeData();
             } catch (IOException ioex) {

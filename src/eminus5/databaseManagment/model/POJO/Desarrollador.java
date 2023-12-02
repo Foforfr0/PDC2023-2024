@@ -101,4 +101,9 @@ public class Desarrollador {
     public void setIsAsignado(boolean isAsignado) {
         this.isAsignado = isAsignado;
     }
+
+    @Override
+    public String toString() {
+        return "Desarrollador{" + "idDesarrollador=" + idDesarrollador + ", nombre=" + nombre + '}';
+    }
 }

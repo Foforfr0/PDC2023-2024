@@ -7,7 +7,6 @@ package eminus5.databaseManagment.model.DAO;
 
 import eminus5.databaseManagment.model.OpenConnectionDB;
 import eminus5.databaseManagment.model.POJO.Actividad;
-import eminus5.databaseManagment.model.POJO.Proyecto;
 import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import java.sql.Connection;
@@ -331,6 +330,69 @@ public class ActividadDAO {
                     null
                 );
                 System.out.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"deleteActividad\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
+    }
+    
+    public static ResultOperation setAsignacionActividad(int idActividad, int idDesarrollador) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {
+            try {
+                PreparedStatement prepareQuery = null;
+                if (idDesarrollador <= 0) {
+                    String sqlQuery = "UPDATE Actividad SET IDDesarrollador = NULL, Asignado = 2, Estado = 1 " +
+                                      "WHERE Actividad.IDActividad = ?";
+                    prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setInt(1, idActividad);
+                } else {
+                    String sqlQuery = "UPDATE Actividad SET IDDesarrollador = ?, Asignado = 1, Estado = 2 " +
+                                      "WHERE Actividad.IDActividad = ?";
+                    prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setInt(1, idDesarrollador);
+                    prepareQuery.setInt(2, idActividad);
+                }
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                        false, 
+                        "Se ha asignado la actividad", 
+                        1, 
+                        null
+                    );
+                    System.out.println("ActividadDAO//SE HA ASIGNADO LA ACTIVIDAD: "+idActividad);
+                } else {
+                    resultOperation = new ResultOperation(
+                        true, 
+                        "No se ha asignado la actividad", 
+                        -1, 
+                        null
+                    );
+                    System.out.println("ActividadDAO//NO SE ASIGNÓ LA ACTIVIDAD: "+idActividad);
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"setAsignacionActividad\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();
