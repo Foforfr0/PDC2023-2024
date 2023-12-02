@@ -323,6 +323,9 @@ INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio,
 INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES 
 ('Creación de vistas', 'Descripción de ejemplo para la actividad Creación de vistas', 
 1, 2, 1, '2023-06-01', '2023-06-04', 1, 3);
+INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES 
+('Creación de controladores', 'Descripción de ejemplo para la actividad Creación de controladores', 
+2, 1, 4, '2023-06-01', '2023-06-04', 1, null);
 
 SELECT * FROM Actividad RIGHT JOIN Usuario 
 ON Actividad.IDDesarrollador = Usuario.IDUsuario 

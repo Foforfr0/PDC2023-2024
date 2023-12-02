@@ -4,7 +4,11 @@
  */
 package eminus5.viewController.responsableProyecto.controllers;
 
+import eminus5.databaseManagment.model.DAO.DesarrolladorDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
+import eminus5.databaseManagment.model.POJO.Desarrollador;
+import eminus5.databaseManagment.model.ResultOperation;
+import static eminus5.utils.ShowMessage.showMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,8 +59,27 @@ public class FXMLDetallesActividadController implements Initializable {
         this.lbTipo.setText(currentActividad.getTipo());
         this.lbFechaInicio.setText(currentActividad.getFechaInicio());
         this.lbFechaFin.setText(currentActividad.getFechaFin());
-        
-        this.lbAsignado.setText("Asignado");
+
+        if (currentActividad.getIdDesarrollador() <= 0) {
+            this.lbAsignado.setText("No ha asignado la actividad todavía.");
+        } else {
+            try {
+                ResultOperation resultGetDesarrollador = DesarrolladorDAO.getDesarrollador(currentActividad.getIdDesarrollador());
+                if (resultGetDesarrollador.getIsError() == true) {
+                    showMessage(
+                        "ERROR", 
+                        "Error inesperado", 
+                        "No se ha podido encontrar el desarrollador",
+                        "Intente mas tarde"
+                    );
+                } else {
+                    Desarrollador asigned = (Desarrollador) resultGetDesarrollador.getData();
+                    this.lbAsignado.setText(asigned.getNombre()+"\n"+asigned.getApellidoPaterno()+"\n"+asigned.getApellidoMaterno()+"\n");
+                }
+            } catch (Exception e) {
+                
+            }
+        }
     }
     
     private void initializeStage() {

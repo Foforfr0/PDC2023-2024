@@ -32,7 +32,7 @@
             <Label fx:id="lbFechaFin" layoutX="555.0" layoutY="114.0" prefHeight="17.0" prefWidth="99.0" />
             <Button fx:id="btAceptar" defaultButton="true" layoutX="689.0" layoutY="334.0" mnemonicParsing="false" onAction="#clicAceptar" text="Aceptar" />
             <Label layoutX="549.0" layoutY="161.0" text="Asignado a:" />
-            <Label fx:id="lbAsignado" layoutX="564.0" layoutY="177.0" prefHeight="141.0" prefWidth="183.0" />
+            <Label fx:id="lbAsignado" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="564.0" layoutY="177.0" prefHeight="141.0" prefWidth="183.0" wrapText="true" />
          </children>
       </Pane>
    </children>

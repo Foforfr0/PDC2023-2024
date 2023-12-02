@@ -18,6 +18,13 @@ public class Desarrollador {
     public Desarrollador() {
     }
     
+    public Desarrollador(int idDesarrollador, String nombre, String apellidoPaterno, String apellidoMaterno) {
+        this.idDesarrollador = idDesarrollador;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+    }
+    
     public Desarrollador(int idDesarrollador, String nombre, String apellidoPaterno, String apellidoMaterno, String matricula, String correoInstitucional, String semestre) {
         this.idDesarrollador = idDesarrollador;
         this.nombre = nombre;
@@ -100,5 +107,10 @@ public class Desarrollador {
 
     public void setIsAsignado(boolean isAsignado) {
         this.isAsignado = isAsignado;
+    }
+
+    @Override
+    public String toString() {
+        return "Desarrollador{" + "idDesarrollador=" + idDesarrollador + ", nombre=" + nombre + '}';
     }
 }

@@ -83,4 +83,63 @@ public class DesarrolladorDAO {
         
         return resultOperation;
     }
+    
+    public static ResultOperation getDesarrollador(int idDesarrollador) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {    
+            try {            
+                String sqlQuery = "SELECT U.Nombre, U.ApellidoPaterno, U.ApellidoMaterno " +
+                                  "FROM Usuario U WHERE U.IDUsuario = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                    prepareQuery.setInt(1, idDesarrollador);
+                ResultSet resultQuery = prepareQuery.executeQuery();
+                
+                if(resultQuery.next()){
+                    resultOperation = new ResultOperation(            //It´s exists
+                        false, 
+                        "Se encontró el desarrollador", 
+                        1,
+                            new Desarrollador(
+                            idDesarrollador, 
+                            resultQuery.getString("Nombre"),
+                            resultQuery.getString("ApellidoPaterno"), 
+                            resultQuery.getString("ApellidoMaterno")
+                        )
+                    );
+                    System.out.println("DesarrolladorDAO//DESARROLLADOR ENCONTRADO: "+idDesarrollador);
+                } else {
+                    resultOperation = new ResultOperation(            //It doesn't exist but it wasn't an error
+                        false, 
+                        "No se encontró desarrollador", 
+                        0, 
+                        null
+                    );
+                    System.out.println("DesarrolladorDAO//NO SE ENCONTRÓ DESARROLLADOR ID"+idDesarrollador);
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"DesarrolladorDAO\" en método \"getDesarrollador\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
+    }
 }
