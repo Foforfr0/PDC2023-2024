@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="460.0" prefWidth="548.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLFormularioDefectoController">
+   <children>
+      <Pane prefHeight="80.0" prefWidth="555.0" style="-fx-background-color: #18419D;">
+         <children>
+            <Label layoutX="376.0" layoutY="14.0" text="EMINUS 5">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Button layoutX="464.0" layoutY="415.0" mnemonicParsing="false" onAction="#btnCancelarDefecto" text="Cancelar" />
+      <Button layoutX="365.0" layoutY="415.0" mnemonicParsing="false" onAction="#btnGuardarDefecto" text="Guardar" />
+      <Label layoutX="14.0" layoutY="89.0" text="Registrar defecto">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="129.0" text="Ingrese los datos requeridos (*)">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="179.0" text="Titulo (*)" />
+      <Label layoutX="14.0" layoutY="361.0" text="Estado" />
+      <Label layoutX="299.0" layoutY="249.0" text="Fecha de reporte (*)" />
+      <Label layoutX="14.0" layoutY="249.0" text="Descripcion (*)" />
+      <Label layoutX="299.0" layoutY="179.0" text="Tipo (*)" />
+      <Label layoutX="296.0" layoutY="319.0" text="Esfuerzo" />
+      <TextField fx:id="tfTituloDefecto" layoutX="14.0" layoutY="200.0" />
+      <TextField fx:id="tfDescDefecto" layoutX="14.0" layoutY="270.0" prefHeight="70.0" prefWidth="187.0" />
+      <ComboBox layoutX="14.0" layoutY="382.0" prefHeight="31.0" prefWidth="187.0" />
+      <TextField fx:id="tfTipoDefecto" layoutX="299.0" layoutY="200.0" />
+      <TextField fx:id="tfEsfuerzo" layoutX="296.0" layoutY="340.0" />
+      <DatePicker fx:id="dpFechaReporteDefecto" layoutX="293.0" layoutY="270.0" prefHeight="31.0" prefWidth="187.0" />
+   </children>
+</AnchorPane>
