@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package eminus5.viewController.desarrollador.controllers;
 
 import java.net.URL;
@@ -12,11 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
-/**
- * FXML Controller class
- *
- * @author abrah
- */
+
 public class FXMLFormularioDefectoController implements Initializable {
 
     @FXML
@@ -30,9 +22,7 @@ public class FXMLFormularioDefectoController implements Initializable {
     @FXML
     private DatePicker dpFechaReporteDefecto;
 
-    /**
-     * Initializes the controller class.
-     */
+    public static int idUser = 0;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

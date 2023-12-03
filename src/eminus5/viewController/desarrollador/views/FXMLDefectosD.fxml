@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLDefectosDController">
+   <children>
+      <Pane prefHeight="80.0" prefWidth="660.0" style="-fx-background-color: #18419D;" />
+      <Pane layoutY="80.0" prefHeight="360.0" prefWidth="170.0" style="-fx-background-color: lightgrey;" />
+      <TableView fx:id="tvDefectos" layoutX="176.0" layoutY="99.0" prefHeight="275.0" prefWidth="470.0">
+        <columns>
+          <TableColumn fx:id="tcNombreDefecto" prefWidth="75.0" text="Titulo" />
+          <TableColumn fx:id="tcDescripcionDefecto" prefWidth="394.0" text="Descripcion" />
+        </columns>
+      </TableView>
+      <Button layoutX="357.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnRegistrarDefecto" text="Registrar defecto" />
+      <Button fx:id="btModificarDefecto" layoutX="510.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnModificarDefecto" text="Modificar defecto" />
+   </children>
+</AnchorPane>

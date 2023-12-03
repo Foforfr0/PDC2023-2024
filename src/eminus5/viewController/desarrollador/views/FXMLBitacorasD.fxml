@@ -6,14 +6,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLBitacorasDController">
+<AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLBitacorasDController">
    <children>
-      <TableView fx:id="tvBitacoras" layoutX="186.0" layoutY="120.0" prefHeight="270.0" prefWidth="400.0">
+      <TableView fx:id="tvBitacoras" layoutX="176.0" layoutY="106.0" prefHeight="275.0" prefWidth="470.0">
         <columns>
-          <TableColumn fx:id="tcBitacoras" prefWidth="410.0" text="Bitacoras" />
+          <TableColumn fx:id="tcTituloBitacora" prefWidth="96.0" text="Titulo" />
+            <TableColumn fx:id="tcDescripcion" prefWidth="379.0" text="Descripcion" />
         </columns>
       </TableView>
-      <Button layoutX="444.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnCancelarSeleccion" text="Cancelar seleccion" />
-      <Button layoutX="336.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnVerBitacora" text="Ver bitacora" />
+      <Button fx:id="btCancelarSeleccion" layoutX="504.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnCancelarSeleccion" text="Cancelar seleccion" />
+      <Button layoutX="385.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnVerBitacora" text="Ver bitacora" />
+      <Pane prefHeight="80.0" prefWidth="660.0" style="-fx-background-color: #18419D;" />
+      <Pane layoutY="80.0" prefHeight="360.0" prefWidth="170.0" style="-fx-background-color: lightgrey;" />
    </children>
 </AnchorPane>
