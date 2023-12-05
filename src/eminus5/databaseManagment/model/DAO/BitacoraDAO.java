@@ -30,7 +30,7 @@ public class BitacoraDAO {
                 while(resultQuery.next()){
                     Bitacora newBitacora = new Bitacora();
                     newBitacora.setIdBitacora(resultQuery.getInt("IDBitacora"));
-                    newBitacora.setNombreCambio(resultQuery.getString("[Nombre del cambio]"));
+                    newBitacora.setNombreCambio(resultQuery.getString("Nombre del cambio"));
                     newBitacora.setDescripcion(resultQuery.getString("Descripcion"));
                     newBitacora.setIdEstado(resultQuery.getInt("IDEstado"));
                     listBitacoras.add(newBitacora);
@@ -42,6 +42,7 @@ public class BitacoraDAO {
                 );
                 System.out.println("BitacoraDAO//BITACORAS ENCONTRADAS: " + listBitacoras.size() + " DEL DESARROLLADOR ID" + idUser);
                 }
+                
                 if(listBitacoras.size() <= 0) {
                     resultOperation = new ResultOperation(
                             false,

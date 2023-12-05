@@ -39,8 +39,8 @@
       <TextField fx:id="tfTituloDefecto" layoutX="14.0" layoutY="200.0" />
       <TextField fx:id="tfDescDefecto" layoutX="14.0" layoutY="270.0" prefHeight="70.0" prefWidth="187.0" />
       <ComboBox layoutX="14.0" layoutY="382.0" prefHeight="31.0" prefWidth="187.0" />
-      <TextField fx:id="tfTipoDefecto" layoutX="299.0" layoutY="200.0" />
       <TextField fx:id="tfEsfuerzo" layoutX="296.0" layoutY="340.0" />
       <DatePicker fx:id="dpFechaReporteDefecto" layoutX="293.0" layoutY="270.0" prefHeight="31.0" prefWidth="187.0" />
+      <ComboBox fx:id="cbTipoDefecto" layoutX="290.0" layoutY="200.0" prefHeight="31.0" prefWidth="187.0" />
    </children>
 </AnchorPane>

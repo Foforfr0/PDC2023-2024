@@ -1,7 +1,3 @@
-/*
- * Descripción del programa
- * Últimos 3 cambios realizados
- */
 package eminus5.viewController.desarrollador.controllers;
 
 import static eminus5.utils.loadView.loadParent;
@@ -34,15 +30,11 @@ public class FXMLPantallaInicioDController implements Initializable {
         // TODO
     }   
     
-    @FXML
     private void clearInsideScene() {
         this.lbTituloVentana.setText("Detalles proyecto");
         this.pnInsideSceneD.getChildren().clear();
     }
 
-    @FXML
-    private void btnSolicitudCambio(ActionEvent event) {
-    }
 
     @FXML
     private void btnBitacoras(ActionEvent event) {
@@ -114,7 +106,7 @@ public class FXMLPantallaInicioDController implements Initializable {
     }
     
     private void showSceneLogin(MouseEvent event) {
-                try {
+        try {
             showSceneLogin();
         } catch (IOException ioex) {
             System.out.println("\"Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"showSceneLogin\"\"");
