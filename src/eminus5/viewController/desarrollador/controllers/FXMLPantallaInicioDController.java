@@ -56,6 +56,19 @@ public class FXMLPantallaInicioDController implements Initializable {
 
     @FXML
     private void btnActividades(ActionEvent event) {
+        String FXMLActividadesD = "viewController/desarrollador/views/FXMLActividadesD.fxml";
+        
+        try {
+            FXMLLoader loader = loadView(FXMLActividadesD);
+            FXMLActividadesDController controller = loader.getController();
+            FXMLActividadesDController.idUser = idUser;
+            
+            Pane vistaSecundaria = (Pane) loadParent(FXMLActividadesD);
+            this.pnInsideSceneD.getChildren().setAll(vistaSecundaria);
+        } catch (IOException ioex) {
+            System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"btnActividades\"");
+            ioex.printStackTrace();
+        }
     }
 
     @FXML

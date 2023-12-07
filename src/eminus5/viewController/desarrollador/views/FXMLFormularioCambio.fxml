@@ -7,9 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="495.0" prefWidth="555.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLFormularioCambioController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLFormularioCambioController">
    <children>
-      <Pane prefHeight="80.0" prefWidth="555.0" style="-fx-background-color: #18419D;">
+      <Pane prefHeight="80.0" prefWidth="560.0" style="-fx-background-color: #18419D;">
          <children>
             <Label layoutX="380.0" layoutY="14.0" text="EMINUS 5">
                <font>

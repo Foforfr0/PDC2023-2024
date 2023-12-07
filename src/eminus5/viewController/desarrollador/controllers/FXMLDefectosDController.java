@@ -30,6 +30,8 @@ public class FXMLDefectosDController implements Initializable {
     private TableColumn<?, ?> tcDescripcionDefecto;
     @FXML
     private Button btModificarDefecto;
+    @FXML
+    private Button btSolicitudCambio;
 
     public static int idUser = 0;
     private ObservableList<Defecto> defectos = FXCollections.observableArrayList();
@@ -93,5 +95,9 @@ public class FXMLDefectosDController implements Initializable {
         int selectedRow = this.tvDefectos.getSelectionModel().getSelectedIndex();
         this.defectoSeleccionado = (selectedRow >= 0) ? this.defectos.get(selectedRow) : null;
         return defectoSeleccionado;
+    }
+
+    @FXML
+    private void btnSolicitudCambio(ActionEvent event) {
     }
 }

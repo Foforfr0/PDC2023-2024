@@ -6,17 +6,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLDefectosDController">
+<AnchorPane id="AnchorPane" prefHeight="480.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLDefectosDController">
    <children>
-      <Pane prefHeight="80.0" prefWidth="660.0" style="-fx-background-color: #18419D;" />
-      <Pane layoutY="80.0" prefHeight="360.0" prefWidth="170.0" style="-fx-background-color: lightgrey;" />
-      <TableView fx:id="tvDefectos" layoutX="176.0" layoutY="99.0" prefHeight="275.0" prefWidth="470.0">
+      <Pane prefHeight="80.0" prefWidth="700.0" style="-fx-background-color: #18419D;" />
+      <Pane layoutY="80.0" prefHeight="400.0" prefWidth="170.0" style="-fx-background-color: lightgrey;" />
+      <TableView fx:id="tvDefectos" layoutX="189.0" layoutY="103.0" prefHeight="295.0" prefWidth="495.0">
         <columns>
-          <TableColumn fx:id="tcNombreDefecto" prefWidth="75.0" text="Titulo" />
-          <TableColumn fx:id="tcDescripcionDefecto" prefWidth="394.0" text="Descripcion" />
+          <TableColumn fx:id="tcNombreDefecto" prefWidth="75.0" resizable="false" text="Titulo" />
+          <TableColumn fx:id="tcDescripcionDefecto" prefWidth="419.0" resizable="false" text="Descripcion" />
         </columns>
       </TableView>
-      <Button layoutX="357.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnRegistrarDefecto" text="Registrar defecto" />
-      <Button fx:id="btModificarDefecto" layoutX="510.0" layoutY="395.0" mnemonicParsing="false" onAction="#btnModificarDefecto" text="Modificar defecto" />
+      <Button layoutX="388.0" layoutY="426.0" mnemonicParsing="false" onAction="#btnRegistrarDefecto" prefHeight="31.0" prefWidth="137.0" text="Registrar defecto" />
+      <Button fx:id="btModificarDefecto" layoutX="547.0" layoutY="426.0" mnemonicParsing="false" onAction="#btnModificarDefecto" text="Modificar defecto" />
+      <Button fx:id="btSolicitudCambio" layoutX="189.0" layoutY="426.0" mnemonicParsing="false" onAction="#btnSolicitudCambio" style="-fx-background-color: ivory;" text="Solicitud de cambio" />
    </children>
 </AnchorPane>

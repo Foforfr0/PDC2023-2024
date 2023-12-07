@@ -29,7 +29,7 @@ public class FXMLCambiosDController implements Initializable {
     @FXML
     private TableColumn<?, ?> tcDescripcionCambio;
     @FXML
-    private Button btCambio;
+    private Button btModificarCambio;
 
     public static int idUser = 0;
     private ObservableList<Cambio> cambios = FXCollections.observableArrayList();
