@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
@@ -76,8 +77,9 @@ public class FXMLDetallesActividadController implements Initializable {
                     Desarrollador asigned = (Desarrollador) resultGetDesarrollador.getData();
                     this.lbAsignado.setText(asigned.getNombre()+"\n"+asigned.getApellidoPaterno()+"\n"+asigned.getApellidoMaterno()+"\n");
                 }
-            } catch (Exception e) {
-                
+            } catch (SQLException sqlex) {
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLDetallesActividadController\" en método \"DesarrolladorDAO.getDesarrollador\"\"");
+                sqlex.printStackTrace();
             }
         }
     }
