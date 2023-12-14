@@ -9,12 +9,17 @@
 
 <AnchorPane id="AnchorPane" fx:id="stageCrearBitacora" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLVerBitacoraController">
    <children>
-      <Pane prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #18419D;" />
-      <Label fx:id="lbNombreBitacora" layoutX="14.0" layoutY="93.0">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="lbDetallesBitacora" layoutX="14.0" layoutY="190.0" />
+      <Pane fx:id="pnPrincipalD" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Label fx:id="lbDetallesBitacora" />
+            <Pane prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #18419D;" />
+            <Label fx:id="lbNombreBitacora">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button layoutX="268.0" layoutY="355.0" mnemonicParsing="false" onAction="#btnSalir" text="Salir" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

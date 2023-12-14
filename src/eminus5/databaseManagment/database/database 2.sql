@@ -15,7 +15,7 @@ CREATE SCHEMA IF NOT EXISTS `Eminus5` DEFAULT CHARACTER SET utf8 ;
 USE `Eminus5` ;
 
 -- -----------------------------------------------------
--- Table `Eminus5`.`Periodo`
+-- Table ``.`Periodo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Eminus5`.`Periodo` (
   `IdPeriodo` INT NOT NULL AUTO_INCREMENT,
@@ -285,3 +285,38 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+/*ROLES SISTEMA--------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO RolSistema (Nombre) VALUES ('Responsable');
+INSERT INTO RolSistema (Nombre) VALUES ('Desarrollador');
+/*ESTADOS--------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Estado (Nombre) VALUES ('Sin asignar');
+INSERT INTO Estado (Nombre) VALUES ('Asignado');
+INSERT INTO Estado (Nombre) VALUES ('Iniciado');
+INSERT INTO Estado (Nombre) VALUES ('Terminado');
+INSERT INTO Estado (Nombre) VALUES ('Entregado');
+/*TIPOS----------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO TipoActividad (Nombre) VALUES ('Frontend');
+INSERT INTO TipoActividad (Nombre) VALUES ('Backend');
+INSERT INTO TipoActividad (Nombre) VALUES ('Base de datos');
+INSERT INTO TipoActividad (Nombre) VALUES ('Controlador');
+INSERT INTO TipoActividad (Nombre) VALUES ('JavaScript');
+/*PERIODO-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Periodo (Inicio, Fin)
+VALUES ('2023-06-01', '2024-01-01');
+INSERT INTO Periodo (Inicio, Fin)
+VALUES ('2024-01-02', '2024-05-30');
+/*EXPERIENCIA EDUCATIVA-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO ExperienciaEducativa (Nombre, Descripcion, idPeriodo)
+VALUES ('Proyecto guiado', 'EE proyecto guiado', 1);
+INSERT INTO ExperienciaEducativa(Nombre, Descripcion, idPeriodo)
+VALUES ('Experiencia recepcional', 'EE experiencia recepcional', 2);
+/*PROYECTO-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Proyecto (Nombre, NumIntegrantes, Descripcion, FechaInicio, FechaFin, idExperienciaEducativa)
+VALUES ('SPGER', 10, 'Descripcion de ejemplo del proyecto SPGER', '2023-06-01', '2024-01-01', 1);
+/*USUARIO-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema,  IdProyecto, IdExperienciaEducativa)
+VALUES ('P12345678', 'PapuPro', 'Rodolfo', 'Fernandez', 'Rodriguez', 'Rodolfo@ejemplo.hotmail.com', 'P12345678@UV.MX', 7, 1, 1, 1);
+
+INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema,  IdProyecto, IdExperienciaEducativa)
+VALUES('S12345678', 'saijiki', 'Abraham', 'Vazquez', 'Quinto', 'Abraham@ejemplo.hotmail.com', 'S12345678@UV.MX', 7, 2, 1, 1);
