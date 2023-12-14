@@ -86,6 +86,7 @@ public class FXMLCrearActividadController implements Initializable {
                 }
             }
         });
+        
         this.dpFechaFin.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {

@@ -24,13 +24,13 @@ public class ActividadDAO {
         
         if (connectionDB != null) {    
             try {            
-                String sqlQuery = "SELECT A.IDActividad, A.Nombre, A.Descripcion, A.Asignado, E.Nombre AS 'Estado', " +
+                String sqlQuery = "SELECT A.IdActividad, A.Nombre, A.Descripcion, E.Nombre AS 'Estado', " +
                                   "TA.Nombre AS 'TipoActividad', DATE_FORMAT(A.FechaInicio, '%d-%m-%Y') AS FechaInicio, " +
-                                  "DATE_FORMAT(A.FechaFin, '%d-%m-%Y') AS FechaFin, A.IDProyecto, A.IDDesarrollador " +
-                                  "FROM Estado E RIGHT JOIN Actividad A ON E.IDEstado = A.Estado " +
-                                  "LEFT JOIN TipoActividad TA ON TA.IDTipoActividad = A.Tipo " +
-                                  "RIGHT JOIN Proyecto ON A.IDProyecto = Proyecto.IDProyecto " +
-                                  "WHERE Proyecto.IDProyecto = ?;";
+                                  "DATE_FORMAT(A.FechaTermino, '%d-%m-%Y') AS FechaTermino, A.IdProyecto, A.IdDesarrollador " +
+                                  "FROM Estado E RIGHT JOIN Actividad A ON E.IdEstado = A.IdEstado " +
+                                  "LEFT JOIN TipoActividad TA ON TA.IdTipoActividad = A.IdTipo " +
+                                  "RIGHT JOIN Proyecto ON A.IdProyecto = Proyecto.IdProyecto " +
+                                  "WHERE Proyecto.IdProyecto = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idProyecto);
                 ResultSet resultQuery = prepareQuery.executeQuery();
@@ -38,20 +38,20 @@ public class ActividadDAO {
                 ObservableList<Actividad> listActividades= FXCollections.observableArrayList();
                 while(resultQuery.next()){
                     Actividad newActividad = new Actividad();
-                        newActividad.setIdActividad(resultQuery.getInt("IDActividad"));
+                        newActividad.setIdActividad(resultQuery.getInt("IdActividad"));
                         newActividad.setNombre(resultQuery.getString("Nombre"));
                         newActividad.setDescripcion(resultQuery.getString("Descripcion"));
-                        if (resultQuery.getInt("Asignado") == 1) {
+                        if (resultQuery.getInt("IdDesarrollador") > 0) {
                             newActividad.setIsAsignado("Sí");
-                        } else if (resultQuery.getInt("Asignado") == 2) {
+                        } else if (resultQuery.getInt("IdDesarrollador") <= 0) {
                             newActividad.setIsAsignado("No");
                         }
                         newActividad.setEstado(resultQuery.getString("Estado"));
                         newActividad.setTipo(resultQuery.getString("TipoActividad"));
                         newActividad.setFechaInicio(resultQuery.getString("FechaInicio"));
-                        newActividad.setFechaFin(resultQuery.getString("FechaFin"));
-                        newActividad.setIdProyecto(resultQuery.getInt("IDProyecto"));
-                        newActividad.setIdDesarrollador(resultQuery.getInt("IDDesarrollador"));
+                        newActividad.setFechaFin(resultQuery.getString("FechaTermino"));
+                        newActividad.setIdProyecto(resultQuery.getInt("IdProyecto"));
+                        newActividad.setIdDesarrollador(resultQuery.getInt("IdDesarrollador"));
                     listActividades.add(newActividad);
                     resultOperation = new ResultOperation(            //It´s exists
                         false, 
@@ -101,17 +101,17 @@ public class ActividadDAO {
         
         if (connectionDB != null) {    
             try {            
-                String sqlQuery = "SELECT U.IDUsuario FROM " +
+                String sqlQuery = "SELECT U.IdUsuario FROM " +
                                   "Actividad A LEFT JOIN Usuario U " +
-                                  "ON A.IDDesarrollador = U.IDUsuario " +
-                                  "WHERE A.IDActividad = ?;";
+                                  "ON A.IdDesarrollador = U.IdUsuario " +
+                                  "WHERE A.IdActividad = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idActividad);
                 ResultSet resultQuery = prepareQuery.executeQuery();
                 int idDesarrolllador = 0;
                 
                 if (resultQuery.next()) {
-                    idDesarrolllador = resultQuery.getInt("IDUsuario");
+                    idDesarrolllador = resultQuery.getInt("IdUsuario");
                     resultOperation = new ResultOperation(            //It´s exists
                         false, 
                         "Se encontró el desarrollador", 
@@ -177,18 +177,17 @@ public class ActividadDAO {
         
         if (connectionDB != null) { 
             try {            
-                String sqlQuery = "INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, " +
-                                  "FechaInicio, FechaFin, IDProyecto, IDDesarrollador) VALUES " +
-                                  "(?,?,?,?,?,(STR_TO_DATE(?, '%d-%m-%Y')),(STR_TO_DATE(?, '%d-%m-%Y')),?,NULL);";
+                String sqlQuery = "INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, " +
+                                  "FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES " +
+                                  "(?,?,?,?,(STR_TO_DATE(?, '%d-%m-%Y')),(STR_TO_DATE(?, '%d-%m-%Y')),?,NULL);";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setString(1, newActividad.getNombre());
                     prepareQuery.setString(2, newActividad.getDescripcion());
                     prepareQuery.setInt(3, 2);
-                    prepareQuery.setInt(4, 1);
-                    prepareQuery.setInt(5, getTipoActividadToInt(newActividad.getTipo()));
-                    prepareQuery.setString(6, newActividad.getFechaInicio().replace("/}", "-"));
-                    prepareQuery.setString(7, newActividad.getFechaFin().replace("/}", "-"));
-                    prepareQuery.setInt(8, idProyecto);
+                    prepareQuery.setInt(4, getTipoActividadToInt(newActividad.getTipo()));
+                    prepareQuery.setString(5, newActividad.getFechaInicio().replace("/}", "-"));
+                    prepareQuery.setString(6, newActividad.getFechaFin().replace("/}", "-"));
+                    prepareQuery.setInt(7, idProyecto);
                 int numberAffectedRows = prepareQuery.executeUpdate();
                 
                 if (numberAffectedRows > 0) {
@@ -240,9 +239,9 @@ public class ActividadDAO {
         if (connectionDB != null) { 
             try {            
                 String sqlQuery = "UPDATE Actividad " +
-                                  "SET Nombre = ?, Descripcion = ?, Tipo = ?, " +
-                                  "FechaInicio = (STR_TO_DATE(?, '%d-%m-%Y')), FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')) " +
-                                  "WHERE IDActividad = ?;";
+                                  "SET Nombre = ?, Descripcion = ?, IdTipo = ?, " +
+                                  "FechaInicio = (STR_TO_DATE(?, '%d-%m-%Y')), FechaTermino = (STR_TO_DATE(?, '%d-%m-%Y')) " +
+                                  "WHERE IdActividad = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setString(1, newActividad.getNombre());
                     prepareQuery.setString(2, newActividad.getDescripcion());
@@ -300,7 +299,7 @@ public class ActividadDAO {
         
         if (connectionDB != null) { 
             try {            
-                String sqlQuery = "DELETE FROM Actividad WHERE IDActividad = ?;";
+                String sqlQuery = "DELETE FROM Actividad WHERE IdActividad = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idActividad);
                 int numberAffectedRows = prepareQuery.executeUpdate();
@@ -355,13 +354,13 @@ public class ActividadDAO {
             try {
                 PreparedStatement prepareQuery = null;
                 if (idDesarrollador <= 0) {
-                    String sqlQuery = "UPDATE Actividad SET IDDesarrollador = NULL, Asignado = 2, Estado = 1 " +
-                                      "WHERE Actividad.IDActividad = ?";
+                    String sqlQuery = "UPDATE Actividad SET IdDesarrollador = NULL, IdEstado = NULL " +
+                                      "WHERE Actividad.IdActividad = ?";
                     prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idActividad);
                 } else {
-                    String sqlQuery = "UPDATE Actividad SET IDDesarrollador = ?, Asignado = 1, Estado = 2 " +
-                                      "WHERE Actividad.IDActividad = ?";
+                    String sqlQuery = "UPDATE Actividad SET IdDesarrollador = ?, IdEstado = 1 " +
+                                      "WHERE Actividad.IdActividad = ?";
                     prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idDesarrollador);
                     prepareQuery.setInt(2, idActividad);
