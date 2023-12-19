@@ -1,5 +1,6 @@
 package eminus5.viewController.desarrollador.controllers;
 
+import eminus5.databaseManagment.model.POJO.Defecto;
 import eminus5.utils.ShowMessage;
 import java.net.URL;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class FXMLFormularioDefectoController implements Initializable {
     private DatePicker dpFechaReporteDefecto;
 
     public static int idUser = 0;
+    public static Defecto currentDefecto = null;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
