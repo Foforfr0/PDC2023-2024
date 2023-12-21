@@ -3,7 +3,6 @@ package eminus5.viewController.desarrollador.controllers;
 import eminus5.databaseManagment.model.DAO.BitacoraDAO;
 import eminus5.databaseManagment.model.POJO.Bitacora;
 import eminus5.databaseManagment.model.ResultOperation;
-import eminus5.utils.ShowMessage;
 import static eminus5.utils.ShowMessage.showMessage;
 import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import static eminus5.utils.loadView.loadScene;
@@ -16,9 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -33,15 +30,14 @@ public class FXMLBitacorasDController implements Initializable {
     @FXML
     private TableView<Bitacora> tvBitacoras;
     @FXML
-    private TableColumn<Bitacora, String> tcTituloBitacora;
+    private TableColumn<Bitacora, String> tcNombreCambio;
     @FXML
     private TableColumn<Bitacora, String> tcDescripcion;
-    @FXML
-    private Button btCancelarSeleccion;
     
     public static int idUser = 0;
     private ObservableList<Bitacora> bitacoras = FXCollections.observableArrayList();
     private Bitacora bitacoraSeleccionada = null;
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -50,7 +46,7 @@ public class FXMLBitacorasDController implements Initializable {
     }    
     
     public void inicializarTabla() {
-        this.tcTituloBitacora.setCellValueFactory(new PropertyValueFactory("Titulo"));
+        this.tcNombreCambio.setCellValueFactory(new PropertyValueFactory("Nombre"));
         this.tcDescripcion.setCellValueFactory(new PropertyValueFactory("Descripcion"));
         tvBitacoras.setRowFactory(tv -> {
             TableRow<Bitacora> row = new TableRow<>();
@@ -104,11 +100,7 @@ public class FXMLBitacorasDController implements Initializable {
         }
     }
 
-    @FXML
-    private void btnCancelarSeleccion(ActionEvent event) {
-    }
-
-    @FXML
+    /*@FXML
     private void btnVerBitacora(ActionEvent event) {
         if(verifyBitacoraSelected() != null) {
             //TODO
@@ -121,7 +113,7 @@ public class FXMLBitacorasDController implements Initializable {
             );
         }
     }
-    
+    */
     private Bitacora verifyBitacoraSelected(){
         int selectedRow = this.tvBitacoras.getSelectionModel().getSelectedIndex();
         this.bitacoraSeleccionada = (selectedRow >= 0) ? this.bitacoras.get(selectedRow) : null;

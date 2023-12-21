@@ -41,7 +41,7 @@ public class FXMLVerBitacoraController implements Initializable {
     }    
     
     private void initializeData(){
-        this.lbNombreBitacora.setText(currentBitacora.getNombreCambio());
+        this.lbNombreBitacora.setText(currentBitacora.getNombre());
         this.lbDetallesBitacora.setText(currentBitacora.getDescripcion());
         
         try {

@@ -15,7 +15,7 @@ CREATE SCHEMA IF NOT EXISTS `Eminus5` DEFAULT CHARACTER SET utf8 ;
 USE `Eminus5` ;
 
 -- -----------------------------------------------------
--- Table ``.`Periodo`
+-- Table `Eminus5`.`Periodo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Eminus5`.`Periodo` (
   `IdPeriodo` INT NOT NULL AUTO_INCREMENT,
@@ -31,7 +31,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Eminus5`.`ExperienciaEducativa` (
   `IdExperienciaEducativa` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
-  `Descripcion` VARCHAR(45) NOT NULL,
+  `Descripcion` TEXT NOT NULL,
   `idPeriodo` INT NOT NULL,
   PRIMARY KEY (`IdExperienciaEducativa`),
   INDEX `IDExperienciaEducativa_Periodo_idx` (`idPeriodo` ASC) VISIBLE,
@@ -51,8 +51,6 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`Proyecto` (
   `Nombre` VARCHAR(45) NOT NULL,
   `NumIntegrantes` INT NULL,
   `Descripcion` TEXT NOT NULL,
-  `FechaInicio` DATE NULL,
-  `FechaFin` DATE NULL,
   `IdExperienciaEducativa` INT NOT NULL,
   PRIMARY KEY (`IdProyecto`),
   INDEX `IDExperienciaEducativa_Proyectos_idx` (`IdExperienciaEducativa` ASC) VISIBLE,
@@ -117,25 +115,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Eminus5`.`Bitacora`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Eminus5`.`Bitacora` (
-  `IdBitacora` INT NOT NULL AUTO_INCREMENT,
-  `NumBitacora` INT NULL,
-  `Nombre` VARCHAR(45) NOT NULL,
-  `Descripción` TEXT NOT NULL,
-  `IdDesarrollador` INT NOT NULL,
-  PRIMARY KEY (`IdBitacora`),
-  INDEX `IDDesarrollador_idx` (`IdDesarrollador` ASC) VISIBLE,
-  CONSTRAINT `IDDesarrollador_Bitacoras`
-    FOREIGN KEY (`IdDesarrollador`)
-    REFERENCES `Eminus5`.`Usuario` (`IDUsuario`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `Eminus5`.`TipoActividad`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Eminus5`.`TipoActividad` (
@@ -163,19 +142,18 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`Actividad` (
   `IdActividad` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Descripcion` TEXT NOT NULL,
-  `Asignado` TINYINT NULL,
-  `Estado` INT NULL,
-  `Tipo` INT NOT NULL,
+  `IdEstado` INT NULL,
+  `IdTipo` INT NOT NULL,
   `FechaInicio` DATE NULL,
-  `FechaFin` DATE NULL,
+  `FechaTermino` DATE NULL,
   `IdProyecto` INT NOT NULL,
   `IdDesarrollador` INT NULL,
   PRIMARY KEY (`IdActividad`),
   UNIQUE INDEX `Nombre_UNIQUE` (`Nombre` ASC) VISIBLE,
   INDEX `IDProyecto_idx` (`IdProyecto` ASC) VISIBLE,
   INDEX `IDDesarrollador_idx` (`IdDesarrollador` ASC) VISIBLE,
-  INDEX `IDTipoActividad_idx` (`Tipo` ASC) VISIBLE,
-  INDEX `IDEstado_idx` (`Estado` ASC) VISIBLE,
+  INDEX `IDTipoActividad_idx` (`IdTipo` ASC) VISIBLE,
+  INDEX `IDEstado_idx` (`IdEstado` ASC) VISIBLE,
   CONSTRAINT `IDProyecto_Actividades`
     FOREIGN KEY (`IdProyecto`)
     REFERENCES `Eminus5`.`Proyecto` (`IdProyecto`)
@@ -187,15 +165,41 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`Actividad` (
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `IDTipoActividad_Actividad`
-    FOREIGN KEY (`Tipo`)
+    FOREIGN KEY (`IdTipo`)
     REFERENCES `Eminus5`.`TipoActividad` (`IdTipoActividad`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `IDEstado_Actividad`
-    FOREIGN KEY (`Estado`)
+    FOREIGN KEY (`IdEstado`)
     REFERENCES `Eminus5`.`Estado` (`IdEstado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Eminus5`.`BitacoraActividad`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Eminus5`.`BitacoraActividad` (
+  `IdBitacora` INT NOT NULL AUTO_INCREMENT,
+  `NumBitacora` INT NULL,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Descripción` TEXT NOT NULL,
+  `IdDesarrollador` INT NOT NULL,
+  `IdActividad` INT NOT NULL,
+  PRIMARY KEY (`IdBitacora`),
+  INDEX `IDDesarrollador_idx` (`IdDesarrollador` ASC) VISIBLE,
+  INDEX `IDActividad_Bitacoras_idx` (`IdActividad` ASC) VISIBLE,
+  CONSTRAINT `IDDesarrollador_Bitacoras`
+    FOREIGN KEY (`IdDesarrollador`)
+    REFERENCES `Eminus5`.`Usuario` (`IDUsuario`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `IDActividad_Bitacoras`
+    FOREIGN KEY (`IdActividad`)
+    REFERENCES `Eminus5`.`Actividad` (`IdActividad`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -246,6 +250,7 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`SolicitudCambio` (
   `AccionPropuesta` VARCHAR(45) NULL,
   `FechaCreacion` DATE NULL,
   `FechaAceptada` DATE NULL,
+  `estadoAceptacion` VARCHAR(2) NULL,
   `IdDefecto` INT NOT NULL,
   PRIMARY KEY (`IdSolicitud`),
   UNIQUE INDEX `IDDefecto_UNIQUE` (`IdDefecto` ASC) VISIBLE,
@@ -282,41 +287,95 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`Cambio` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `Eminus5`.`BitacoraCambio`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Eminus5`.`BitacoraCambio` (
+  `IdBitacora` INT NOT NULL AUTO_INCREMENT,
+  `NumBitacora` INT NULL,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Descripción` TEXT NOT NULL,
+  `IdDesarrollador` INT NOT NULL,
+  `IdCambio` INT NOT NULL,
+  PRIMARY KEY (`IdBitacora`),
+  INDEX `IDDesarrollador_idx` (`IdDesarrollador` ASC) VISIBLE,
+  CONSTRAINT `IDDesarrollador_Bitacoras0`
+    FOREIGN KEY (`IdDesarrollador`)
+    REFERENCES `Eminus5`.`Usuario` (`IDUsuario`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `IDCambio_Bitacoras`
+    FOREIGN KEY (`IdCambio`)
+    REFERENCES `Eminus5`.`Cambio` (`IdCambio`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+
+
+
+
 /*ROLES SISTEMA--------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO RolSistema (Nombre) VALUES ('Responsable');
 INSERT INTO RolSistema (Nombre) VALUES ('Desarrollador');
-/*ESTADOS--------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO Estado (Nombre) VALUES ('Sin asignar');
-INSERT INTO Estado (Nombre) VALUES ('Asignado');
+/*ESTADO ACTIVIDAD--------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO Estado (Nombre) VALUES ('Iniciado');
-INSERT INTO Estado (Nombre) VALUES ('Terminado');
 INSERT INTO Estado (Nombre) VALUES ('Entregado');
-/*TIPOS----------------------------------------------------------------------------------------------------------------------------*/
+/*TIPO ACTIVIDAD----------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO TipoActividad (Nombre) VALUES ('Frontend');
 INSERT INTO TipoActividad (Nombre) VALUES ('Backend');
 INSERT INTO TipoActividad (Nombre) VALUES ('Base de datos');
 INSERT INTO TipoActividad (Nombre) VALUES ('Controlador');
 INSERT INTO TipoActividad (Nombre) VALUES ('JavaScript');
-/*PERIODO-------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO Periodo (Inicio, Fin)
-VALUES ('2023-06-01', '2024-01-01');
-INSERT INTO Periodo (Inicio, Fin)
-VALUES ('2024-01-02', '2024-05-30');
-/*EXPERIENCIA EDUCATIVA-------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO ExperienciaEducativa (Nombre, Descripcion, idPeriodo)
-VALUES ('Proyecto guiado', 'EE proyecto guiado', 1);
-INSERT INTO ExperienciaEducativa(Nombre, Descripcion, idPeriodo)
-VALUES ('Experiencia recepcional', 'EE experiencia recepcional', 2);
-/*PROYECTO-------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO Proyecto (Nombre, NumIntegrantes, Descripcion, FechaInicio, FechaFin, idExperienciaEducativa)
-VALUES ('SPGER', 10, 'Descripcion de ejemplo del proyecto SPGER', '2023-06-01', '2024-01-01', 1);
+/*PERIODO------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Periodo (Inicio, Fin) VALUES ('2023-01-01', '2023-06-08');
+INSERT INTO Periodo (Inicio, Fin) VALUES ('2023-07-01', '2024-01-01');
+/*EXPERIENCIA EDUCATIVA------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO ExperienciaEducativa (Nombre, Descripcion, idPeriodo) 
+	VALUES ('Proyecto guiado', 'Descripción de ejemplo de la materia de proyecto guiado', 2);
+/*PROYECTO------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Proyecto (Nombre, NumIntegrantes, Descripcion, IdExperienciaEducativa) 
+	VALUES ('SPGER', 10, 'Descripción de ejemplo del proyecto SPGER', 1);
 /*USUARIO-------------------------------------------------------------------------------------------------------------------------*/
-INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema,  IdProyecto, IdExperienciaEducativa)
-VALUES ('P12345678', 'PapuPro', 'Rodolfo', 'Fernandez', 'Rodriguez', 'Rodolfo@ejemplo.hotmail.com', 'P12345678@UV.MX', 7, 1, 1, 1);
+INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema, IDproyecto, IdExperienciaEducativa) 
+	VALUES('P21013908', '1234', 'Abraham David', 'Fernández', 'Rodríguez', 
+	'abrakadabra007@gmail.com', 'ps21013908@profesor.uv.mx', NULL, 1, 1, 1);
+INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema, IDproyecto, IdExperienciaEducativa) 
+	VALUES('S21013909', '1234', 'Rodolfo', 'Fernández', 'Rodríguez', 
+	'foforfr007@gmail.com', 'zs21013909@estudiantes.uv.mx', 6, 2, 1, 1);
+INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema, IDproyecto, IdExperienciaEducativa) 
+	VALUES('S21013910', '1234', 'Andrés', 'Arellano', 'García', 
+	'andargar@gmail.com', 'zs21013910@estudiantes.uv.mx', 6, 2, 1, 1);
+INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema, IDProyecto, IdExperienciaEducativa)
+	VALUES('S21013885', 'saijiki', 'Papu', 'Vazquez', 'Quinto', 'lol2021@gmail.com', 'zs21013885@estudiantes.uv.mx', 6, 2, 1, 1);
+/*ACTIVIDAD-------------------------------------------------------------------------------------------------------------------------*/
+USE Eminus5;
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación de base de datos', 'Descripción de ejemplo para la actividad Creación de base de datos', 
+1, 3, '2023-06-01', '2023-06-04', 1, 2);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación de vistas', 'Descripción de ejemplo para la actividad Creación de vistas', 
+1, 1, '2023-06-01', '2023-06-04', 1, 3);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación de controladores', 'Descripción de ejemplo para la actividad Creación de controladores', 
+NULL, 4, '2023-06-01', '2023-06-04', 1, NULL);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación de bitacora', 'Descripción de ejemplo para la actividad Creación de bitacora, relacionada con una actividad', 
+NULL, 4, '2023-06-01', '2023-06-04', 1, 4);
 
-INSERT INTO Usuario (Usuario, Password, Nombre, ApellidoPaterno, ApellidoMaterno, CorreoPersonal, CorreoInstitucional, Semestre, IdRolSistema,  IdProyecto, IdExperienciaEducativa)
-VALUES('S12345678', 'saijiki', 'Abraham', 'Vazquez', 'Quinto', 'Abraham@ejemplo.hotmail.com', 'S12345678@UV.MX', 7, 2, 1, 1);
+/*BITACORA-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO BitacoraActividad (NumBitacora, Nombre, Descripción, IdActividad, IdDesarrollador)
+VALUES (1, 'Bitacora de ejemplo', 'Prueba para hacer mi CU13, creo jajaj no recuerdo cual era. Ni pex', 4, 4);
+
+SELECT BA.Nombre, BA.Descripción FROM bitacoraactividad BA
+JOIN Usuario U ON BA.IdDesarrollador = U.IDUsuario 
+WHERE U.IDUsuario = 4
+UNION SELECT BC.Nombre, BC.Descripción FROM bitacoracambio BC
+JOIN  Usuario U ON BC.IdDesarrollador = U.IDUsuario
+WHERE U.IDUsuario = 4;
+
