@@ -119,7 +119,7 @@ public class CambioDAO {
         if (connectionDB != null) {
             try {
                 String sqlQuery = "INSERT INTO Cambio (Nombre, Descripcion, FechaInicio, " +
-                                  "IdDesarrollador, Estado, Tipo) " +
+                                  "IdDesarrollador, IdEstado, IdTipo) " +
                                   "VALUES (?,?,(STR_TO_DATE(?, '%d-%m-%Y')),?,?,?);";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setString(1, newCambio.getNombre());
@@ -176,7 +176,7 @@ public class CambioDAO {
         if (connectionDB != null) {
             try {
                 String sqlQuery = "UPDATE Cambio " +
-                                  "SET Estado = ?, FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), Esfuerzo = ? " +
+                                  "SET IdEstado = ?, FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), Esfuerzo = ? " +
                                   "WHERE IdCambio = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, getEstadoCambioToInt(newCambio.getEstado()));
