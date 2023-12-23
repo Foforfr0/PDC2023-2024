@@ -24,7 +24,7 @@ public class DefectoDAO {
         
         if (connectionDB != null) {
             try {
-                String sqlQuery = "SELECT * FROM Defecto " +
+                String sqlQuery = "SELECT DE.Nombre, DE.Descripcion FROM Defecto DE" +
                         "JOIN Proyecto ON D.IdProyecto = Proyecto.IdProyecto " +
                         "WHERE Proyecto.IdProyecto = ?";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);

@@ -1,10 +1,14 @@
 package eminus5.viewController.desarrollador.controllers;
 
+import eminus5.databaseManagment.model.DAO.CambioDAO;
 import eminus5.databaseManagment.model.POJO.Cambio;
+import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
+import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import static eminus5.utils.loadView.loadScene;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +18,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -25,9 +31,9 @@ public class FXMLCambiosDController implements Initializable {
     @FXML
     private TableView<Cambio> tvCambios;
     @FXML
-    private TableColumn<?, ?> tcNombreCambio;
+    private TableColumn<Cambio, String> tcNombreCambio;
     @FXML
-    private TableColumn<?, ?> tcDescripcionCambio;
+    private TableColumn<Cambio, String> tcDescripcionCambio;
     @FXML
     private Button btModificarCambio;
 
@@ -35,11 +41,69 @@ public class FXMLCambiosDController implements Initializable {
     private ObservableList<Cambio> cambios = FXCollections.observableArrayList();
     private Cambio selectedCambio = null;
     
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        inicializarTabla();
+        cargarCambios();
     }    
-
+    
+    public void inicializarTabla() {
+        this.tcNombreCambio.setCellValueFactory(new PropertyValueFactory("Nombre"));
+        this.tcDescripcionCambio.setCellValueFactory(new PropertyValueFactory("Descripcion"));
+        tvCambios.setRowFactory(tv -> {
+            TableRow<Cambio> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if(event.getClickCount() == 2 && !row.isEmpty()) {
+                    selectedCambio = row.getItem();
+                    try {
+                        Stage stageCambio = new Stage();
+                        FXMLFormularioCambioController.currentCambio = selectedCambio;
+                        stageCambio.setScene(loadScene("viewController/desarrollador/views/FXMLFormularioCambio.fxml"));
+                        stageCambio.setTitle("Cambio");
+                        stageCambio.initModality(Modality.WINDOW_MODAL);
+                        stageCambio.initOwner(
+                                (Stage) this.tvCambios.getScene().getWindow()
+                        );
+                        
+                        stageCambio.initStyle(StageStyle.UTILITY);
+                        stageCambio.showAndWait();
+                    } catch (IOException e) {
+                        System.out.println("Error de \"IOException\" en archivo "
+                                + "\"FXMLFormularioCambioController\" en metodo \"modificarCambio\"");
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return row;
+        });
+    }
+    
+    public void cargarCambios() {
+        try {
+            ResultOperation resultGetCambios = CambioDAO.getCambios(idUser);
+            
+            if(resultGetCambios.getIsError() == true && resultGetCambios.getData() == null
+                || resultGetCambios.getNumberRowsAffected() <= 0) {
+                showMessage(
+                        "ERROR", 
+                        "Error inesperado",
+                        resultGetCambios.getMessage(),
+                        "Intente mas tarde"
+                );
+            } else {
+                this.cambios = FXCollections.observableArrayList(
+                        (ObservableList) CambioDAO.getCambios(idUser).getData()
+                );
+                this.tvCambios.setItems(this.cambios);
+            }
+        } catch (SQLException sqlex) {
+            showMessageFailureConnection();
+            System.out.println("\"Error de \"SQLException\" en archivo \"FXMLCambiosDController\"");
+            sqlex.printStackTrace();
+        }
+    }
+    
     @FXML
     private void btnRegistrarCambio(ActionEvent event) {
         try{

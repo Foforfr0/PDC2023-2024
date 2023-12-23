@@ -1,8 +1,13 @@
 package eminus5.viewController.desarrollador.controllers;
 
+import eminus5.databaseManagment.model.DAO.CambioDAO;
+import eminus5.databaseManagment.model.POJO.Cambio;
+import eminus5.databaseManagment.model.ResultOperation;
 import eminus5.utils.ShowMessage;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,11 +21,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author abrah
- */
+
 public class FXMLFormularioCambioController implements Initializable {
 
     @FXML
@@ -38,6 +39,7 @@ public class FXMLFormularioCambioController implements Initializable {
     @FXML
     private TextField tfEsfuerzo;
 
+    public static Cambio currentCambio = null;
     public static int idUser = 0;
     
     @Override
@@ -47,7 +49,7 @@ public class FXMLFormularioCambioController implements Initializable {
 
     private void initializeStage() {
         this.cbEstadoCambio.getItems().setAll(
-                "Asignado",
+                "Iniciado",
                 "Entregado"
         );
         
@@ -66,6 +68,14 @@ public class FXMLFormularioCambioController implements Initializable {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 setDisable(date.isBefore(LocalDate.now()));
+            }
+        });
+        
+        this.dpFechaFinCambio.setDayCellFactory(picker -> new DateCell(){
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(dpFechaInicioCambio.getValue()));
             }
         });
     }
@@ -101,7 +111,38 @@ public class FXMLFormularioCambioController implements Initializable {
                     "Por favor ingrese los datos faltantes"
             );
         } else {
-            //TODO crear metodo en CambioDAO
+            try {
+                Cambio newCambio = new Cambio();
+                newCambio.setNombre(this.tfTituloCambio.getText());
+                newCambio.setDescripcion(this.tfDescCambio.getText());
+                newCambio.setFechaInicio(this.dpFechaInicioCambio.getValue().format
+                (DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                newCambio.setEstado(this.cbEstadoCambio.getValue());
+                newCambio.setTipo(this.cbTipoCambio.getValue());
+                
+                ResultOperation  resultCreate = CambioDAO.registrarCambio(idUser, newCambio);
+                if (resultCreate.getIsError() == true) {
+                    ShowMessage.showMessage(
+                            "ERROR",
+                            "Error inesperado",
+                            resultCreate.getMessage(),
+                            "Intente mas tarde"
+                    );
+                } else {
+                    ShowMessage.showMessage(
+                            "INFORMATION",
+                            "Se ha registrado con exito",
+                            "Se registro el cambio",
+                            ""
+                    );
+                    Stage currentStage = (Stage) this.tfTituloCambio.getScene().getWindow();
+                    currentStage.close();
+                }
+            } catch (SQLException sqlex) {
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLFormularioCambioController"
+                        + " en metodo \"registrarCambio\"");
+                sqlex.printStackTrace();
+            }
         }
     }
     

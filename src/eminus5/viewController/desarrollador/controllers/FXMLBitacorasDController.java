@@ -99,21 +99,7 @@ public class FXMLBitacorasDController implements Initializable {
            sqlex.printStackTrace();
         }
     }
-
-    /*@FXML
-    private void btnVerBitacora(ActionEvent event) {
-        if(verifyBitacoraSelected() != null) {
-            //TODO
-        } else {
-            showMessage(
-                    "WARNING",
-                    "Seleccion requerida",
-                    "Primero selecciona una bitacora",
-                    "Elije una bitacora para ver sus detalles"
-            );
-        }
-    }
-    */
+    
     private Bitacora verifyBitacoraSelected(){
         int selectedRow = this.tvBitacoras.getSelectionModel().getSelectedIndex();
         this.bitacoraSeleccionada = (selectedRow >= 0) ? this.bitacoras.get(selectedRow) : null;

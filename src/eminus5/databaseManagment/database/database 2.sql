@@ -31,7 +31,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Eminus5`.`ExperienciaEducativa` (
   `IdExperienciaEducativa` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
-  `Descripcion` TEXT NOT NULL,
+  `Descripcion` VARCHAR(45) NOT NULL,
   `idPeriodo` INT NOT NULL,
   PRIMARY KEY (`IdExperienciaEducativa`),
   INDEX `IDExperienciaEducativa_Periodo_idx` (`idPeriodo` ASC) VISIBLE,
@@ -269,11 +269,18 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`Cambio` (
   `IdCambio` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Descripcion` VARCHAR(45) NOT NULL,
+  `Esfuerzo` INT NULL,
+  `FechaInicio` DATE NULL,
+  `FechaFin` DATE NULL,
   `IdDesarrollador` INT NULL,
   `IdSolicitud` INT NULL,
+  `IdEstado` INT NULL,
+  `IdTipo` INT NULL,
   PRIMARY KEY (`IdCambio`),
   INDEX `IDDesarrollador_idx` (`IdDesarrollador` ASC) VISIBLE,
   UNIQUE INDEX `IDSolicitud_UNIQUE` (`IdSolicitud` ASC) VISIBLE,
+  INDEX `IDEstado_Cambio_idx` (`IdEstado` ASC) VISIBLE,
+  INDEX `IDTipoActividad_Cambio_idx` (`IdTipo` ASC) VISIBLE,
   CONSTRAINT `IDDesarrollador_Cambio`
     FOREIGN KEY (`IdDesarrollador`)
     REFERENCES `Eminus5`.`Usuario` (`IDUsuario`)
@@ -283,7 +290,17 @@ CREATE TABLE IF NOT EXISTS `Eminus5`.`Cambio` (
     FOREIGN KEY (`IdSolicitud`)
     REFERENCES `Eminus5`.`SolicitudCambio` (`IdSolicitud`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+  CONSTRAINT `IDEstado_Cambio`
+    FOREIGN KEY (`IdEstado`)
+    REFERENCES `Eminus5`.`Estado` (`IdEstado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `IDTipoActividad_Cambio`
+    FOREIGN KEY (`IdTipo`)
+    REFERENCES `Eminus5`.`TipoActividad` (`IdTipoActividad`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -317,9 +334,6 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
-
-
-
 /*ROLES SISTEMA--------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO RolSistema (Nombre) VALUES ('Responsable');
 INSERT INTO RolSistema (Nombre) VALUES ('Desarrollador');
@@ -337,7 +351,7 @@ INSERT INTO Periodo (Inicio, Fin) VALUES ('2023-01-01', '2023-06-08');
 INSERT INTO Periodo (Inicio, Fin) VALUES ('2023-07-01', '2024-01-01');
 /*EXPERIENCIA EDUCATIVA------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO ExperienciaEducativa (Nombre, Descripcion, idPeriodo) 
-	VALUES ('Proyecto guiado', 'Descripción de ejemplo de la materia de proyecto guiado', 2);
+	VALUES ('Proyecto guiado', 'Descripción de ejemplo de proyecto guiado', 2);
 /*PROYECTO------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO Proyecto (Nombre, NumIntegrantes, Descripcion, IdExperienciaEducativa) 
 	VALUES ('SPGER', 10, 'Descripción de ejemplo del proyecto SPGER', 1);
@@ -372,6 +386,12 @@ NULL, 4, '2023-06-01', '2023-06-04', 1, 4);
 INSERT INTO BitacoraActividad (NumBitacora, Nombre, Descripción, IdActividad, IdDesarrollador)
 VALUES (1, 'Bitacora de ejemplo', 'Prueba para hacer mi CU13, creo jajaj no recuerdo cual era. Ni pex', 4, 4);
 
+/*CAMBIO-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Cambio (Nombre, Descripcion, FechaInicio, IdDesarrollador, IdEstado, IdTipo)
+VALUES ('Cambio de ejemplo', 'Ejemplo para ver si mi query funciona', '2023-12-21', 4, 1, 2);
+
+
+
 SELECT BA.Nombre, BA.Descripción FROM bitacoraactividad BA
 JOIN Usuario U ON BA.IdDesarrollador = U.IDUsuario 
 WHERE U.IDUsuario = 4
@@ -379,3 +399,6 @@ UNION SELECT BC.Nombre, BC.Descripción FROM bitacoracambio BC
 JOIN  Usuario U ON BC.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4;
 
+SELECT C.Nombre, C.Descripcion FROM Cambio C
+JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
+WHERE U.IDUsuario = 4;

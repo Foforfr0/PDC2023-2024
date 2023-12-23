@@ -174,7 +174,7 @@ public class ActividadDAO {
     public static ResultOperation createActividad(int idProyecto, Actividad newActividad) throws SQLException{
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
-        
+        //Falla  la conexion al registrar
         if (connectionDB != null) { 
             try {            
                 String sqlQuery = "INSERT INTO Actividad (Nombre, Descripcion, Asignado, Estado, Tipo, " +

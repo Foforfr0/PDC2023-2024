@@ -7,25 +7,29 @@ package eminus5.databaseManagment.model.POJO;
 public class Cambio {
     private int idCambio;
     private String nombre;
-    private String descripcionCambio;
-    private String tipo;
-    private int idProyecto;
+    private String descripcion;
+    private int esfuerzo;
+    private String fechaInicio;
+    private String fechaFin;
     private int idDesarrollador;
-    private int idDefecto;
     private int idSolicitud;
+    private String estado;
+    private String tipo;
 
     public Cambio() {
     }
 
-    public Cambio(int idCambio, String nombre, String descripcionCambio, String tipo, int idProyecto, int idDesarrollador, int idDefecto, int idSolicitud) {
+    public Cambio(int idCambio, String nombre, String descripcion, int esfuerzo, String fechaInicio, String fechaFin, int idDesarrollador, int idSolicitud, String estado, String tipo) {
         this.idCambio = idCambio;
         this.nombre = nombre;
-        this.descripcionCambio = descripcionCambio;
-        this.tipo = tipo;
-        this.idProyecto = idProyecto;
+        this.descripcion = descripcion;
+        this.esfuerzo = esfuerzo;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
         this.idDesarrollador = idDesarrollador;
-        this.idDefecto = idDefecto;
         this.idSolicitud = idSolicitud;
+        this.estado = estado;
+        this.tipo = tipo;
     }
 
     public int getIdCambio() {
@@ -44,28 +48,36 @@ public class Cambio {
         this.nombre = nombre;
     }
 
-    public String getDescripcionCambio() {
-        return descripcionCambio;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripcionCambio(String descripcionCambio) {
-        this.descripcionCambio = descripcionCambio;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getTipo() {
-        return tipo;
+    public int getEsfuerzo() {
+        return esfuerzo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setEsfuerzo(int esfuerzo) {
+        this.esfuerzo = esfuerzo;
     }
 
-    public int getIdProyecto() {
-        return idProyecto;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setIdProyecto(int idProyecto) {
-        this.idProyecto = idProyecto;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public int getIdDesarrollador() {
@@ -76,14 +88,6 @@ public class Cambio {
         this.idDesarrollador = idDesarrollador;
     }
 
-    public int getIdDefecto() {
-        return idDefecto;
-    }
-
-    public void setIdDefecto(int idDefecto) {
-        this.idDefecto = idDefecto;
-    }
-
     public int getIdSolicitud() {
         return idSolicitud;
     }
@@ -91,6 +95,22 @@ public class Cambio {
     public void setIdSolicitud(int idSolicitud) {
         this.idSolicitud = idSolicitud;
     }
-    
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     
 }
