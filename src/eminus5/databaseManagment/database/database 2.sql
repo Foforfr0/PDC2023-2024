@@ -390,6 +390,8 @@ VALUES (1, 'Bitacora de ejemplo', 'Prueba para hacer mi CU13, creo jajaj no recu
 INSERT INTO Cambio (Nombre, Descripcion, FechaInicio, IdDesarrollador, IdEstado, IdTipo)
 VALUES ('Cambio de ejemplo', 'Ejemplo para ver si mi query funciona', '2023-12-21', 4, 1, 2);
 
+INSERT INTO Cambio (Nombre, Descripcion, FechaInicio, IdDesarrollador, IdEstado, IdTipo)
+VALUES ('Cambio de ejemplo 2', 'Ejemplo para modificar', '2023-12-21', 4,  2, 2);
 
 
 SELECT BA.Nombre, BA.Descripción FROM bitacoraactividad BA
@@ -399,6 +401,13 @@ UNION SELECT BC.Nombre, BC.Descripción FROM bitacoracambio BC
 JOIN  Usuario U ON BC.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4;
 
-SELECT C.Nombre, C.Descripcion FROM Cambio C
+SELECT C.Nombre, C.Descripcion, C.Esfuerzo, C.FechaInicio, C.FechaFin, C.IdEstado, C.Tipo
+FROM Cambio C
+JOIN Estado E ON C.IdEstado = E.IdEstado
+JOIN TipoActividad TA ON C.Tipo = TA.IdTipo
+JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
+WHERE U.IDUsuario = 4 AND IdEstado = 1;
+
+SELECT C.Nombre, C.Descripcion FROM Cambio C 
 JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4;

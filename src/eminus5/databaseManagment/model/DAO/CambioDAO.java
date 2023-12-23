@@ -18,9 +18,14 @@ public class CambioDAO {
         
         if (connectionDB != null) {
             try {
-                String sqlQuery = "SELECT C.Nombre, C.Descripcion FROM Cambio C " + 
-                                  "JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario " +
-                                  "WHERE U.IDUsuario = ?; ";
+                String sqlQuery = "SELECT C.IdCambio, C.Nombre, C.Descripcion, C.Esfuerzo, " +
+                                  " DATE_FORMAT(C.FechaInicio, '%d-%m-%Y') AS FechaInicio, DATE_FORMAT(C.FechaFin, '%d-%m-%Y') AS FechaFin, " +
+                                  "E.IdEstado AS 'Estado', TA.IdTipoACtividad AS 'Tipo'\n" +
+                                  "FROM Cambio C \n" +
+                                  "JOIN Estado E ON E.IdEstado = C.IdEstado \n" +
+                                  "JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo \n" +
+                                  "JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario \n" +
+                                  "WHERE U.IDUsuario = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, idUser);
                 ResultSet resultQuery = prepareQuery.executeQuery();
@@ -28,8 +33,14 @@ public class CambioDAO {
                 ObservableList<Cambio> listCambios = FXCollections.observableArrayList();
                 while(resultQuery.next()) {
                     Cambio newCambio = new Cambio();
+                    newCambio.setIdCambio(resultQuery.getInt("IdCambio"));
                     newCambio.setNombre(resultQuery.getString("Nombre"));
                     newCambio.setDescripcion(resultQuery.getString("Descripcion"));
+                    newCambio.setEsfuerzo(resultQuery.getInt("Esfuerzo"));
+                    newCambio.setFechaInicio(resultQuery.getString("FechaInicio"));
+                    newCambio.setFechaFin(resultQuery.getString("FechaFin"));
+                    newCambio.setEstado(resultQuery.getString("Estado"));
+                    newCambio.setTipo(resultQuery.getString("Tipo"));
                     listCambios.add(newCambio);
                     resultOperation = new ResultOperation(
                             false,
@@ -56,7 +67,7 @@ public class CambioDAO {
                         -1,
                         null
                 );
-                System.out.println("Error de \"SQLException\" en archivo\"BitacoraDAO\" en metodo \"getBitacoras\"");
+                System.out.println("Error de \"SQLException\" en archivo\"CambioDAO\" en metodo \"getCambios\"");
                 sqlex.printStackTrace();
             } finally {
                 connectionDB.close();
@@ -157,4 +168,61 @@ public class CambioDAO {
         }
         return resultOperation;
     }
+    
+    public static ResultOperation modificarCambio(Cambio newCambio) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {
+            try {
+                String sqlQuery = "UPDATE Cambio " +
+                                  "SET Estado = ?, FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), Esfuerzo = ? " +
+                                  "WHERE IdCambio = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                prepareQuery.setInt(1, getEstadoCambioToInt(newCambio.getEstado()));
+                prepareQuery.setString(2, newCambio.getFechaFin().replace("/", "-"));
+                prepareQuery.setInt(3, newCambio.getEsfuerzo());
+                prepareQuery.setInt(4, newCambio.getIdCambio());
+                
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                            false,
+                            "Se ha modificado el cambio",
+                            numberAffectedRows,
+                            newCambio
+                    );
+                } else {
+                    resultOperation = new ResultOperation(
+                            true,
+                            "No se ha modificado el cambio",
+                            numberAffectedRows,
+                            newCambio
+                    );
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(
+                        true,
+                        "Fallo la conexion con la base de datos",
+                        -1,
+                        null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"CambioDAO\" en método \"modificarCambio\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(
+                    true,
+                    "Fallo la conexion con la base de datos",
+                    -1,
+                    null
+            );
+            showMessageFailureConnection();
+        }
+        return resultOperation;
+    }
+    
 }

@@ -59,7 +59,7 @@ public class FXMLCambiosDController implements Initializable {
                     try {
                         Stage stageCambio = new Stage();
                         FXMLFormularioCambioController.currentCambio = selectedCambio;
-                        stageCambio.setScene(loadScene("viewController/desarrollador/views/FXMLFormularioCambio.fxml"));
+                        stageCambio.setScene(loadScene("viewController/desarrollador/views/FXMLFormularioModCambio.fxml"));
                         stageCambio.setTitle("Cambio");
                         stageCambio.initModality(Modality.WINDOW_MODAL);
                         stageCambio.initOwner(
@@ -70,7 +70,7 @@ public class FXMLCambiosDController implements Initializable {
                         stageCambio.showAndWait();
                     } catch (IOException e) {
                         System.out.println("Error de \"IOException\" en archivo "
-                                + "\"FXMLFormularioCambioController\" en metodo \"modificarCambio\"");
+                                + "\"FXMLFormularioModCambioController\" en metodo \"btmodificarCambio\"");
                         e.printStackTrace();
                     }
                 }
@@ -131,7 +131,7 @@ public class FXMLCambiosDController implements Initializable {
                 });
             });
             clicRegistrarCambio.showAndWait();
-            
+            cargarCambios();
         } catch (IOException ioex) {
             System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\""
                     + " en método \"clicRegistrarCambio\"");
@@ -142,7 +142,37 @@ public class FXMLCambiosDController implements Initializable {
     @FXML
     private void btnModificarCambio(ActionEvent event) {
         if (verifySelectedCambio() != null) {
-            //TODO
+            this.btModificarCambio.setVisible(true);
+            try {
+                Stage clicModificarCambio = new Stage();
+                FXMLFormularioModCambioController.currentCambio = verifySelectedCambio();
+                clicModificarCambio.setScene(loadScene("viewController/desarrollador/views/FXMLFormularioModCambio.fxml"));
+                clicModificarCambio.setTitle("Modificar cambio");
+                clicModificarCambio.initModality(Modality.WINDOW_MODAL);
+                clicModificarCambio.initOwner(
+                        (Stage) this.tvCambios.getScene().getWindow()
+                );
+                clicModificarCambio.initStyle(StageStyle.UTILITY);
+                clicModificarCambio.setOnCloseRequest(eventStage -> {
+                    eventStage.consume();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("¿Está seguro?");
+                    alert.setHeaderText("¿Está seguro de cancelar?");
+                    alert.setContentText("¿Ésta acción no se podrá revertir?");
+
+                    alert.showAndWait().ifPresent(response ->{
+                       String responseMessage = response.getText();
+                       if (responseMessage.equals("Aceptar")) {
+                           clicModificarCambio.close();
+                       }
+                    });
+                });
+                clicModificarCambio.showAndWait();
+                cargarCambios();
+            } catch (IOException ioex) {
+                System.err.println("Error de \"IOException\" en archivo \"FXMLFormularioModCambio\" en método \"btModificarCambio\"");
+                ioex.printStackTrace();
+            }
         } else {
             showMessage(
                     "WARNING",
