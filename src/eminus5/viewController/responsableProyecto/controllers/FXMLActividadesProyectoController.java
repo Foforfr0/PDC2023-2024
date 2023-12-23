@@ -97,7 +97,8 @@ public class FXMLActividadesProyectoController implements Initializable {
         try{            
             ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idResponsable);
         
-            if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null || resultGetProyecto.getNumberRowsAffected() <= 0) {
+            if (resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null || 
+                resultGetProyecto.getNumberRowsAffected() <= 0) {
                 showMessage(
                     "ERROR", 
                     "Error inesperado", 

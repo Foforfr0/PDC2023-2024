@@ -8,7 +8,7 @@ package eminus5.databaseManagment.model.POJO;
 public class Bitacora {
     int idBitacora;
     int numBitacora;
-    String nombreCambio;
+    String nombre;
     String descripcion;
     int idEstado;
     int idDesarrollador;
@@ -18,10 +18,10 @@ public class Bitacora {
     public Bitacora() {
     }
 
-    public Bitacora(int idBitacora, int numBitacora, String nombreCambio, String descripcion, int idEstado, int idDesarrollador, int idActividad, int idCambio) {
+    public Bitacora(int idBitacora, int numBitacora, String nombre, String descripcion, int idEstado, int idDesarrollador, int idActividad, int idCambio) {
         this.idBitacora = idBitacora;
         this.numBitacora = numBitacora;
-        this.nombreCambio = nombreCambio;
+        this.nombre = nombre;
         this.descripcion = descripcion;
         this.idEstado = idEstado;
         this.idDesarrollador = idDesarrollador;
@@ -45,12 +45,12 @@ public class Bitacora {
         this.numBitacora = numBitacora;
     }
 
-    public String getNombreCambio() {
-        return nombreCambio;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombreCambio(String nombreCambio) {
-        this.nombreCambio = nombreCambio;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {

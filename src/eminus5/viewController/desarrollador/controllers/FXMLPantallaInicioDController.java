@@ -1,7 +1,3 @@
-/*
- * Descripción del programa
- * Últimos 3 cambios realizados
- */
 package eminus5.viewController.desarrollador.controllers;
 
 import static eminus5.utils.loadView.loadParent;
@@ -34,15 +30,11 @@ public class FXMLPantallaInicioDController implements Initializable {
         // TODO
     }   
     
-    @FXML
     private void clearInsideScene() {
         this.lbTituloVentana.setText("Detalles proyecto");
         this.pnInsideSceneD.getChildren().clear();
     }
 
-    @FXML
-    private void btnSolicitudCambio(ActionEvent event) {
-    }
 
     @FXML
     private void btnBitacoras(ActionEvent event) {
@@ -64,6 +56,19 @@ public class FXMLPantallaInicioDController implements Initializable {
 
     @FXML
     private void btnActividades(ActionEvent event) {
+        String FXMLActividadesD = "viewController/desarrollador/views/FXMLActividadesD.fxml";
+        
+        try {
+            FXMLLoader loader = loadView(FXMLActividadesD);
+            FXMLActividadesDController controller = loader.getController();
+            FXMLActividadesDController.idUser = idUser;
+            
+            Pane vistaSecundaria = (Pane) loadParent(FXMLActividadesD);
+            this.pnInsideSceneD.getChildren().setAll(vistaSecundaria);
+        } catch (IOException ioex) {
+            System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"btnActividades\"");
+            ioex.printStackTrace();
+        }
     }
 
     @FXML
@@ -109,11 +114,12 @@ public class FXMLPantallaInicioDController implements Initializable {
         
         stageActual.setTitle("Inicio de sesión");
         stageActual.setResizable(false);
+        stageActual.setMaximized(true);
         stageActual.show();
     }
     
     private void showSceneLogin(MouseEvent event) {
-                try {
+        try {
             showSceneLogin();
         } catch (IOException ioex) {
             System.out.println("\"Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"showSceneLogin\"\"");

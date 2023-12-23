@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLFormularioModCambioController">
+   <children>
+      <Pane prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #18419D;" />
+      <Label layoutX="24.0" layoutY="103.0" text="Modificar cambio">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="24.0" layoutY="153.0" text="Ingrese los datos requeridos (*)">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="24.0" layoutY="191.0" text="Titulo (*)" />
+      <TextField fx:id="tfTituloCambio" layoutX="24.0" layoutY="212.0" />
+      <Label layoutX="24.0" layoutY="252.0" text="Descripcion (*)" />
+      <TextField fx:id="tfDescCambio" layoutX="24.0" layoutY="273.0" prefHeight="95.0" prefWidth="187.0" />
+      <Label layoutX="24.0" layoutY="377.0" text="Estado" />
+      <ComboBox fx:id="cbEstadoCambio" layoutX="24.0" layoutY="398.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="327.0" layoutY="191.0" text="Tipo (*)" />
+      <ComboBox fx:id="cbTipoCambio" layoutX="327.0" layoutY="212.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="327.0" layoutY="252.0" text="Fecha de inicio (*)" />
+      <DatePicker fx:id="dpFechaInicioCambio" layoutX="327.0" layoutY="273.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="326.0" layoutY="310.0" text="Fecha de fin (*)" />
+      <DatePicker fx:id="dpFechaFinCambio" layoutX="327.0" layoutY="337.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="324.0" layoutY="377.0" text="Esfuerzo" />
+      <TextField fx:id="tfEsfuerzo" layoutX="324.0" layoutY="398.0" />
+      <Button layoutX="426.0" layoutY="455.0" mnemonicParsing="false" onAction="#btnGuardarCambio" text="Guardar" />
+      <Button layoutX="511.0" layoutY="455.0" mnemonicParsing="false" onAction="#btnCancelarCambio" text="Cancelar" />
+   </children>
+</AnchorPane>

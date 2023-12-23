@@ -22,9 +22,9 @@ public class UserDAO {
         
         if (connectionDB != null) {    
             try {            
-                String sqlQuery = "SELECT u.IDUsuario, rs.Nombre AS RolSistema " +
+                String sqlQuery = "SELECT u.IdUsuario, rs.Nombre AS RolSistema " +
                                   "FROM RolSistema rs RIGHT JOIN Usuario u ON u.IdRolSistema = rs.IdRolSistema " +
-                                  "WHERE BINARY u.Usuario = ? AND BINARY u.Password = ?;";
+                                  "WHERE u.Usuario = ? AND u.Password = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setString(1, user);
                     prepareQuery.setString(2, password);
@@ -34,9 +34,9 @@ public class UserDAO {
                     resultOperation = new ResultOperation(            //It´s exists
                         false, 
                         "Se encontró el usuario", 
-                        resultQuery.getInt("IDUsuario"), 
+                        resultQuery.getInt("IdUsuario"), 
                         new Usuario(
-                            resultQuery.getInt("IDUsuario"),
+                            resultQuery.getInt("IdUsuario"),
                             resultQuery.getString("RolSistema")
                         )  
                     );

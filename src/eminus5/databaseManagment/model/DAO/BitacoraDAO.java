@@ -16,23 +16,26 @@ public class BitacoraDAO {
     public static ResultOperation getBitacoras(int idUser) throws SQLException{
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
-        
+
         if(connectionDB != null){
             try{
-                String sqlQuery = "SELECT * FROM Bitacora " +
-                                  "JOIN Usuario ON Bitacora.IDDesarrollador = Usuario.IDUsuario " +
-                                  "WHERE Usuario.IDUsuario = ?;";
+                String sqlQuery = "SELECT BA.Nombre, BA.Descripción FROM BitacoraActividad BA " +
+                                  "JOIN Usuario U ON BA.IdDesarrollador = U.IDUsuario " +
+                                  "WHERE U.IDUsuario = ? " +
+                                  "UNION " +
+                                  "SELECT BC.Nombre, BC.Descripción FROM BitacoraCambio BC " +
+                                  "JOIN Usuario U ON BC.IdDesarrollador = U.IDUsuario " +
+                                  "WHERE U.IDUsuario = ?; ";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, idUser);
+                prepareQuery.setInt(2, idUser);
                 ResultSet resultQuery = prepareQuery.executeQuery();
                 
                 ObservableList<Bitacora> listBitacoras = FXCollections.observableArrayList();
                 while(resultQuery.next()){
                     Bitacora newBitacora = new Bitacora();
-                    newBitacora.setIdBitacora(resultQuery.getInt("IDBitacora"));
-                    newBitacora.setNombreCambio(resultQuery.getString("[Nombre del cambio]"));
-                    newBitacora.setDescripcion(resultQuery.getString("Descripcion"));
-                    newBitacora.setIdEstado(resultQuery.getInt("IDEstado"));
+                    newBitacora.setNombre(resultQuery.getString("Nombre"));
+                    newBitacora.setDescripcion(resultQuery.getString("Descripción"));
                     listBitacoras.add(newBitacora);
                 resultOperation = new ResultOperation(
                         false,
@@ -42,10 +45,11 @@ public class BitacoraDAO {
                 );
                 System.out.println("BitacoraDAO//BITACORAS ENCONTRADAS: " + listBitacoras.size() + " DEL DESARROLLADOR ID" + idUser);
                 }
+                
                 if(listBitacoras.size() <= 0) {
                     resultOperation = new ResultOperation(
                             false,
-                            "No se encontraron bitacoras",
+                            "Sin registros",
                             0,
                             null
                     );

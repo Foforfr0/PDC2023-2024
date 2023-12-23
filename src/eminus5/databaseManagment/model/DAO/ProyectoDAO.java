@@ -22,9 +22,9 @@ public class ProyectoDAO {
         
         if (connectionDB != null) {    
             try {            
-                String sqlQuery = "SELECT P.IdProyecto, P.Nombre FROM Proyecto P " +
-                                  "RIGHT JOIN Usuario U ON U.IdProyecto = P.IdProyecto " +
-                                  "WHERE U.IdUsuario = ?;";
+                String sqlQuery = "SELECT P.IDProyecto, P.Nombre FROM Proyecto P " +
+                                  "RIGHT JOIN Usuario U ON U.IDProyecto = P.IDProyecto " +
+                                  "WHERE U.IDUsuario = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idUser);
                 ResultSet resultQuery = prepareQuery.executeQuery();
@@ -33,9 +33,9 @@ public class ProyectoDAO {
                     resultOperation = new ResultOperation(            //It´s exists
                         false, 
                         "El usuario si pertenece a un proyecto", 
-                        resultQuery.getInt("IdProyecto"), 
+                        resultQuery.getInt("IDProyecto"), 
                         new Proyecto(
-                            resultQuery.getInt("IdProyecto"), 
+                            resultQuery.getInt("IDProyecto"), 
                             resultQuery.getString("Nombre")
                         )
                     );

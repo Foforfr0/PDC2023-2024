@@ -10,10 +10,10 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLPantallaInicioDController">
    <children>
-      <Pane fx:id="pnInsideSceneD" prefHeight="440.0" prefWidth="650.0" />
-      <Pane prefHeight="80.0" prefWidth="650.0" style="-fx-background-color: #18419D;">
+      <Pane fx:id="pnInsideSceneD" prefHeight="480.0" prefWidth="770.0" />
+      <Pane prefHeight="80.0" prefWidth="770.0" style="-fx-background-color: #18419D;">
          <children>
-            <Label layoutX="465.0" layoutY="14.0" text="EMINUS 5">
+            <Label layoutX="585.0" layoutY="14.0" text="EMINUS 5">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
@@ -24,13 +24,12 @@
                </image>
             </ImageView>
          </children></Pane>
-      <Pane layoutY="80.0" prefHeight="360.0" prefWidth="170.0" style="-fx-background-color: lightGray;">
+      <Pane layoutY="80.0" prefHeight="400.0" prefWidth="170.0" style="-fx-background-color: lightGray;">
          <children>
-            <Button layoutX="10.0" layoutY="257.0" mnemonicParsing="false" onAction="#btnSolicitudCambio" text="Solicitud de cambio" />
-            <Button layoutX="10.0" layoutY="203.0" mnemonicParsing="false" onAction="#btnBitacoras" prefHeight="31.0" prefWidth="151.0" text="Bitacoras" />
-            <Button layoutX="10.0" layoutY="149.0" mnemonicParsing="false" onAction="#btnActividades" prefHeight="31.0" prefWidth="151.0" text="Actividades" />
-            <Button layoutX="10.0" layoutY="97.0" mnemonicParsing="false" onAction="#btnCambios" prefHeight="31.0" prefWidth="151.0" text="Cambios" />
-            <Button layoutX="10.0" layoutY="52.0" mnemonicParsing="false" onAction="#btnDefectos" prefHeight="31.0" prefWidth="151.0" text="Defectos" />
+            <Button layoutX="10.0" layoutY="275.0" mnemonicParsing="false" onAction="#btnBitacoras" prefHeight="31.0" prefWidth="151.0" text="Bitacoras" />
+            <Button layoutX="10.0" layoutY="200.0" mnemonicParsing="false" onAction="#btnActividades" prefHeight="31.0" prefWidth="151.0" text="Actividades" />
+            <Button layoutX="10.0" layoutY="125.0" mnemonicParsing="false" onAction="#btnCambios" prefHeight="31.0" prefWidth="151.0" text="Cambios" />
+            <Button layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnDefectos" prefHeight="31.0" prefWidth="151.0" text="Defectos" />
          </children></Pane>
       <Label fx:id="lbTituloVentana" layoutX="170.0" layoutY="80.0">
          <font>

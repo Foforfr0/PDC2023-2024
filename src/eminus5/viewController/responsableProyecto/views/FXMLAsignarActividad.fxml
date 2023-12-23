@@ -51,8 +51,8 @@
               </content>
             </ScrollPane>
             <Button layoutX="688.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#clicSaveAsignacion" text="Guardar" />
-            <Button layoutX="603.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#clicCleanAsignacion" text="Desasignar" />
-            <Button layoutX="531.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#clicCancelAsignacion" text="Cancelar" />
+            <Button layoutX="623.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#clicCleanAsignacion" text="Eiminar" />
+            <Button layoutX="551.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#clicCancelAsignacion" text="Cancelar" />
          </children>
       </Pane>
    </children>

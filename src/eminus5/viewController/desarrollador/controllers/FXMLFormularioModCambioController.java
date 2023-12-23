@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
@@ -21,8 +20,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-
-public class FXMLFormularioCambioController implements Initializable {
+/**
+ * FXML Controller class
+ *
+ * @author abrah
+ */
+public class FXMLFormularioModCambioController implements Initializable {
 
     @FXML
     private TextField tfTituloCambio;
@@ -44,26 +47,25 @@ public class FXMLFormularioCambioController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initializeStage();
+        initializeData();
     }    
 
-    private void initializeStage() {
+    private void initializeData() {
         this.cbEstadoCambio.getItems().setAll(
                 "Iniciado",
                 "Entregado"
         );
         
-        this.cbTipoCambio.getItems().setAll(
-                "Frontend",
-                "Backend",
-                "Controladores",
-                "Base de datos",
-                "JavaScript"
-        );
+        this.tfTituloCambio.setText(currentCambio.getNombre());
+        this.tfDescCambio.setText(currentCambio.getDescripcion());
+        this.cbEstadoCambio.setValue(currentCambio.getEstado());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate localDate = LocalDate.parse(currentCambio.getFechaInicio(), formatter);
+            this.dpFechaInicioCambio.setValue(localDate);
         
-        this.dpFechaFinCambio.setDisable(true);
-        this.tfEsfuerzo.setDisable(true);
-        this.dpFechaInicioCambio.setDayCellFactory(picker -> new DateCell(){
+        this.cbTipoCambio.setValue(currentCambio.getTipo());
+        
+        this.dpFechaFinCambio.setDayCellFactory(picker -> new DateCell(){
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -71,91 +73,81 @@ public class FXMLFormularioCambioController implements Initializable {
             }
         });
         
-        this.dpFechaFinCambio.setDayCellFactory(picker -> new DateCell(){
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(date.isBefore(dpFechaInicioCambio.getValue()));
-            }
-        });
+        this.tfTituloCambio.setDisable(true);
+        this.tfDescCambio.setDisable(true);
+        this.cbTipoCambio.setDisable(true);
+        this.dpFechaInicioCambio.setDisable(true);
     }
     
     private boolean validateFields() {
-        if (tfTituloCambio.getText().length() <= 0 || tfDescCambio.getText().length() <= 0) {
+        if (dpFechaFinCambio.getValue() == null) {
             return true;
         }
-        if (cbEstadoCambio.getValue() == null) {
-            return true;
-        }
-        if (cbTipoCambio.getValue() == null) {
-            return true;
-        }
-        if (dpFechaInicioCambio.getValue() == null) {
-            return true;
+        if (tfEsfuerzo.getText().length() <= 0) {
+            return false;
         }
         return false;
     }
     
-    @FXML
-    private void btnCancelarCambio(ActionEvent event) {
-        closeWindow((Stage) this.tfTituloCambio.getScene().getWindow());
-    }
-
     @FXML
     private void btnGuardarCambio(ActionEvent event) {
         if (validateFields() == true) {
             ShowMessage.showMessage(
                     "ERROR",
                     "Campos incompletos",
-                    "Faltan datos por ingresar",
-                    "Por favor ingrese los datos faltantes"
+                    "Faltan campos por ingresar",
+                    "Ingrese los datos faltantes"
             );
         } else {
             try {
                 Cambio newCambio = new Cambio();
-                newCambio.setNombre(this.tfTituloCambio.getText());
-                newCambio.setDescripcion(this.tfDescCambio.getText());
-                newCambio.setFechaInicio(this.dpFechaInicioCambio.getValue().format
-                (DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-                newCambio.setEstado(this.cbEstadoCambio.getValue());
-                newCambio.setTipo(this.cbTipoCambio.getValue());
-                
-                ResultOperation  resultCreate = CambioDAO.registrarCambio(idUser, newCambio);
-                if (resultCreate.getIsError() == true) {
+                    newCambio.setIdCambio(currentCambio.getIdCambio());
+                    newCambio.setTipo(this.cbTipoCambio.getValue());
+                    newCambio.setFechaFin(this.dpFechaFinCambio.getValue()
+                    .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                    newCambio.setEsfuerzo(Integer.parseInt(this.tfEsfuerzo.getText()));
+                    
+                ResultOperation resultModify = CambioDAO.modificarCambio(newCambio);
+                if (resultModify.getIsError() == true) {
                     ShowMessage.showMessage(
                             "ERROR",
                             "Error inesperado",
-                            resultCreate.getMessage(),
+                            resultModify.getMessage(),
                             "Intente mas tarde"
                     );
                 } else {
                     ShowMessage.showMessage(
                             "INFORMATION",
-                            "Se ha registrado con exito",
-                            "Se registro el cambio",
+                            "Se ha modificado correctamente",
+                            "Se modifico con exito",
                             ""
                     );
                     Stage currentStage = (Stage) this.tfTituloCambio.getScene().getWindow();
                     currentStage.close();
                 }
             } catch (SQLException sqlex) {
-                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLFormularioCambioController"
-                        + " en metodo \"registrarCambio\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLFormularioModCambio\" en método \"modificarCambio\"");
                 sqlex.printStackTrace();
             }
         }
     }
-    
+
     private void closeWindow(Stage currentStage) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("¿Está seguro?");
         alert.setHeaderText("¿Está seguro de cancelar?");
-        alert.setContentText("Ésta acción no se podrá revertir");
+        alert.setContentText("¿Ésta acción no se podrá revertir?");
         
         alert.showAndWait().ifPresent(response -> {
-           if (response == ButtonType.OK) {
-               currentStage.close();
-           } 
+            if (response == ButtonType.OK) {
+                currentStage.close(); 
+            }
         });
     }
+    
+    @FXML
+    private void btnCancelarCambio(ActionEvent event) {
+        closeWindow((Stage) this.tfTituloCambio.getScene().getWindow());
+    }
+    
 }

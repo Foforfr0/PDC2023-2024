@@ -23,10 +23,10 @@ public class DesarrolladorDAO {
         
         if (connectionDB != null) {    
             try {            
-                String sqlQuery = "SELECT U.IdUsuario, U.ApellidoPaterno, U.ApellidoMaterno, U.Nombre, U.Usuario, " +
+                String sqlQuery = "SELECT U.IDUsuario, U.ApellidoPaterno, U.ApellidoMaterno, U.Nombre, U.Matricula, " +
                                   "U.CorreoInstitucional, U.Semestre FROM Usuario U RIGHT JOIN Proyecto P " +
-                                  "ON U.IdProyecto = P.IdProyecto " +
-                                  "WHERE U.IdRolSistema = 2 AND P.IdProyecto = ?;";
+                                  "ON U.IDProyecto = P.IDProyecto " +
+                                  "WHERE U.RolSistema = 2 AND P.IDProyecto = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idProyecto);
                 ResultSet resultQuery = prepareQuery.executeQuery();
@@ -34,11 +34,11 @@ public class DesarrolladorDAO {
                 ObservableList<Desarrollador> listDesarrolladores = FXCollections.observableArrayList();
                 while(resultQuery.next()){
                     Desarrollador newDesarrollador = new Desarrollador();
-                        newDesarrollador.setIdDesarrollador(resultQuery.getInt("IdUsuario"));
+                        newDesarrollador.setIdDesarrollador(resultQuery.getInt("IDUsuario"));
                         newDesarrollador.setNombre(resultQuery.getString("Nombre"));
                         newDesarrollador.setApellidoPaterno(resultQuery.getString("ApellidoPaterno"));
                         newDesarrollador.setApellidoMaterno(resultQuery.getString("ApellidoMaterno"));
-                        newDesarrollador.setMatricula(resultQuery.getString("Usuario"));
+                        newDesarrollador.setMatricula(resultQuery.getString("Matricula"));
                         newDesarrollador.setCorreoInstitucional(resultQuery.getString("CorreoInstitucional"));
                         newDesarrollador.setSemestre(String.valueOf(resultQuery.getInt("Semestre"))+"°");
                     listDesarrolladores.add(newDesarrollador);
@@ -91,7 +91,7 @@ public class DesarrolladorDAO {
         if (connectionDB != null) {    
             try {            
                 String sqlQuery = "SELECT U.Nombre, U.ApellidoPaterno, U.ApellidoMaterno " +
-                                  "FROM Usuario U WHERE U.IdUsuario = ?;";
+                                  "FROM Usuario U WHERE U.IDUsuario = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idDesarrollador);
                 ResultSet resultQuery = prepareQuery.executeQuery();

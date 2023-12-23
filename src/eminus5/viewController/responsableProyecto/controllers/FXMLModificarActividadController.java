@@ -20,7 +20,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -83,34 +82,6 @@ public class FXMLModificarActividadController implements Initializable {
     }
     
     private void initializeStage(){
-        this.dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
-                if (dpFechaInicio.getValue() == null) {
-                    dpFechaFin.setDisable(true);
-                } else {
-                    dpFechaFin.setDisable(false);
-                }
-            }
-        });
-        
-        this.dpFechaFin.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
-                dpFechaFin.setDayCellFactory(picker -> new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate date, boolean empty) {
-                        super.updateItem(date, empty);
-                        setDisable(date.isBefore(dpFechaInicio.getValue())); // Deshabilitar fechas anteriores a la del primer DatePicker
-                    }
-                });
-            }
-        });
-        
         stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE){
                 event.consume();

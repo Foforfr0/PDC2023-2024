@@ -82,6 +82,7 @@ public class FXMLPantallaInicioRController implements Initializable {
         
         stageActual.setTitle("Inicio de sesión");
         stageActual.setResizable(false);
+        stageActual.setMaximized(true);
         stageActual.show();
     }
     
