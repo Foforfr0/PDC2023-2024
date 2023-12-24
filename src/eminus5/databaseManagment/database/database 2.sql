@@ -401,13 +401,17 @@ UNION SELECT BC.Nombre, BC.Descripción FROM bitacoracambio BC
 JOIN  Usuario U ON BC.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4;
 
-SELECT C.Nombre, C.Descripcion, C.Esfuerzo, C.FechaInicio, C.FechaFin, C.IdEstado, C.Tipo
+SELECT C.IdCambio, C.Nombre, C.Descripcion, C.Esfuerzo, C.FechaInicio, C.FechaFin, E.Nombre AS 'Estado', TA.Nombre AS 'TipoActividad'
 FROM Cambio C
-JOIN Estado E ON C.IdEstado = E.IdEstado
-JOIN TipoActividad TA ON C.Tipo = TA.IdTipo
+JOIN Estado E ON E.IdEstado = C.IdEstado
+JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo
 JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
-WHERE U.IDUsuario = 4 AND IdEstado = 1;
-
+WHERE U.IDUsuario = 4;
+JOIN Actividad A ON E.IdEstado = A.IdEstado 
 SELECT C.Nombre, C.Descripcion FROM Cambio C 
 JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4;
+
+UPDATE Cambio
+SET IdEstado = 1, FechaFin = '2023-12-23', Esfuerzo = 5
+WHERE IdCambio = 2

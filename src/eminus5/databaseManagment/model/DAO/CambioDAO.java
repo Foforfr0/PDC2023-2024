@@ -20,7 +20,7 @@ public class CambioDAO {
             try {
                 String sqlQuery = "SELECT C.IdCambio, C.Nombre, C.Descripcion, C.Esfuerzo, " +
                                   " DATE_FORMAT(C.FechaInicio, '%d-%m-%Y') AS FechaInicio, DATE_FORMAT(C.FechaFin, '%d-%m-%Y') AS FechaFin, " +
-                                  "E.IdEstado AS 'Estado', TA.IdTipoACtividad AS 'Tipo'\n" +
+                                  "E.Nombre AS 'Estado', TA.Nombre AS 'Tipo'\n" +
                                   "FROM Cambio C \n" +
                                   "JOIN Estado E ON E.IdEstado = C.IdEstado \n" +
                                   "JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo \n" +
