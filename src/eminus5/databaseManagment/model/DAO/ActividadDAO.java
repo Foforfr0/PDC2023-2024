@@ -409,4 +409,70 @@ public class ActividadDAO {
         
         return resultOperation;
     }
+    
+    
+    public static ResultOperation getActividadesDesarrollador(int idUser) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {
+            try {
+                String sqlQuery = "SELECT A.IdActividad, A.Nombre, A.Descripcion, E.Nombre AS 'Estado' \n" +
+                                  "FROM Actividad A \n" + 
+                                  "JOIN Estado E ON E.IdEstado = A.IdEstado \n" +
+                                  "JOIN Usuario U ON A.IdDesarrollador = U.IDUsuario \n" +
+                                  "WHERE IDUsuario = ? AND A.IdEstado = 1";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                prepareQuery.setInt(1, idUser);
+                ResultSet resultQuery = prepareQuery.executeQuery();
+                
+                ObservableList<Actividad> listActividadesD = FXCollections.observableArrayList();
+                while (resultQuery.next()) {
+                    Actividad newActividad = new Actividad();
+                    newActividad.setIdActividad(resultQuery.getInt("IdActividad"));
+                    newActividad.setNombre(resultQuery.getString("Nombre"));
+                    newActividad.setDescripcion(resultQuery.getString("Descripcion"));
+                    newActividad.setEstado(resultQuery.getString("Estado"));
+                    listActividadesD.add(newActividad);
+                    resultOperation = new ResultOperation(
+                            false,
+                            "Se encontraron actividades",
+                            listActividadesD.size(),
+                            listActividadesD
+                    );
+                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS: " + listActividadesD.size() + " DEL DESARROLLADOR ID" + idUser);
+                }
+                
+                if (listActividadesD.size() <= 0) {
+                    resultOperation = new ResultOperation(
+                            false,
+                            "Sin registros",
+                            0,
+                            null
+                    );
+                    System.out.println("ActividadDAO//NO SE ENCONTRARON ACTIVIDADES DEL DESARROLLADOR ID " + idUser);
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(
+                        true,
+                        "Fallo la conexion con la base de datos",
+                        -1,
+                        null
+                );
+                System.out.println("Error de \"SQLException\" en archivo\"ActividadDAO\" en metodo \"getActividadesDesarrollador\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(
+                    true,
+                    "Fallo la conexion con la base de datos",
+                    -1,
+                    null
+            );
+            showMessageFailureConnection();
+        }
+        return resultOperation;
+    }
 }

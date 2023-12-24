@@ -12,7 +12,8 @@
       <Pane layoutY="80.0" prefHeight="400.0" prefWidth="170.0" style="-fx-background-color: lightgrey;" />
       <TableView fx:id="tvActividades" layoutX="189.0" layoutY="103.0" prefHeight="295.0" prefWidth="495.0">
         <columns>
-          <TableColumn fx:id="tcNombreActividad" prefWidth="494.0" resizable="false" text="Nombre" />
+          <TableColumn fx:id="tcNombreActividad" prefWidth="110.0" resizable="false" text="Nombre" />
+            <TableColumn fx:id="tcDescripcionActividad" editable="false" prefWidth="459.0" text="Descripcion" />
         </columns>
       </TableView>
       <Button layoutX="544.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnEntregarActividad" text="Entregar actividad" />

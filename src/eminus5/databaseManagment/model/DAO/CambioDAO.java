@@ -25,7 +25,7 @@ public class CambioDAO {
                                   "JOIN Estado E ON E.IdEstado = C.IdEstado \n" +
                                   "JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo \n" +
                                   "JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario \n" +
-                                  "WHERE U.IDUsuario = ?;";
+                                  "WHERE U.IDUsuario = ? AND C.IdEstado = 1;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, idUser);
                 ResultSet resultQuery = prepareQuery.executeQuery();
