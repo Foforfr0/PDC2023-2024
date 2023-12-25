@@ -175,9 +175,9 @@ public class CambioDAO {
         
         if (connectionDB != null) {
             try {
-                String sqlQuery = "UPDATE Cambio " +
-                                  "SET IdEstado = ?, FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), Esfuerzo = ? " +
-                                  "WHERE IdCambio = ?;";
+                String sqlQuery = "UPDATE Cambio C " +
+                                  "SET C.IdEstado = ?, C.FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), C.Esfuerzo = ? " +
+                                  "WHERE C.IdCambio = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, getEstadoCambioToInt(newCambio.getEstado()));
                 prepareQuery.setString(2, newCambio.getFechaFin().replace("/", "-"));

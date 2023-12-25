@@ -102,7 +102,7 @@ public class FXMLFormularioModCambioController implements Initializable {
             try {
                 Cambio newCambio = new Cambio();
                     newCambio.setIdCambio(currentCambio.getIdCambio());
-                    newCambio.setTipo(this.cbTipoCambio.getValue());
+                    newCambio.setEstado(this.cbEstadoCambio.getValue());
                     newCambio.setFechaFin(this.dpFechaFinCambio.getValue()
                     .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                     newCambio.setEsfuerzo(Integer.parseInt(this.tfEsfuerzo.getText()));
