@@ -388,6 +388,19 @@ INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, Fecha
 INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
 ('Comprobacion de query', 'Query para getActividadesDesarrollador sin terminar', 
 2, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creacion de', 'Query para modificar actividades', 
+1, 2, '2023-12-24', '2023-12-26', 1, 4);
+
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación alert', 'alert para confirmar modificacion', 
+1, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Comprobacion de alert', 'comprobar alerts para confirmar', 
+2, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('XD', 'lol nomas por si no me sale', 
+1, 2, '2023-12-24', '2023-12-26', 1, 4);
 /*BITACORA-------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO BitacoraActividad (NumBitacora, Nombre, Descripción, IdActividad, IdDesarrollador)
 VALUES (1, 'Bitacora de ejemplo', 'Prueba para hacer mi CU13, creo jajaj no recuerdo cual era. Ni pex', 4, 4);
@@ -414,13 +427,16 @@ JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo
 JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4 AND C.IdEstado = 1;
 
-SELECT A.IdActividad, A.Nombre, A.Descripcion
-FROM ACTIVIDAD A 
-JOIN Usuario U ON A.IdDesarrollador = U.IDUsuario
-WHERE U.IDUsuario = 1;
-
-SELECT A.IdActividad, A.Nombre, A.Descripcion, E.Nombre
+SELECT A.IdActividad, A.Nombre, A.Descripcion, E.Nombre AS 'Estado'
 FROM Actividad A
 JOIN Estado E ON E.IdEstado = A.IdEstado
 LEFT JOIN Usuario U ON A.IdDesarrollador = U.IDUsuario
 WHERE IDUsuario = 4 AND A.IdEstado = 1;
+
+UPDATE Cambio C
+SET C.Estado = 1, C.FechaFin = '2023-12-24', C.Esfuerzo = 19
+WHERE C.IdCambio = 4;
+
+UPDATE Actividad A
+SET A.IdEstado = 1
+WHERE A.IdActividad = 11;

@@ -7,7 +7,10 @@ package eminus5.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class ShowMessage {
@@ -26,6 +29,9 @@ public class ShowMessage {
                 break;
             case "NONE":
                 alert.setAlertType(AlertType.NONE);
+                break;
+            case "CONFIRMATION":
+                alert.setAlertType(AlertType.CONFIRMATION);
                 break;
             default:
                 System.out.println("Error de \"AlertType\" en archivo \"ShowMessage\" en método \"ShowMessage\"");
@@ -73,5 +79,16 @@ public class ShowMessage {
         alert.setResizable(false);
         
         alert.showAndWait();
+    }
+    
+    public static ButtonType showConfirmation(String title, String headerText, String contentText) {
+        Alert confirmationAlert = new Alert(AlertType.CONFIRMATION);
+        confirmationAlert.setTitle(title);
+        confirmationAlert.setHeaderText(headerText);
+        confirmationAlert.setContentText(contentText);
+        confirmationAlert.initModality(Modality.WINDOW_MODAL);
+        confirmationAlert.initStyle(StageStyle.UTILITY);
+
+        return confirmationAlert.showAndWait().orElse(ButtonType.CANCEL);
     }
 }

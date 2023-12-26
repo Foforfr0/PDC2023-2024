@@ -60,16 +60,16 @@ public class FXMLActividadesDController implements Initializable {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     actividadSeleccionada = row.getItem();
                     try {
-                        Stage stageAddActividad = new Stage();
-                        FXMLDetallesActividadController.currentActividad = actividadSeleccionada;
-                        stageAddActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividadD.fxml"));
-                        stageAddActividad.setTitle("Detalles de actividad");
-                        stageAddActividad.initModality(Modality.WINDOW_MODAL);
-                        stageAddActividad.initOwner(
+                        Stage stageActividad = new Stage();
+                        FXMLDetallesActividadDController.currentActividad = actividadSeleccionada;
+                        stageActividad.setScene(loadScene("viewController/desarrollador/views/FXMLDetallesActividadD.fxml"));
+                        stageActividad.setTitle("Entregar actividad");
+                        stageActividad.initModality(Modality.WINDOW_MODAL);
+                        stageActividad.initOwner(
                             (Stage) this.tvActividades.getScene().getWindow()
                         );
-                        stageAddActividad.initStyle(StageStyle.UTILITY);
-                        stageAddActividad.showAndWait();
+                        stageActividad.initStyle(StageStyle.UTILITY);
+                        stageActividad.showAndWait();
                     } catch (IOException ioex) {
                         System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesDController\" en método \"btnEntregarActividad\"");
                         ioex.printStackTrace();
@@ -107,17 +107,18 @@ public class FXMLActividadesDController implements Initializable {
     @FXML
     private void btnEntregarActividad(ActionEvent event) {
         if (verifySelectedActividad() != null) {
+            
             try {
-                Stage stageEntregarActividad = new Stage();
+                Stage stageActividad = new Stage();
                 FXMLDetallesActividadDController.currentActividad = verifySelectedActividad();
-                stageEntregarActividad.setScene(loadScene("viewController/desarrollador/views/FXMLDetallesActividadD.fxml"));
-                stageEntregarActividad.setTitle("Entregar actividad");
-                stageEntregarActividad.initModality(Modality.WINDOW_MODAL);
-                stageEntregarActividad.initOwner(
+                stageActividad.setScene(loadScene("viewController/desarrollador/views/FXMLDetallesActividadD.fxml"));
+                stageActividad.setTitle("Entregar actividad");
+                stageActividad.initModality(Modality.WINDOW_MODAL);
+                stageActividad.initOwner(
                         (Stage) this.tvActividades.getScene().getWindow()
                 );
-                stageEntregarActividad.initStyle(StageStyle.UTILITY);
-                stageEntregarActividad.setOnCloseRequest(eventStage -> {
+                stageActividad.initStyle(StageStyle.UTILITY);
+                stageActividad.setOnCloseRequest(eventStage -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("¿Está seguro?");
                     alert.setHeaderText("¿Está seguro de cancelar?");
@@ -126,11 +127,11 @@ public class FXMLActividadesDController implements Initializable {
                     alert.showAndWait().ifPresent(response -> {
                         String responseMessage = response.getText();
                         if (responseMessage.equals("Aceptar")) {
-                            stageEntregarActividad.close(); 
+                            stageActividad.close(); 
                         }
                     });
                 });
-                stageEntregarActividad.showAndWait();
+                stageActividad.showAndWait();
                 
             } catch (IOException ioex) {
                 System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesDController\""

@@ -154,6 +154,17 @@ public class ActividadDAO {
         return resultOperation;
     }
     
+    private static int getEstadoActividadToInt(String idEstadoActividad) {
+        switch(idEstadoActividad) {
+            case "Iniciado":
+                return 1;
+            case "Entregado":
+                return 2;
+            default:
+                return 0;
+        }
+    }
+    
     private static int getTipoActividadToInt (String idTipoAtividad) {
         switch (idTipoAtividad) {
             case "Frontend":
@@ -466,6 +477,58 @@ public class ActividadDAO {
             }
         } else {
             resultOperation = new ResultOperation(
+                    true,
+                    "Fallo la conexion con la base de datos",
+                    -1,
+                    null
+            );
+            showMessageFailureConnection();
+        }
+        return resultOperation;
+    }
+    
+    public static ResultOperation modificarActividadDesarrollador(Actividad newActividad) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {
+            try {
+                String sqlQuery = "UPDATE Actividad A \n" +
+                                  "SET A.IdEstado = 2 \n" +
+                                  "WHERE A.IdActividad = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                prepareQuery.setInt(1, newActividad.getIdActividad());
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                            false,
+                            "Se ha Entregado la actividad",
+                            numberAffectedRows,
+                            newActividad
+                    );
+                } else {
+                    resultOperation = new ResultOperation(
+                            true,
+                            "No se ha entregado la actividad",
+                            numberAffectedRows,
+                            newActividad
+                    );
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(
+                        true,
+                        "Fallo la conexion con la base de datos",
+                        -1,
+                        null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"modificarActividadDesarrollador\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation (
                     true,
                     "Fallo la conexion con la base de datos",
                     -1,
