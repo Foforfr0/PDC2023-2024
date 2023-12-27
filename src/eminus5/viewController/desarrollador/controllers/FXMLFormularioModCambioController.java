@@ -56,6 +56,12 @@ public class FXMLFormularioModCambioController implements Initializable {
                 "Entregado"
         );
         
+        tfEsfuerzo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                tfEsfuerzo.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+        
         this.tfTituloCambio.setText(currentCambio.getNombre());
         this.tfDescCambio.setText(currentCambio.getDescripcion());
         this.cbEstadoCambio.setValue(currentCambio.getEstado());
@@ -80,12 +86,16 @@ public class FXMLFormularioModCambioController implements Initializable {
     }
     
     private boolean validateFields() {
-        if (dpFechaFinCambio.getValue() == null) {
-            return true;
+        if (dpFechaFinCambio.getValue() == null || tfEsfuerzo.getText().trim().isEmpty()) {
+        return true;
         }
-        if (tfEsfuerzo.getText().length() <= 0) {
-            return false;
+
+        try {
+            Integer.parseInt(tfEsfuerzo.getText().trim());
+        } catch (NumberFormatException e) {
+            return true; 
         }
+
         return false;
     }
     
@@ -150,4 +160,7 @@ public class FXMLFormularioModCambioController implements Initializable {
         closeWindow((Stage) this.tfTituloCambio.getScene().getWindow());
     }
     
+    private boolean revisarEstado(Cambio newCambio) {
+        return !newCambio.getEstado().equals(currentCambio.getEstado());
+    }
 }

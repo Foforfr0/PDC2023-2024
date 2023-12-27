@@ -4,17 +4,18 @@ public class Defecto {
     int idDefecto;
     String nombre;
     String descripcion;
-    int Estado;
+    String Estado;
     int Esfuerzo;
     String fechaEncontrado;
     String fechaSolucionado;
-    int tipo;
-    int idActividad;
+    String tipo;
+    int IdProyecto;
+    int IdDesarrollador;
 
     public Defecto() {
     }
 
-    public Defecto(int idDefecto, String nombre, String descripcion, int Estado, int Esfuerzo, String fechaEncontrado, String fechaSolucionado, int tipo, int idActividad) {
+    public Defecto(int idDefecto, String nombre, String descripcion, String Estado, int Esfuerzo, String fechaEncontrado, String fechaSolucionado, String tipo, int IdProyecto, int IdDesarrollador) {
         this.idDefecto = idDefecto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -23,7 +24,8 @@ public class Defecto {
         this.fechaEncontrado = fechaEncontrado;
         this.fechaSolucionado = fechaSolucionado;
         this.tipo = tipo;
-        this.idActividad = idActividad;
+        this.IdProyecto = IdProyecto;
+        this.IdDesarrollador = IdDesarrollador;
     }
 
     public int getIdDefecto() {
@@ -50,11 +52,11 @@ public class Defecto {
         this.descripcion = descripcion;
     }
 
-    public int getEstado() {
+    public String getEstado() {
         return Estado;
     }
 
-    public void setEstado(int Estado) {
+    public void setEstado(String Estado) {
         this.Estado = Estado;
     }
 
@@ -82,20 +84,29 @@ public class Defecto {
         this.fechaSolucionado = fechaSolucionado;
     }
 
-    public int getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
-    public int getIdActividad() {
-        return idActividad;
+    public int getIdProyecto() {
+        return IdProyecto;
     }
 
-    public void setIdActividad(int idActividad) {
-        this.idActividad = idActividad;
+    public void setIdProyecto(int IdProyecto) {
+        this.IdProyecto = IdProyecto;
     }
+
+    public int getIdDesarrollador() {
+        return IdDesarrollador;
+    }
+
+    public void setIdDesarrollador(int IdDesarrollador) {
+        this.IdDesarrollador = IdDesarrollador;
+    }
+
     
 }

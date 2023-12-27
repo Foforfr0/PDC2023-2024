@@ -1,6 +1,7 @@
 package eminus5.viewController.desarrollador.controllers;
 
 import eminus5.databaseManagment.model.DAO.DefectoDAO;
+import eminus5.databaseManagment.model.DAO.ProyectoDAO;
 import eminus5.databaseManagment.model.POJO.Defecto;
 import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
@@ -45,7 +46,8 @@ public class FXMLDefectosDController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        inicializarTabla();
+        cargarDefectos();
     }    
 
     
@@ -80,19 +82,19 @@ public class FXMLDefectosDController implements Initializable {
     
     public void cargarDefectos() {
         try{
-            ResultOperation resultGetDefectos = DefectoDAO.getDefectosDesarrollador(idUser);
+            ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idUser);
             
-            if(resultGetDefectos.getIsError() == true && resultGetDefectos.getData() == null ||
-               resultGetDefectos.getNumberRowsAffected() <= 0){
+            if(resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null ||
+               resultGetProyecto.getNumberRowsAffected() <= 0){
                 showMessage(
                         "ERROR",
                         "Error inesperado",
-                        resultGetDefectos.getMessage(),
+                        resultGetProyecto.getMessage(),
                         "Intente mas tarde"
                 );
             } else {
             this.defectos = FXCollections.observableArrayList(
-                    (ObservableList) DefectoDAO.getDefectosDesarrollador(idUser).getData()
+                    (ObservableList) DefectoDAO.getDefectosDesarrollador(resultGetProyecto.getNumberRowsAffected()).getData()
             );
             this.tvDefectos.setItems(this.defectos);
             }

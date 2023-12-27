@@ -412,6 +412,13 @@ VALUES ('Cambio de ejemplo', 'Ejemplo para ver si mi query funciona', '2023-12-2
 INSERT INTO Cambio (Nombre, Descripcion, FechaInicio, IdDesarrollador, IdEstado, IdTipo)
 VALUES ('Cambio de ejemplo 2', 'Ejemplo para modificar', '2023-12-21', 4,  2, 2);
 
+/*DEFECTO-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Primer defecto', 'Query regresa null', '2023-12-26', 1, 1, 3);
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Defecto de ejemplo', 'Para comprobar query', '2023-12-26', 1, 1, 3);
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
 
 SELECT BA.Nombre, BA.Descripción FROM bitacoraactividad BA
 JOIN Usuario U ON BA.IdDesarrollador = U.IDUsuario 
@@ -433,10 +440,9 @@ JOIN Estado E ON E.IdEstado = A.IdEstado
 LEFT JOIN Usuario U ON A.IdDesarrollador = U.IDUsuario
 WHERE IDUsuario = 4 AND A.IdEstado = 1;
 
-UPDATE Cambio C
-SET C.Estado = 1, C.FechaFin = '2023-12-24', C.Esfuerzo = 19
-WHERE C.IdCambio = 4;
-
-UPDATE Actividad A
-SET A.IdEstado = 1
-WHERE A.IdActividad = 11;
+SELECT DE.IdDefecto, DE.Nombre, DE.Descripcion, E.Nombre AS 'Estado', DE.Esfuerzo, DE.FechaEncontrado, DE.FechaSolucionado, TA.Nombre AS 'Tipo'
+FROM Defecto DE 
+JOIN Estado E ON E.IdEstado = DE.IdEstado
+JOIN TipoActividad TA ON TA.IdTipoActividad = DE.IdTipo
+JOIN Proyecto P ON DE.IdProyecto = P.IdProyecto
+WHERE P.IdProyecto = 1 AND DE.IdEstado = 1;
