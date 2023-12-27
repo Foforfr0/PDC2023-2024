@@ -446,3 +446,6 @@ JOIN Estado E ON E.IdEstado = DE.IdEstado
 JOIN TipoActividad TA ON TA.IdTipoActividad = DE.IdTipo
 JOIN Proyecto P ON DE.IdProyecto = P.IdProyecto
 WHERE P.IdProyecto = 1 AND DE.IdEstado = 1;
+
+UPDATE Defecto DE
+SET DE.Esfuerzo = 22, DE.IdEstado = 2, DE.FechaSolucionado = '2023-12-27', 

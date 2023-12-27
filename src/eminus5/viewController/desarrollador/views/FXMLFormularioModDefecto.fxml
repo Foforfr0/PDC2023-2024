@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLFormularioModDefectoController">
+   <children>
+      <Pane prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #18419D;" />
+      <Label layoutX="34.0" layoutY="113.0" text="Modificar defecto">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="34.0" layoutY="163.0" text="Ingrese los datos requeridos (*)">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="34.0" layoutY="200.0" text="Titulo (*)" />
+      <TextField fx:id="tfTituloDefecto" layoutX="34.0" layoutY="222.0" />
+      <Label layoutX="34.0" layoutY="262.0" text="Descripcion (*)" />
+      <TextArea fx:id="taDescripcion" layoutX="31.0" layoutY="283.0" prefHeight="100.0" prefWidth="187.0" />
+      <Label layoutX="34.0" layoutY="387.0" text="Estado" />
+      <ComboBox fx:id="cbEstadoDefecto" layoutX="38.0" layoutY="408.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="330.0" layoutY="200.0" text="Tipo (*)" />
+      <ComboBox fx:id="cbTipoDefecto" layoutX="330.0" layoutY="222.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="330.0" layoutY="262.0" text="Fecha encontrado (*)" />
+      <DatePicker fx:id="dpFechaEncontrado" layoutX="330.0" layoutY="283.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="329.0" layoutY="323.0" text="Fecha solucionado (*)" />
+      <DatePicker fx:id="dpFechaSolucionado" layoutX="329.0" layoutY="344.0" prefHeight="31.0" prefWidth="187.0" />
+      <Label layoutX="327.0" layoutY="387.0" text="Esfuerzo" />
+      <TextField fx:id="tfEsfuerzo" layoutX="327.0" layoutY="408.0" />
+      <Button layoutX="431.0" layoutY="455.0" mnemonicParsing="false" onAction="#btnGuardarDefecto" text="Guardar" />
+      <Button layoutX="516.0" layoutY="455.0" mnemonicParsing="false" onAction="#btnCancelarDefecto" text="Cancelar" />
+   </children>
+</AnchorPane>

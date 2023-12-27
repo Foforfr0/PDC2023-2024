@@ -88,4 +88,88 @@ public class DefectoDAO {
         }
         return resultOperation;
     }
+    
+    private static int getEstadoDefectoToInt(String idEstadoCambio) {
+        switch(idEstadoCambio) {
+            case "Iniciado":
+                return 1;
+            case "Entregado":
+                return 2;
+            default:
+                return 0;
+        }
+    }
+    
+    private static int getTipoDefectoToInt (String idTipoCambio) {
+        switch (idTipoCambio) {
+            case "Frontend":
+                return 1;
+            case "Backend":
+                return 2;
+            case "Base de datos":
+                return 3;
+            case "Controlador":
+                return 4;
+            case "JavaScript":
+                return 5;
+            default:
+                return 0;
+        }
+    }
+    
+    public static ResultOperation modificarDefecto(Defecto newDefecto) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {
+            try {
+                String sqlQuery = "UPDATE Defecto DE " +
+                                  "SET DE.Esfuerzo = ?, DE.IdEstado = ?, DE.FechaSolucionado = (STR_TO_DATE(?, '%d-%m-%Y')) \n" +
+                                  "WHERE DE.IdDefecto = ?;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                prepareQuery.setInt(1, newDefecto.getEsfuerzo());
+                prepareQuery.setInt(2, getEstadoDefectoToInt(newDefecto.getEstado()));
+                prepareQuery.setString(3, newDefecto.getFechaSolucionado().replace("/", "-"));
+                prepareQuery.setInt(4, newDefecto.getIdDefecto());
+                
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if (numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                            false,
+                            "Se ha modificado el defecto",
+                            numberAffectedRows,
+                            newDefecto
+                    );
+                } else {
+                    resultOperation = new ResultOperation(
+                            true,
+                            "No se ha modificado el defecto",
+                            numberAffectedRows,
+                            newDefecto
+                    );
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(
+                        true,
+                        "Fallo la conexion con la base de datos",
+                        -1,
+                        null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"DefectoDAO\" en método \"modificarDefecto\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(
+                    true,
+                    "Fallo la conexion con la base de datos",
+                    -1,
+                    null
+            );
+            showMessageFailureConnection();
+        }
+        return resultOperation;
+    }
 }
