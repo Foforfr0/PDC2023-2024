@@ -183,7 +183,7 @@ public class ActividadDAO {
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setString(1, newActividad.getNombre());
                     prepareQuery.setString(2, newActividad.getDescripcion());
-                    prepareQuery.setInt(3, 2);
+                    prepareQuery.setInt(3, 1);
                     prepareQuery.setInt(4, getTipoActividadToInt(newActividad.getTipo()));
                     prepareQuery.setString(5, newActividad.getFechaInicio().replace("/}", "-"));
                     prepareQuery.setString(6, newActividad.getFechaFin().replace("/}", "-"));

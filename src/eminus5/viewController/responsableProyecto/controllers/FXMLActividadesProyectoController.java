@@ -1,4 +1,4 @@
-/*
+    /*
  * Descripción del programa
  * Últimos 3 cambios realizados
  */
@@ -124,6 +124,8 @@ public class FXMLActividadesProyectoController implements Initializable {
         try {
             Stage clicAddActividad = new Stage();
             FXMLCrearActividadController.idResponsable = idResponsable;
+            FXMLCrearActividadController.idProyecto = ProyectoDAO.getProyectoUsuario(idResponsable).getNumberRowsAffected();
+            
             clicAddActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLCrearActividad.fxml"));
             clicAddActividad.setTitle("Crear actividad");
             clicAddActividad.initModality(Modality.WINDOW_MODAL);
@@ -148,10 +150,13 @@ public class FXMLActividadesProyectoController implements Initializable {
             });
             clicAddActividad.showAndWait();
             initializeData();
+        } catch (SQLException sqlex) {
+            System.err.println("Error de \"SQLException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
+            sqlex.printStackTrace();
         } catch (IOException ioex) {
             System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicAddActividad\"");
             ioex.printStackTrace();
-        }
+        } 
     }
 
     @FXML
@@ -160,6 +165,8 @@ public class FXMLActividadesProyectoController implements Initializable {
             try {
                 Stage stageModifyActividad = new Stage();
                 FXMLModificarActividadController.currentActividad = verifyActividadSelected();
+                FXMLModificarActividadController.idResponsable = idResponsable;
+                
                 stageModifyActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLModificarActividad.fxml"));
                 stageModifyActividad.setTitle("Modificar actividad");
                 stageModifyActividad.initModality(Modality.WINDOW_MODAL);
@@ -185,7 +192,7 @@ public class FXMLActividadesProyectoController implements Initializable {
             } catch (IOException ioex) {
                 System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                 ioex.printStackTrace();
-            }
+            } 
         } else {
             showMessage(
                 "WARNING", 

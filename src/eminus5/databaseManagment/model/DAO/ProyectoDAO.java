@@ -20,10 +20,13 @@ public class ProyectoDAO {
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
         
-        if (connectionDB != null) {    
+        if (connectionDB != null) {   
             try {            
-                String sqlQuery = "SELECT P.IdProyecto, P.Nombre FROM Proyecto P " +
+                String sqlQuery = "SELECT P.IdProyecto, P.Nombre, DATE_FORMAT(PED.Inicio, '%d-%m-%Y') AS Inicio, DATE_FORMAT(PED.Fin, '%d-%m-%Y') AS Fin " +
+                                  "FROM Proyecto P " +
                                   "RIGHT JOIN Usuario U ON U.IdProyecto = P.IdProyecto " +
+                                  "LEFT JOIN ExperienciaEducativa EE ON P.IdExperienciaEducativa = EE.IdExperienciaEducativa " +
+                                  "LEFT JOIN Periodo PED ON PED.IdPeriodo = EE.idPeriodo " +
                                   "WHERE U.IdUsuario = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                     prepareQuery.setInt(1, idUser);
@@ -36,7 +39,9 @@ public class ProyectoDAO {
                         resultQuery.getInt("IdProyecto"), 
                         new Proyecto(
                             resultQuery.getInt("IdProyecto"), 
-                            resultQuery.getString("Nombre")
+                            resultQuery.getString("Nombre"),
+                            resultQuery.getString("Inicio"),
+                            resultQuery.getString("Fin")
                         )
                     );
                     System.out.println("ProyectoDAO//ID DE PROYECTO DE USUARIO ES: " + resultQuery.getInt("IDProyecto"));

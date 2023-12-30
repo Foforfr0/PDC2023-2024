@@ -5,9 +5,13 @@
 package eminus5.viewController.responsableProyecto.controllers;
 
 import eminus5.databaseManagment.model.DAO.ActividadDAO;
+import eminus5.databaseManagment.model.DAO.ProyectoDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
+import eminus5.databaseManagment.model.POJO.Proyecto;
 import eminus5.databaseManagment.model.ResultOperation;
+import static eminus5.utils.ConvertData.convertStringToLocalDate;
 import eminus5.utils.ShowMessage;
+import static eminus5.viewController.responsableProyecto.controllers.FXMLCrearActividadController.idResponsable;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -54,6 +58,10 @@ public class FXMLModificarActividadController implements Initializable {
     
     
     public static Actividad currentActividad = null;
+    public static int idProyecto = 0;
+    public static int idResponsable = 0;
+    private String fechaInicio = "";
+    private String fechaFin = "";
     
     
     @Override
@@ -66,8 +74,8 @@ public class FXMLModificarActividadController implements Initializable {
         this.cbTipo.getItems().setAll(
             "Frontend", 
             "Backend", 
-            "Controladoes", 
-            "Base de datos", 
+            "Base de datos",
+            "Controlador",  
             "JavaScript"
         );
         
@@ -80,37 +88,51 @@ public class FXMLModificarActividadController implements Initializable {
             localDate = LocalDate.parse(currentActividad.getFechaFin(), formatter);
             this.dpFechaFin.setValue(localDate);
         this.cbTipo.setValue(currentActividad.getTipo());
+        
+        try {
+            Proyecto currentProyecto = (Proyecto) ProyectoDAO.getProyectoUsuario(idResponsable).getData();
+            fechaInicio = String.valueOf(currentProyecto.getFechaInicio());
+            fechaFin = String.valueOf(currentProyecto.getFechaFin());
+        } catch (SQLException sqlex) {
+            System.err.println("Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"initializaData\"");
+            sqlex.printStackTrace();
+        }
+        dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                /**
+                 * FECHA DE INICIO:
+                 * -No puede ser antes de la fecha actual.
+                 * -No puede ser después de la fecha de termino.
+                 * -No puede estar antes ni después del perido.
+                */
+                setDisable(
+                    date.isAfter(dpFechaFin.getValue() == null ? convertStringToLocalDate(fechaFin) : dpFechaFin.getValue() ) || 
+                    date.isAfter(convertStringToLocalDate(fechaFin)) || 
+                    date.isBefore(LocalDate.now()) ||
+                    date.isBefore(convertStringToLocalDate(fechaInicio))
+                );
+            }
+        });
+        dpFechaFin.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty){
+                super.updateItem(date, empty);
+                /**
+                 * FECHA DE TERMINO:
+                 * -No puede estar antes de la fecha de inicio.
+                 * -No puede estar antes ni después del perido.
+                */
+                setDisable(
+                    date.isAfter(convertStringToLocalDate(fechaFin)) ||
+                    date.isBefore(dpFechaInicio.getValue() == null ? LocalDate.now() : dpFechaInicio.getValue())
+                );
+            }
+        });
     }
     
-    private void initializeStage(){
-        this.dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
-                if (dpFechaInicio.getValue() == null) {
-                    dpFechaFin.setDisable(true);
-                } else {
-                    dpFechaFin.setDisable(false);
-                }
-            }
-        });
-        
-        this.dpFechaFin.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
-                dpFechaFin.setDayCellFactory(picker -> new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate date, boolean empty) {
-                        super.updateItem(date, empty);
-                        setDisable(date.isBefore(dpFechaInicio.getValue())); // Deshabilitar fechas anteriores a la del primer DatePicker
-                    }
-                });
-            }
-        });
-        
+    private void initializeStage(){        
         stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE){
                 event.consume();
@@ -124,9 +146,6 @@ public class FXMLModificarActividadController implements Initializable {
             return true;
         }
         if (tfDescripcion.getText().length() <= 0) {
-            return true;
-        }
-        if (tfNombre.getText().length() <= 0) {
             return true;
         }
         if (cbTipo.getValue() == null) {

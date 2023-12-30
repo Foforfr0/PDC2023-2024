@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="495.0" prefWidth="555.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="eminus5.viewController.desarrollador.controllers.FXMLFormularioCambioController">
+   <children>
+      <Pane prefHeight="80.0" prefWidth="555.0" style="-fx-background-color: #18419D;">
+         <children>
+            <Label layoutX="380.0" layoutY="14.0" text="EMINUS 5">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label layoutX="14.0" layoutY="93.0" text="Registrar cambio">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="133.0" text="Ingrese los datos requeridos (*)">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="171.0" text="Titulo (*)" />
+      <Label layoutX="263.0" layoutY="171.0" text="Tipo (*)" />
+      <Label layoutX="260.0" layoutY="242.0" text="Fecha de inicio (*)" />
+      <Label layoutX="14.0" layoutY="242.0" text="Descripcion (*)" />
+      <Label layoutX="14.0" layoutY="367.0" text="Estado" />
+      <Label layoutX="260.0" layoutY="302.0" text="Fecha de fin (*)" />
+      <Label layoutX="260.0" layoutY="367.0" text="Esfuerzo" />
+      <TextField fx:id="tfTituloCambio" layoutX="14.0" layoutY="200.0" />
+      <TextField fx:id="tfDescCambio" layoutX="14.0" layoutY="263.0" prefHeight="95.0" prefWidth="187.0" />
+      <ComboBox fx:id="cbEstadoCambio" layoutX="14.0" layoutY="392.0" prefHeight="31.0" prefWidth="187.0" />
+      <TextField fx:id="tfTipoCambio" layoutX="263.0" layoutY="200.0" />
+      <DatePicker fx:id="dpFechaInicioCambio" layoutX="260.0" layoutY="263.0" prefHeight="31.0" prefWidth="187.0" />
+      <DatePicker fx:id="dpFechaFinCambio" layoutX="260.0" layoutY="325.0" prefHeight="31.0" prefWidth="187.0" />
+      <TextField fx:id="tfEsfuerzo" layoutX="260.0" layoutY="392.0" />
+      <Button layoutX="464.0" layoutY="450.0" mnemonicParsing="false" onAction="#btnCancelarCambio" text="Cancelar" />
+      <Button layoutX="378.0" layoutY="450.0" mnemonicParsing="false" onAction="#btnGuardarCambio" text="Guardar" />
+   </children>
+</AnchorPane>

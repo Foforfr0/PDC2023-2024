@@ -23,7 +23,14 @@ public class Proyecto {
         this.idProyecto = idProyecto;
         this.nombre = nombre;
     }
-
+    
+    public Proyecto(int idProyecto, String nombre, String fechaInicio, String fechaFin) {
+        this.idProyecto = idProyecto;
+        this.nombre = nombre;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+    }
+    
     public Proyecto(int idProyecto, String nombre, String descripcion, int numIntegrantes, String fechaInicio, String fechaFin) {
         this.idProyecto = idProyecto;
         this.nombre = nombre;

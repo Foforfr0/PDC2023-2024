@@ -4,11 +4,13 @@
  */
 package eminus5.viewController.responsableProyecto.controllers;
 
-import eminus5.databaseManagment.model.DAO.ActividadDAO;
 import eminus5.databaseManagment.model.DAO.ProyectoDAO;
+import eminus5.databaseManagment.model.DAO.ActividadDAO;
+import eminus5.databaseManagment.model.POJO.Proyecto;
 import eminus5.databaseManagment.model.POJO.Actividad;
 import eminus5.databaseManagment.model.ResultOperation;
 import eminus5.utils.ShowMessage;
+import static eminus5.utils.ConvertData.convertStringToLocalDate;
 import static eminus5.utils.ShowMessage.showMessage;
 import java.net.URL;
 import java.sql.SQLException;
@@ -57,51 +59,70 @@ public class FXMLCrearActividadController implements Initializable {
     
     
     public static int idResponsable = 0;
+    public static int idProyecto = 0;
+    private String fechaInicio = "";
+    private String fechaFin = "";
     
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        initializeData();
         initializeStage();
     }    
     
-    private void initializeStage() {
+    private void initializeData() {
         this.cbTipo.getItems().setAll(                      //addOptionsCbTipo();
             "Frontend", 
             "Backend", 
-            "Controladoes", 
-            "Base de datos", 
+            "Base de datos",
+            "Controlador",  
             "JavaScript"
         );
         
-        this.dpFechaFin.setDisable(true);               //initializaDatePickers();
-        this.dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
+        try {
+            Proyecto currentProyecto = (Proyecto) ProyectoDAO.getProyectoUsuario(idResponsable).getData();
+            fechaInicio = String.valueOf(currentProyecto.getFechaInicio());
+            fechaFin = String.valueOf(currentProyecto.getFechaFin());
+        } catch (SQLException sqlex) {
+            System.err.println("Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"initializaData\"");
+            sqlex.printStackTrace();
+        }
+        dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
-                if (dpFechaInicio.getValue() == null) {
-                    dpFechaFin.setDisable(true);
-                } else {
-                    dpFechaFin.setDisable(false);
-                }
+                /**
+                 * FECHA DE INICIO:
+                 * -No puede ser antes de la fecha actual.
+                 * -No puede ser después de la fecha de termino.
+                 * -No puede estar antes ni después del perido.
+                */
+                setDisable(
+                    date.isAfter(dpFechaFin.getValue() == null ? convertStringToLocalDate(fechaFin) : dpFechaFin.getValue() ) || 
+                    date.isAfter(convertStringToLocalDate(fechaFin)) || 
+                    date.isBefore(LocalDate.now()) ||
+                    date.isBefore(convertStringToLocalDate(fechaInicio))
+                );
             }
         });
-        
-        this.dpFechaFin.setDayCellFactory(picker -> new DateCell() {
+        dpFechaFin.setDayCellFactory(picker -> new DateCell() {
             @Override
-            public void updateItem(LocalDate date, boolean empty) {
+            public void updateItem(LocalDate date, boolean empty){
                 super.updateItem(date, empty);
-                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
-                dpFechaFin.setDayCellFactory(picker -> new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate date, boolean empty) {
-                        super.updateItem(date, empty);
-                        setDisable(date.isBefore(dpFechaInicio.getValue())); // Deshabilitar fechas anteriores a la del primer DatePicker
-                    }
-                });
+                /**
+                 * FECHA DE TERMINO:
+                 * -No puede estar antes de la fecha de inicio.
+                 * -No puede estar antes ni después del perido.
+                */
+                setDisable(
+                    date.isAfter(convertStringToLocalDate(fechaFin)) ||
+                    date.isBefore(dpFechaInicio.getValue() == null ? LocalDate.now() : dpFechaInicio.getValue())
+                );
             }
         });
-        
+    }
+    
+    private void initializeStage() {
         stageCrearActividad.addEventFilter(KeyEvent.KEY_PRESSED, event -> {     //addActionToStage();
             if (event.getCode() == KeyCode.ESCAPE){
                 event.consume();
@@ -117,9 +138,6 @@ public class FXMLCrearActividadController implements Initializable {
         if (tfDescripcion.getText().length() <= 0) {
             return true;
         }
-        if (tfNombre.getText().length() <= 0) {
-            return true;
-        }
         if (cbTipo.getValue() == null) {
             return true;
         }
@@ -129,7 +147,7 @@ public class FXMLCrearActividadController implements Initializable {
         if (dpFechaFin.getValue() == null) {
             return true;
         }
-        return false;
+        return false; 
     }
     
     @FXML
@@ -204,3 +222,33 @@ public class FXMLCrearActividadController implements Initializable {
         closeWindow((Stage) this.tfNombre.getScene().getWindow());
     }
 }
+
+/*
+this.dpFechaFin.setDisable(true);               //initializaDatePickers();
+        this.dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
+                if (dpFechaInicio.getValue() == null) {
+                    dpFechaFin.setDisable(true);
+                } else {
+                    dpFechaFin.setDisable(false);
+                }
+            }
+        });
+        this.dpFechaFin.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(date.isBefore(LocalDate.now())); // Deshabilitar fechas anteriores a la fecha actual
+                dpFechaFin.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        setDisable(date.isBefore(dpFechaInicio.getValue())); // Deshabilitar fechas anteriores a la del primer DatePicker
+                    }
+                });
+            }
+        });
+*/
