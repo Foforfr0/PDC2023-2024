@@ -417,7 +417,10 @@ INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado,
 VALUES ('Primer defecto', 'Query regresa null', '2023-12-26', 1, 1, 3);
 INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
 VALUES ('Defecto de ejemplo', 'Para comprobar query', '2023-12-26', 1, 1, 3);
-
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Fallo al no haber defectos', 'Programa falla cuando no halla defectos', '2023-12-28', 1, 1, 1);
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Comprobacion de arreglo', 'Arreglo de controlador', '2023-12-28', 1, 1, 3);
 /*-------------------------------------------------------------------------------------------------------------------------*/
 
 SELECT BA.Nombre, BA.Descripción FROM bitacoraactividad BA
@@ -448,4 +451,5 @@ JOIN Proyecto P ON DE.IdProyecto = P.IdProyecto
 WHERE P.IdProyecto = 1 AND DE.IdEstado = 1;
 
 UPDATE Defecto DE
-SET DE.Esfuerzo = 22, DE.IdEstado = 2, DE.FechaSolucionado = '2023-12-27', 
+SET DE.Esfuerzo = 22, DE.IdEstado = 2, DE.FechaSolucionado = '2023-12-27'
+WHERE DE.IdDefecto = 1;

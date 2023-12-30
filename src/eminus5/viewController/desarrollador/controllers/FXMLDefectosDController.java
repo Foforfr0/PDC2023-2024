@@ -93,10 +93,20 @@ public class FXMLDefectosDController implements Initializable {
                         "Intente mas tarde"
                 );
             } else {
-            this.defectos = FXCollections.observableArrayList(
-                    (ObservableList) DefectoDAO.getDefectosDesarrollador(resultGetProyecto.getNumberRowsAffected()).getData()
-            );
-            this.tvDefectos.setItems(this.defectos);
+                System.out.println("Rows affected: " + resultGetProyecto.getNumberRowsAffected());
+
+                Object data = DefectoDAO.getDefectosDesarrollador(resultGetProyecto.getNumberRowsAffected()).getData();
+                System.out.println("Data from DAO: " + data);
+
+                if (data instanceof ObservableList) {
+                    this.defectos = (ObservableList<Defecto>) data;
+                    this.tvDefectos.setItems(this.defectos);
+                }
+                /*this.defectos = FXCollections.observableArrayList(
+                        (ObservableList) DefectoDAO.getDefectosDesarrollador(resultGetProyecto.getNumberRowsAffected()).getData()
+                );
+                this.tvDefectos.setItems(this.defectos);
+                */
             }
         } catch (SQLException sqlex) {
             showMessageFailureConnection();

@@ -59,12 +59,12 @@ public class DefectoDAO {
                 if (listDefectos.size() <=  0) {
                     resultOperation = new ResultOperation(
                             false,
-                            "No se encontraron defectos",
+                            "Sin registros",
                             0,
                             null
                     );
                     System.out.println("DefectoDAO//NO SE ENCONTRARON DEFECTOS ");
-            }
+                }
             } catch (SQLException sqlex) {
                 resultOperation = new ResultOperation(
                         true, 
@@ -89,8 +89,8 @@ public class DefectoDAO {
         return resultOperation;
     }
     
-    private static int getEstadoDefectoToInt(String idEstadoCambio) {
-        switch(idEstadoCambio) {
+    private static int getEstadoDefectoToInt(String idEstadoDefecto) {
+        switch(idEstadoDefecto) {
             case "Iniciado":
                 return 1;
             case "Entregado":
@@ -100,8 +100,8 @@ public class DefectoDAO {
         }
     }
     
-    private static int getTipoDefectoToInt (String idTipoCambio) {
-        switch (idTipoCambio) {
+    private static int getTipoDefectoToInt (String idTipoDefecto) {
+        switch (idTipoDefecto) {
             case "Frontend":
                 return 1;
             case "Backend":
@@ -115,6 +115,55 @@ public class DefectoDAO {
             default:
                 return 0;
         }
+    }
+    
+    public static ResultOperation registrarDefecto(int IdProyecto, Defecto newDefecto) throws SQLException {
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if(connectionDB != null) {
+            try {
+                String sqlQuery = "INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, " +
+                                  "IdProyecto, IdEstado, IdTipo) \n" +
+                                  "VALUES (?,?,(STR_TO_DATE(?, '%d-%m-%Y')),?,?,?); ";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                prepareQuery.setString(1, newDefecto.getNombre());
+                prepareQuery.setString(2, newDefecto.getDescripcion());
+                prepareQuery.setString(3, newDefecto.getFechaEncontrado().replace("/", "-"));
+                prepareQuery.setInt(4, IdProyecto);
+                prepareQuery.setInt(5, getEstadoDefectoToInt(newDefecto.getEstado()));
+                prepareQuery.setInt(6, getTipoDefectoToInt(newDefecto.getTipo()));
+                int numberAffectedRows = prepareQuery.executeUpdate();
+                
+                if(numberAffectedRows > 0) {
+                    resultOperation = new ResultOperation(
+                            false,
+                            "Se ha registrado el defecto",
+                            numberAffectedRows,
+                            newDefecto
+                    );
+                    System.out.println("DefectoDAO//SE HA REGISTRADO EL DEFECTO: " + newDefecto.getNombre());
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(
+                        true,
+                        "Fallo la conexion con la base de datos",
+                        -1,
+                        null
+                );
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(
+                    true,
+                    "Fallo la conexion con la base de datos",
+                    -1,
+                    null
+            );
+            showMessageFailureConnection();
+        }
+        return resultOperation;
     }
     
     public static ResultOperation modificarDefecto(Defecto newDefecto) throws SQLException {
