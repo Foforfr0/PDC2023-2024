@@ -20,12 +20,12 @@ public class CambioDAO {
             try {
                 String sqlQuery = "SELECT C.IdCambio, C.Nombre, C.Descripcion, C.Esfuerzo, " +
                                   " DATE_FORMAT(C.FechaInicio, '%d-%m-%Y') AS FechaInicio, DATE_FORMAT(C.FechaFin, '%d-%m-%Y') AS FechaFin, " +
-                                  "E.IdEstado AS 'Estado', TA.IdTipoACtividad AS 'Tipo'\n" +
+                                  "E.Nombre AS 'Estado', TA.Nombre AS 'Tipo'\n" +
                                   "FROM Cambio C \n" +
                                   "JOIN Estado E ON E.IdEstado = C.IdEstado \n" +
                                   "JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo \n" +
                                   "JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario \n" +
-                                  "WHERE U.IDUsuario = ?;";
+                                  "WHERE U.IDUsuario = ? AND C.IdEstado = 1;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, idUser);
                 ResultSet resultQuery = prepareQuery.executeQuery();
@@ -175,9 +175,9 @@ public class CambioDAO {
         
         if (connectionDB != null) {
             try {
-                String sqlQuery = "UPDATE Cambio " +
-                                  "SET IdEstado = ?, FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), Esfuerzo = ? " +
-                                  "WHERE IdCambio = ?;";
+                String sqlQuery = "UPDATE Cambio C " +
+                                  "SET C.IdEstado = ?, C.FechaFin = (STR_TO_DATE(?, '%d-%m-%Y')), C.Esfuerzo = ? " +
+                                  "WHERE C.IdCambio = ?;";
                 PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
                 prepareQuery.setInt(1, getEstadoCambioToInt(newCambio.getEstado()));
                 prepareQuery.setString(2, newCambio.getFechaFin().replace("/", "-"));

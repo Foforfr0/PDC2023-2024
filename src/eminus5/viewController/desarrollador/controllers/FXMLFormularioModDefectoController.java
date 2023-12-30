@@ -1,9 +1,10 @@
 package eminus5.viewController.desarrollador.controllers;
 
-import eminus5.databaseManagment.model.DAO.CambioDAO;
-import eminus5.databaseManagment.model.POJO.Cambio;
+import eminus5.databaseManagment.model.DAO.DefectoDAO;
+import eminus5.databaseManagment.model.POJO.Defecto;
 import eminus5.databaseManagment.model.ResultOperation;
 import eminus5.utils.ShowMessage;
+import static eminus5.viewController.desarrollador.controllers.FXMLFormularioModCambioController.currentCambio;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -25,33 +27,32 @@ import javafx.stage.Stage;
  *
  * @author abrah
  */
-public class FXMLFormularioModCambioController implements Initializable {
+public class FXMLFormularioModDefectoController implements Initializable {
 
     @FXML
-    private TextField tfTituloCambio;
+    private TextField tfTituloDefecto;
     @FXML
-    private TextField tfDescCambio;
+    private TextArea taDescripcion;
     @FXML
-    private ComboBox<String> cbEstadoCambio;
+    private ComboBox<String> cbEstadoDefecto;
     @FXML
-    private ComboBox<String> cbTipoCambio;
+    private ComboBox<String> cbTipoDefecto;
     @FXML
-    private DatePicker dpFechaInicioCambio;
+    private DatePicker dpFechaEncontrado;
     @FXML
-    private DatePicker dpFechaFinCambio;
+    private DatePicker dpFechaSolucionado;
     @FXML
     private TextField tfEsfuerzo;
 
-    public static Cambio currentCambio = null;
-    public static int idUser = 0;
+    public static Defecto currentDefecto = null; 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeData();
-    }    
-
+    }   
+    
     private void initializeData() {
-        this.cbEstadoCambio.getItems().setAll(
+        this.cbEstadoDefecto.getItems().setAll(
                 "Iniciado",
                 "Entregado"
         );
@@ -62,31 +63,29 @@ public class FXMLFormularioModCambioController implements Initializable {
             }
         });
         
-        this.tfTituloCambio.setText(currentCambio.getNombre());
-        this.tfDescCambio.setText(currentCambio.getDescripcion());
-        this.cbEstadoCambio.setValue(currentCambio.getEstado());
+        this.tfTituloDefecto.setText(currentDefecto.getNombre());
+        this.taDescripcion.setText(currentDefecto.getDescripcion());
+        this.cbEstadoDefecto.setValue(currentDefecto.getEstado());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate localDate = LocalDate.parse(currentCambio.getFechaInicio(), formatter);
-            this.dpFechaInicioCambio.setValue(localDate);
+            LocalDate localDate = LocalDate.parse(currentDefecto.getFechaEncontrado(), formatter);
+            this.dpFechaEncontrado.setValue(localDate);
+        this.cbTipoDefecto.setValue(currentDefecto.getTipo());
         
-        this.cbTipoCambio.setValue(currentCambio.getTipo());
-        
-        this.dpFechaFinCambio.setDayCellFactory(picker -> new DateCell(){
+        this.dpFechaSolucionado.setDayCellFactory(picker -> new DateCell(){
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 setDisable(date.isBefore(LocalDate.now()));
             }
         });
-        
-        this.tfTituloCambio.setDisable(true);
-        this.tfDescCambio.setDisable(true);
-        this.cbTipoCambio.setDisable(true);
-        this.dpFechaInicioCambio.setDisable(true);
+        this.tfTituloDefecto.setDisable(true);
+        this.taDescripcion.setDisable(true);
+        this.cbTipoDefecto.setDisable(true);
+        this.dpFechaEncontrado.setDisable(true);
     }
     
     private boolean validateFields() {
-        if (dpFechaFinCambio.getValue() == null || tfEsfuerzo.getText().trim().isEmpty()) {
+        if (dpFechaSolucionado.getValue() == null || tfEsfuerzo.getText().trim().isEmpty()) {
         return true;
         }
 
@@ -98,9 +97,9 @@ public class FXMLFormularioModCambioController implements Initializable {
 
         return false;
     }
-    
+
     @FXML
-    private void btnGuardarCambio(ActionEvent event) {
+    private void btnGuardarDefecto(ActionEvent event) {
         if (validateFields() == true) {
             ShowMessage.showMessage(
                     "ERROR",
@@ -110,17 +109,17 @@ public class FXMLFormularioModCambioController implements Initializable {
             );
         } else {
             try {
-                Cambio newCambio = new Cambio();
-                    newCambio.setIdCambio(currentCambio.getIdCambio());
-                    newCambio.setEstado(this.cbEstadoCambio.getValue());
-                    newCambio.setFechaFin(this.dpFechaFinCambio.getValue()
-                    .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-                    newCambio.setEsfuerzo(Integer.parseInt(this.tfEsfuerzo.getText()));
+                Defecto newDefecto = new Defecto();
+                    newDefecto.setIdDefecto(currentDefecto.getIdDefecto());
+                    newDefecto.setEsfuerzo(Integer.parseInt(this.tfEsfuerzo.getText()));
+                    newDefecto.setEstado(this.cbEstadoDefecto.getValue());
+                    newDefecto.setFechaSolucionado(this.dpFechaSolucionado.getValue().
+                            format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                     
-                ResultOperation resultModify = CambioDAO.modificarCambio(newCambio);
+                ResultOperation resultModify = DefectoDAO.modificarDefecto(newDefecto);
                 if (resultModify.getIsError() == true) {
                     ShowMessage.showMessage(
-                            "ERROR",
+                            "Error",
                             "Error inesperado",
                             resultModify.getMessage(),
                             "Intente mas tarde"
@@ -132,11 +131,11 @@ public class FXMLFormularioModCambioController implements Initializable {
                             "Se modifico con exito",
                             ""
                     );
-                    Stage currentStage = (Stage) this.tfTituloCambio.getScene().getWindow();
+                    Stage currentStage = (Stage) this.tfTituloDefecto.getScene().getWindow();
                     currentStage.close();
                 }
             } catch (SQLException sqlex) {
-                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLFormularioModCambio\" en método \"modificarCambio\"");
+                System.err.println("\"Error de \"SQLException\" en archivo \"FXMLFormularioModDefecto\" en método \"modificarDefecto\"");
                 sqlex.printStackTrace();
             }
         }
@@ -156,11 +155,8 @@ public class FXMLFormularioModCambioController implements Initializable {
     }
     
     @FXML
-    private void btnCancelarCambio(ActionEvent event) {
-        closeWindow((Stage) this.tfTituloCambio.getScene().getWindow());
+    private void btnCancelarDefecto(ActionEvent event) {
+        closeWindow((Stage) this.tfTituloDefecto.getScene().getWindow());
     }
     
-    private boolean revisarEstado(Cambio newCambio) {
-        return !newCambio.getEstado().equals(currentCambio.getEstado());
-    }
 }

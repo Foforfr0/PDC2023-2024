@@ -382,6 +382,25 @@ INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, Fecha
 ('Creación de bitacora', 'Descripción de ejemplo para la actividad Creación de bitacora, relacionada con una actividad', 
 NULL, 4, '2023-06-01', '2023-06-04', 1, 4);
 
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación query', 'Query para getActividadesDesarrollador', 
+1, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Comprobacion de query', 'Query para getActividadesDesarrollador sin terminar', 
+2, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creacion de', 'Query para modificar actividades', 
+1, 2, '2023-12-24', '2023-12-26', 1, 4);
+
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Creación alert', 'alert para confirmar modificacion', 
+1, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('Comprobacion de alert', 'comprobar alerts para confirmar', 
+2, 2, '2023-12-24', '2023-12-25', 1, 4);
+INSERT INTO Actividad (Nombre, Descripcion, IdEstado, IdTipo, FechaInicio, FechaTermino, IdProyecto, IdDesarrollador) VALUES 
+('XD', 'lol nomas por si no me sale', 
+1, 2, '2023-12-24', '2023-12-26', 1, 4);
 /*BITACORA-------------------------------------------------------------------------------------------------------------------------*/
 INSERT INTO BitacoraActividad (NumBitacora, Nombre, Descripción, IdActividad, IdDesarrollador)
 VALUES (1, 'Bitacora de ejemplo', 'Prueba para hacer mi CU13, creo jajaj no recuerdo cual era. Ni pex', 4, 4);
@@ -393,6 +412,16 @@ VALUES ('Cambio de ejemplo', 'Ejemplo para ver si mi query funciona', '2023-12-2
 INSERT INTO Cambio (Nombre, Descripcion, FechaInicio, IdDesarrollador, IdEstado, IdTipo)
 VALUES ('Cambio de ejemplo 2', 'Ejemplo para modificar', '2023-12-21', 4,  2, 2);
 
+/*DEFECTO-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Primer defecto', 'Query regresa null', '2023-12-26', 1, 1, 3);
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Defecto de ejemplo', 'Para comprobar query', '2023-12-26', 1, 1, 3);
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Fallo al no haber defectos', 'Programa falla cuando no halla defectos', '2023-12-28', 1, 1, 1);
+INSERT INTO Defecto (Nombre, Descripcion, FechaEncontrado, IdProyecto, IdEstado, IdTipo)
+VALUES ('Comprobacion de arreglo', 'Arreglo de controlador', '2023-12-28', 1, 1, 3);
+/*-------------------------------------------------------------------------------------------------------------------------*/
 
 SELECT BA.Nombre, BA.Descripción FROM bitacoraactividad BA
 JOIN Usuario U ON BA.IdDesarrollador = U.IDUsuario 
@@ -401,13 +430,26 @@ UNION SELECT BC.Nombre, BC.Descripción FROM bitacoracambio BC
 JOIN  Usuario U ON BC.IdDesarrollador = U.IDUsuario
 WHERE U.IDUsuario = 4;
 
-SELECT C.Nombre, C.Descripcion, C.Esfuerzo, C.FechaInicio, C.FechaFin, C.IdEstado, C.Tipo
+SELECT C.IdCambio, C.Nombre, C.Descripcion, C.Esfuerzo, C.FechaInicio, C.FechaFin, E.Nombre AS 'Estado', TA.Nombre AS 'TipoActividad'
 FROM Cambio C
-JOIN Estado E ON C.IdEstado = E.IdEstado
-JOIN TipoActividad TA ON C.Tipo = TA.IdTipo
+JOIN Estado E ON E.IdEstado = C.IdEstado
+JOIN TipoActividad TA ON TA.IdTipoActividad = C.IdTipo
 JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
-WHERE U.IDUsuario = 4 AND IdEstado = 1;
+WHERE U.IDUsuario = 4 AND C.IdEstado = 1;
 
-SELECT C.Nombre, C.Descripcion FROM Cambio C 
-JOIN Usuario U ON C.IdDesarrollador = U.IDUsuario
-WHERE U.IDUsuario = 4;
+SELECT A.IdActividad, A.Nombre, A.Descripcion, E.Nombre AS 'Estado'
+FROM Actividad A
+JOIN Estado E ON E.IdEstado = A.IdEstado
+LEFT JOIN Usuario U ON A.IdDesarrollador = U.IDUsuario
+WHERE IDUsuario = 4 AND A.IdEstado = 1;
+
+SELECT DE.IdDefecto, DE.Nombre, DE.Descripcion, E.Nombre AS 'Estado', DE.Esfuerzo, DE.FechaEncontrado, DE.FechaSolucionado, TA.Nombre AS 'Tipo'
+FROM Defecto DE 
+JOIN Estado E ON E.IdEstado = DE.IdEstado
+JOIN TipoActividad TA ON TA.IdTipoActividad = DE.IdTipo
+JOIN Proyecto P ON DE.IdProyecto = P.IdProyecto
+WHERE P.IdProyecto = 1 AND DE.IdEstado = 1;
+
+UPDATE Defecto DE
+SET DE.Esfuerzo = 22, DE.IdEstado = 2, DE.FechaSolucionado = '2023-12-27'
+WHERE DE.IdDefecto = 1;

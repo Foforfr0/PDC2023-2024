@@ -1,6 +1,7 @@
 package eminus5.viewController.desarrollador.controllers;
 
 import eminus5.databaseManagment.model.DAO.DefectoDAO;
+import eminus5.databaseManagment.model.DAO.ProyectoDAO;
 import eminus5.databaseManagment.model.POJO.Defecto;
 import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
@@ -45,7 +46,8 @@ public class FXMLDefectosDController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        inicializarTabla();
+        cargarDefectos();
     }    
 
     
@@ -80,25 +82,35 @@ public class FXMLDefectosDController implements Initializable {
     
     public void cargarDefectos() {
         try{
-            ResultOperation resultGetDefectos = DefectoDAO.getDefectosDesarrollador(idUser);
+            ResultOperation resultGetProyecto = ProyectoDAO.getProyectoUsuario(idUser);
             
-            if(resultGetDefectos.getIsError() == true && resultGetDefectos.getData() == null ||
-               resultGetDefectos.getNumberRowsAffected() <= 0){
+            if(resultGetProyecto.getIsError() == true && resultGetProyecto.getData() == null ||
+               resultGetProyecto.getNumberRowsAffected() <= 0){
                 showMessage(
                         "ERROR",
                         "Error inesperado",
-                        resultGetDefectos.getMessage(),
+                        resultGetProyecto.getMessage(),
                         "Intente mas tarde"
                 );
             } else {
-            this.defectos = FXCollections.observableArrayList(
-                    (ObservableList) DefectoDAO.getDefectosDesarrollador(idUser).getData()
-            );
-            this.tvDefectos.setItems(this.defectos);
+                System.out.println("Rows affected: " + resultGetProyecto.getNumberRowsAffected());
+
+                Object data = DefectoDAO.getDefectosDesarrollador(resultGetProyecto.getNumberRowsAffected()).getData();
+                System.out.println("Data from DAO: " + data);
+
+                if (data instanceof ObservableList) {
+                    this.defectos = (ObservableList<Defecto>) data;
+                    this.tvDefectos.setItems(this.defectos);
+                }
+                /*this.defectos = FXCollections.observableArrayList(
+                        (ObservableList) DefectoDAO.getDefectosDesarrollador(resultGetProyecto.getNumberRowsAffected()).getData()
+                );
+                this.tvDefectos.setItems(this.defectos);
+                */
             }
         } catch (SQLException sqlex) {
             showMessageFailureConnection();
-           System.out.println("\"Error de \"SQLException\" en archivo \"FXMLBitacorasDcontroller\"");
+           System.out.println("\"Error de \"SQLException\" en archivo \"FXMLDefectosDController\"");
            sqlex.printStackTrace();
         }
     } 
@@ -132,8 +144,8 @@ public class FXMLDefectosDController implements Initializable {
         clicRegistrarDefecto.showAndWait();
         
         } catch (IOException ioex) {
-            System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\""
-                    + " en método \"clicRegistrarCambio\"");
+            System.err.println("Error de \"IOException\" en archivo \"FXMLDefectosDController\""
+                    + " en método \"clicRegistrarDefecto\"");
             ioex.printStackTrace();
         }
     }
@@ -141,7 +153,37 @@ public class FXMLDefectosDController implements Initializable {
     @FXML
     private void btnModificarDefecto(ActionEvent event) {
         if (verifySelectedDefecto() != null) {
-            //TODO
+            this.btModificarDefecto.setVisible(true);
+            try {
+                Stage modificarDefecto = new Stage();
+                FXMLFormularioModDefectoController.currentDefecto = verifySelectedDefecto();
+                modificarDefecto.setScene(loadScene("viewController/desarrollador/views/FXMLFormularioModDefecto.fxml"));
+                modificarDefecto.setTitle("Modificar defecto");
+                modificarDefecto.initModality(Modality.WINDOW_MODAL);
+                modificarDefecto.initOwner(
+                        (Stage) this.tvDefectos.getScene().getWindow()
+                );
+                modificarDefecto.initStyle(StageStyle.UTILITY);
+                modificarDefecto.setOnCloseRequest(eventStage -> {
+                    eventStage.consume();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("¿Está seguro?");
+                    alert.setHeaderText("¿Está seguro de cancelar?");
+                    alert.setContentText("¿Ésta acción no se podrá revertir?");
+                    
+                    alert.showAndWait().ifPresent(response -> {
+                        String responseMessage = response.getText();
+                        if (responseMessage.equals("Aceptar")) {
+                            modificarDefecto.close();
+                        }
+                    });
+                });
+                modificarDefecto.showAndWait();
+                cargarDefectos();
+            } catch (IOException ioex) {
+                System.err.println("Error de \"IOException\" en archivo \"FXMLFormularioModDefecto\" en método \"btModificarDefecto\"");
+                ioex.printStackTrace();
+            }
         } else {
             showMessage(
                     "WARNING",

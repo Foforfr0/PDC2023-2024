@@ -1,11 +1,15 @@
 package eminus5.viewController.desarrollador.controllers;
 
+import eminus5.databaseManagment.model.DAO.ActividadDAO;
 import eminus5.databaseManagment.model.POJO.Actividad;
+import eminus5.databaseManagment.model.ResultOperation;
 import static eminus5.utils.ShowMessage.showMessage;
+import static eminus5.utils.ShowMessage.showMessageFailureConnection;
 import static eminus5.utils.loadView.loadScene;
 import eminus5.viewController.responsableProyecto.controllers.FXMLDetallesActividadController;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +36,10 @@ public class FXMLActividadesDController implements Initializable {
     private TableView<Actividad> tvActividades;
     @FXML
     private TableColumn<Actividad, String> tcNombreActividad;
-
+    @FXML
+    private TableColumn<Actividad, String> tcDescripcionActividad;
+    
+    
     public static int idUser = 0;
     private ObservableList<Actividad> actividades = FXCollections.observableArrayList();
     private Actividad actividadSeleccionada = null;
@@ -40,10 +47,12 @@ public class FXMLActividadesDController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeTable();
+        cargarActividades();
     }    
     
     public void initializeTable() {
         this.tcNombreActividad.setCellValueFactory(new PropertyValueFactory("Nombre"));
+        this.tcDescripcionActividad.setCellValueFactory(new PropertyValueFactory("Descripcion"));
         
         tvActividades.setRowFactory(tv -> {
             TableRow<Actividad> row = new TableRow<>();
@@ -51,16 +60,16 @@ public class FXMLActividadesDController implements Initializable {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     actividadSeleccionada = row.getItem();
                     try {
-                        Stage stageAddActividad = new Stage();
-                        FXMLDetallesActividadController.currentActividad = actividadSeleccionada;
-                        stageAddActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividadD.fxml"));
-                        stageAddActividad.setTitle("Detalles de actividad");
-                        stageAddActividad.initModality(Modality.WINDOW_MODAL);
-                        stageAddActividad.initOwner(
+                        Stage stageActividad = new Stage();
+                        FXMLDetallesActividadDController.currentActividad = actividadSeleccionada;
+                        stageActividad.setScene(loadScene("viewController/desarrollador/views/FXMLDetallesActividadD.fxml"));
+                        stageActividad.setTitle("Entregar actividad");
+                        stageActividad.initModality(Modality.WINDOW_MODAL);
+                        stageActividad.initOwner(
                             (Stage) this.tvActividades.getScene().getWindow()
                         );
-                        stageAddActividad.initStyle(StageStyle.UTILITY);
-                        stageAddActividad.showAndWait();
+                        stageActividad.initStyle(StageStyle.UTILITY);
+                        stageActividad.showAndWait();
                     } catch (IOException ioex) {
                         System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesDController\" en método \"btnEntregarActividad\"");
                         ioex.printStackTrace();
@@ -70,22 +79,46 @@ public class FXMLActividadesDController implements Initializable {
             return row;
         });
     }
+    public void cargarActividades() {
+        try{
+            ResultOperation resultGetActividades = ActividadDAO.getActividadesDesarrollador(idUser);
+            
+            if (resultGetActividades.getIsError() == true && resultGetActividades.getData()  == null
+                || resultGetActividades.getNumberRowsAffected() <= 0) {
+                showMessage(
+                        "ERROR",
+                        "Error inesperado",
+                        resultGetActividades.getMessage(),
+                        "Intente mas tarde"
+                );
+            } else {
+                this.actividades = FXCollections.observableArrayList(
+                        (ObservableList) ActividadDAO.getActividadesDesarrollador(idUser).getData()
+                );
+                this.tvActividades.setItems(this.actividades);
+            }
+        } catch (SQLException sqlex) {
+            showMessageFailureConnection();
+            System.out.println("\"Error de \"SQLException\" en archivo \"FXMLActividadesDController\"");
+            sqlex.printStackTrace();
+        }
+    }
 
     @FXML
     private void btnEntregarActividad(ActionEvent event) {
         if (verifySelectedActividad() != null) {
+            
             try {
-                Stage stageEntregarActividad = new Stage();
+                Stage stageActividad = new Stage();
                 FXMLDetallesActividadDController.currentActividad = verifySelectedActividad();
-                stageEntregarActividad.setScene(loadScene("viewController/desarrollador/views"
-                        + "/FXMLDetallesActividad.fxml"));
-                stageEntregarActividad.setTitle("Entregar actividad");
-                stageEntregarActividad.initModality(Modality.WINDOW_MODAL);
-                stageEntregarActividad.initOwner(
+                stageActividad.setScene(loadScene("viewController/desarrollador/views/FXMLDetallesActividadD.fxml"));
+                stageActividad.setTitle("Entregar actividad");
+                stageActividad.initModality(Modality.WINDOW_MODAL);
+                stageActividad.initOwner(
                         (Stage) this.tvActividades.getScene().getWindow()
                 );
-                stageEntregarActividad.initStyle(StageStyle.UTILITY);
-                stageEntregarActividad.setOnCloseRequest(eventStage -> {
+                stageActividad.initStyle(StageStyle.UTILITY);
+                stageActividad.setOnCloseRequest(eventStage -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("¿Está seguro?");
                     alert.setHeaderText("¿Está seguro de cancelar?");
@@ -94,11 +127,11 @@ public class FXMLActividadesDController implements Initializable {
                     alert.showAndWait().ifPresent(response -> {
                         String responseMessage = response.getText();
                         if (responseMessage.equals("Aceptar")) {
-                            stageEntregarActividad.close(); 
+                            stageActividad.close(); 
                         }
                     });
                 });
-                stageEntregarActividad.showAndWait();
+                stageActividad.showAndWait();
                 
             } catch (IOException ioex) {
                 System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesDController\""
