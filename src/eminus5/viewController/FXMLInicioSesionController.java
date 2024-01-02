@@ -43,7 +43,7 @@ public class FXMLInicioSesionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        tfUserLogin.setText("P21013908");
+        tfUserLogin.setText("S21013909");
         tfPasswordLogin.setText("1234");
         addActionToButtonLogin();
     }

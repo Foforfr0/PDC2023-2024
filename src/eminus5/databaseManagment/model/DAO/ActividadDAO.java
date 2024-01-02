@@ -18,6 +18,61 @@ import javafx.collections.ObservableList;
 
 
 public class ActividadDAO {
+    public static ResultOperation getTiposActividad() throws SQLException{
+        Connection connectionDB = OpenConnectionDB.getConnection();
+        ResultOperation resultOperation = null;
+        
+        if (connectionDB != null) {    
+            try {            
+                String sqlQuery = "SELECT * FROM TipoActividad;";
+                PreparedStatement prepareQuery = connectionDB.prepareStatement(sqlQuery);
+                ResultSet resultQuery = prepareQuery.executeQuery();
+                
+                ObservableList<String> listTiposActividad= FXCollections.observableArrayList();
+                while(resultQuery.next()){
+                    listTiposActividad.add(resultQuery.getString("Nombre"));
+                    resultOperation = new ResultOperation(            //It´s exists
+                        false, 
+                        "Se encontraron tipos de actividad", 
+                        listTiposActividad.size(),
+                        listTiposActividad
+                    );
+                    System.out.println("ActividadDAO//TIPOS ACTIVIDAD ENCONTRADAS: "+listTiposActividad.size());
+                }
+                if (listTiposActividad.size() <= 0) {
+                    resultOperation = new ResultOperation(            //It doesn't exist but it wasn't an error
+                        false, 
+                        "No se encontraron tipos de actividad", 
+                        0, 
+                        null
+                    );
+                    System.out.println("ActividadDAO//NO SE ENCONTRARON TIPOS DE ACTIVIDAD");
+                }
+            } catch (SQLException sqlex) {
+                resultOperation = new ResultOperation(               
+                    true, 
+                    "Falló conexión con la base de datos", 
+                    -1, 
+                    null
+                );
+                System.err.println("Error de \"SQLException\" en archivo \"ActividadDAO\" en método \"getTiposActividad\"");
+                sqlex.printStackTrace();
+            } finally {
+                connectionDB.close();
+            }
+        } else {
+            resultOperation = new ResultOperation(                 //Could not connect to database
+                true, 
+                "Falló conexión con la base de datos", 
+                -1, 
+                null
+            );
+            showMessageFailureConnection();
+        }  
+        
+        return resultOperation;
+    }
+    
     public static ResultOperation getActividadesProyecto(int idProyecto) throws SQLException{
         Connection connectionDB = OpenConnectionDB.getConnection();
         ResultOperation resultOperation = null;
@@ -59,7 +114,7 @@ public class ActividadDAO {
                         listActividades.size(),
                         listActividades
                     );
-                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS: "+listActividades.size()+" DEL PROYECTO ID"+idProyecto);
+                    System.out.println("ActividadDAO//ACTIVIDADES ENCONTRADAS: "+listActividades.size()+" DEL PROYECTO ID: "+idProyecto);
                 }
                 if (listActividades.size() <= 0) {
                     resultOperation = new ResultOperation(            //It doesn't exist but it wasn't an error
@@ -68,7 +123,7 @@ public class ActividadDAO {
                         0, 
                         null
                     );
-                    System.out.println("ActividadDAO//NO SE ENCONTRARON ACTIVIDADES DEL PROYECTO ID"+idProyecto);
+                    System.out.println("ActividadDAO//NO SE ENCONTRARON ACTIVIDADES DEL PROYECTO ID: "+idProyecto);
                 }
             } catch (SQLException sqlex) {
                 resultOperation = new ResultOperation(               

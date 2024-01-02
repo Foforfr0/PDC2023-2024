@@ -73,16 +73,16 @@ public class FXMLActividadesProyectoController implements Initializable {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     selectedActividad = row.getItem();
                     try {
-                        Stage stageAddActividad = new Stage();
+                        Stage stageDetailsActividad = new Stage();
                         FXMLDetallesActividadController.currentActividad = selectedActividad;
-                        stageAddActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividad.fxml"));
-                        stageAddActividad.setTitle("Detalles de actividad");
-                        stageAddActividad.initModality(Modality.WINDOW_MODAL);
-                        stageAddActividad.initOwner(
+                        stageDetailsActividad.setScene(loadScene("viewController/responsableProyecto/views/FXMLDetallesActividad.fxml"));
+                        stageDetailsActividad.setTitle("Detalles de actividad");
+                        stageDetailsActividad.initModality(Modality.WINDOW_MODAL);
+                        stageDetailsActividad.initOwner(
                             (Stage) this.tvActividades.getScene().getWindow()
                         );
-                        stageAddActividad.initStyle(StageStyle.UTILITY);
-                        stageAddActividad.showAndWait();
+                        stageDetailsActividad.initStyle(StageStyle.UTILITY);
+                        stageDetailsActividad.showAndWait();
                     } catch (IOException ioex) {
                         System.err.println("Error de \"IOException\" en archivo \"FXMLActividadesProyectoController\" en método \"clicModifyActividad\"");
                         ioex.printStackTrace();

@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -71,15 +72,11 @@ public class FXMLCrearActividadController implements Initializable {
     }    
     
     private void initializeData() {
-        this.cbTipo.getItems().setAll(                      //addOptionsCbTipo();
-            "Frontend", 
-            "Backend", 
-            "Base de datos",
-            "Controlador",  
-            "JavaScript"
-        );
-        
         try {
+            this.cbTipo.getItems().setAll(                      //addOptionsCbTipo();
+                (ObservableList<String>) ActividadDAO.getTiposActividad().getData()
+            );
+            
             Proyecto currentProyecto = (Proyecto) ProyectoDAO.getProyectoUsuario(idResponsable).getData();
             fechaInicio = String.valueOf(currentProyecto.getFechaInicio());
             fechaFin = String.valueOf(currentProyecto.getFechaFin());

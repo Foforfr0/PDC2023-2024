@@ -25,15 +25,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Button fx:id="btInicio" layoutX="90.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#clearInsideScene" style="-fx-background-color: inherit;" text="Inicio" textFill="WHITE">
+            <Button fx:id="btInicio" layoutX="90.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#clearInsideScene" style="-fx-background-color: inherit;" text="Inicio" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
-            <Button fx:id="btGestionarActividades" layoutX="134.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#clicShowGestionarActividadesScene" style="-fx-background-color: inherit;" text="Gestionar actividades" textFill="WHITE">
+            <Button fx:id="btGestionarActividades" layoutX="146.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#clicShowGestionarActividadesScene" style="-fx-background-color: inherit;" text="Gestionar actividades" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
          </children>
       </Pane>

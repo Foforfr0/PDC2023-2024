@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -71,14 +72,6 @@ public class FXMLModificarActividadController implements Initializable {
     }    
     
     private void initializeData() {
-        this.cbTipo.getItems().setAll(
-            "Frontend", 
-            "Backend", 
-            "Base de datos",
-            "Controlador",  
-            "JavaScript"
-        );
-        
         this.tfNombre.setText(currentActividad.getNombre());
         this.tfDescripcion.setText(currentActividad.getDescripcion());
         this.cbTipo.setValue(currentActividad.getTipo());
@@ -90,12 +83,15 @@ public class FXMLModificarActividadController implements Initializable {
         this.cbTipo.setValue(currentActividad.getTipo());
         
         try {
+            this.cbTipo.getItems().setAll(                      //addOptionsCbTipo();
+                (ObservableList<String>) ActividadDAO.getTiposActividad().getData()
+            );
             Proyecto currentProyecto = (Proyecto) ProyectoDAO.getProyectoUsuario(idResponsable).getData();
             fechaInicio = String.valueOf(currentProyecto.getFechaInicio());
             fechaFin = String.valueOf(currentProyecto.getFechaFin());
         } catch (SQLException sqlex) {
             System.err.println("Error de \"SQLException\" en archivo \"FXMLCrearActividadController\" en método \"initializaData\"");
-            sqlex.printStackTrace();
+            sqlex.printStackTrace();  
         }
         dpFechaInicio.setDayCellFactory(picker -> new DateCell() {
             @Override

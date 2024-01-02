@@ -41,7 +41,7 @@
                   <Font size="14.0" />
                </font></Label>
             <Label fx:id="lbFechaInicio" layoutX="564.0" layoutY="63.0" prefHeight="17.0" prefWidth="99.0" />
-            <Label layoutX="548.0" layoutY="87.0" text="Fecha termino:">
+            <Label layoutX="545.0" layoutY="87.0" text="Fecha termino:">
                <font>
                   <Font size="14.0" />
                </font></Label>

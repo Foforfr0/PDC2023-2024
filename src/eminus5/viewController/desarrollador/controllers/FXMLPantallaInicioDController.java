@@ -7,6 +7,8 @@ package eminus5.viewController.desarrollador.controllers;
 import static eminus5.utils.loadView.loadParent;
 import static eminus5.utils.loadView.loadScene;
 import static eminus5.utils.loadView.loadView;
+import eminus5.viewController.responsableProyecto.controllers.FXMLActividadesProyectoController;
+import static eminus5.viewController.responsableProyecto.controllers.FXMLPantallaInicioRController.idResponsable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,16 +27,13 @@ import javafx.stage.Stage;
  * @author fofor
  */
 public class FXMLPantallaInicioDController implements Initializable {
-
-    /**
-     * Initializes the controller class.
-     */
-    
-    public static int idUser = 0;
     @FXML
     private Label lbTituloVentana;
     @FXML
     private Pane pnInsideSceneD;
+    
+    
+    public static int idUser = 0;
     
     
     @Override
@@ -67,7 +66,6 @@ public class FXMLPantallaInicioDController implements Initializable {
             System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"btnBitacoras\"");
             ioex.printStackTrace();
         }
-        
     }
 
     @FXML
@@ -80,6 +78,18 @@ public class FXMLPantallaInicioDController implements Initializable {
 
     @FXML
     private void btnDefectos(ActionEvent event) {
+        String FXMLDefectosProyecto = "viewController/desarrollador/views/FXMLDefectosProyecto.fxml";
+        
+        try {
+            FXMLLoader loader = loadView(FXMLDefectosProyecto);
+            FXMLDefectosProyectoController.idUser = idUser;
+        
+            Pane vistaSecundaria = (Pane) loadParent(FXMLDefectosProyecto);
+            this.pnInsideSceneD.getChildren().setAll(vistaSecundaria);
+        } catch (IOException ioex) {
+            System.out.println("Error de \"IOException\" en archivo \"FXMLPantallaInicioDController\" en método \"btnDefectos\"");
+            ioex.printStackTrace();
+        }
     }
 
     @FXML

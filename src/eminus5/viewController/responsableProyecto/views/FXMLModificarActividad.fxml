@@ -50,8 +50,8 @@
                <font>
                   <Font size="14.0" />
                </font></Label>
-            <Button fx:id="btAddActividad" defaultButton="true" layoutX="689.0" layoutY="313.0" mnemonicParsing="false" onAction="#clicModifyActividad" text="Modificar" />
-            <Button fx:id="btCancelAddActividad" cancelButton="true" layoutX="620.0" layoutY="313.0" mnemonicParsing="false" onAction="#clicCancelAdd" text="Cancelar" />
+            <Button fx:id="btAddActividad" defaultButton="true" layoutX="682.0" layoutY="313.0" mnemonicParsing="false" onAction="#clicModifyActividad" text="Modificar" />
+            <Button fx:id="btCancelAddActividad" cancelButton="true" layoutX="614.0" layoutY="313.0" mnemonicParsing="false" onAction="#clicCancelAdd" text="Cancelar" />
          </children>
       </Pane>
    </children>
