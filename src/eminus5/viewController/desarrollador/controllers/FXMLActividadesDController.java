@@ -26,9 +26,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * FXML Controller class
- *
- * @author abrah
+ * Autor: Abraham Vazquez
+ * Fecha de creacion: noviembre 2023
+ * Ultima actualizacion: diciembre 25, 2023
  */
 public class FXMLActividadesDController implements Initializable {
     
