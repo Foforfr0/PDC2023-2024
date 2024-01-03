@@ -24,6 +24,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Autor: Abraham Vazquez
+ * Fecha de creacion: noviembre 2023
+ * Ultima actualizacion: diciembre 21, 2023
+ */
 
 public class FXMLBitacorasDController implements Initializable {
     
